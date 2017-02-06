@@ -1,0 +1,45 @@
+﻿@model CrmWebApp.Models.SelectUserRolesViewModel
+@{
+    ViewBag.Title = "编辑角色";
+}
+
+
+<h2>编辑角色 @Html.DisplayFor(model => model.UserName)</h2>
+<hr />
+
+
+@using (Html.BeginForm("EditUserRoles", "Account", FormMethod.Post, new { encType = "multipart/form-data", name = "myform" }))
+{
+    @Html.AntiForgeryToken()
+
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true)
+        <div class="form-group">
+            <div class="col-md-10">
+                @Html.HiddenFor(model => model.UserName)
+            </div>
+        </div>
+        <h4>要加入的角色</h4>
+        <br />
+        <hr />
+        <table>
+            <tr>
+                <th>
+                    勾选
+                </th>
+                <th>
+                    角色
+                </th>
+            </tr>
+            @Html.EditorFor(model => model.RoleEditorViews)
+        </table>
+        <br />
+        <hr />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="保存" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
