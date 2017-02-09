@@ -52,6 +52,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -170,6 +172,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ParamDictsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -179,8 +182,28 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\CompanyBusinessDaily.cs" />
+    <Compile Include="Models\CompanyBusinessDailyParam.cs" />
+    <Compile Include="Models\CompanyBusinessDailyPhoto.cs" />
+    <Compile Include="Models\CompanyBusinessDailySoundRecord.cs" />
+    <Compile Include="Models\CompanyCertificate.cs" />
+    <Compile Include="Models\CompanyMedia.cs" />
+    <Compile Include="Models\CompanyMeeting.cs" />
+    <Compile Include="Models\CompanyMeetingSubject.cs" />
+    <Compile Include="Models\CompanySalesDaily.cs" />
+    <Compile Include="Models\CompanySalesDailyFund.cs" />
+    <Compile Include="Models\CompanySalesDailyParam.cs" />
+    <Compile Include="Models\CompanySalesDailyProductDesp.cs" />
+    <Compile Include="Models\CompanySalesDailySalesSource.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\OtaCompany.cs" />
+    <Compile Include="Models\OtaCrmModel.cs" />
+    <Compile Include="Models\ParamDict.cs" />
+    <Compile Include="Models\SalesServeArea.cs" />
+    <Compile Include="Models\S_City.cs" />
+    <Compile Include="Models\S_District.cs" />
+    <Compile Include="Models\S_Province.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -221,7 +244,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
@@ -255,8 +277,15 @@
     <Content Include="Views\Account\DeleteRole.cshtml" />
     <Content Include="Views\Account\DeleteRoleConfirmed.cshtml" />
     <Content Include="Views\Account\CreateRole.cshtml" />
+    <Content Include="Views\ParamDicts\Create.cshtml" />
+    <Content Include="Views\ParamDicts\Delete.cshtml" />
+    <Content Include="Views\ParamDicts\Details.cshtml" />
+    <Content Include="Views\ParamDicts\Edit.cshtml" />
+    <Content Include="Views\ParamDicts\Index.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\SalesArea\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
