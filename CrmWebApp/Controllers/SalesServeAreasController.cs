@@ -18,6 +18,7 @@ namespace CrmWebApp.Controllers
         // GET: SalesServeAreas
         public async Task<ActionResult> Index()
         {
+            ViewBag.UserName = User.Identity.Name;
             return View(await db.SalesServeArea.ToListAsync());
         }
 

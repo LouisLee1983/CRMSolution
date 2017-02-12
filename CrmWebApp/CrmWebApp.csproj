@@ -196,6 +196,7 @@
     <Compile Include="Controllers\OtaCompaniesController.cs" />
     <Compile Include="Controllers\ParamDictsController.cs" />
     <Compile Include="Controllers\SalesServeAreasController.cs" />
+    <Compile Include="Controllers\SelectCityViewController.cs" />
     <Compile Include="Controllers\S_CityController.cs" />
     <Compile Include="Controllers\S_ProvinceController.cs" />
     <Compile Include="Global.asax.cs">
@@ -226,6 +227,7 @@
     <Compile Include="Models\OtaCrmModel.cs" />
     <Compile Include="Models\ParamDict.cs" />
     <Compile Include="Models\SalesServeArea.cs" />
+    <Compile Include="Models\SelectCityViewModel.cs" />
     <Compile Include="Models\S_City.cs" />
     <Compile Include="Models\S_Province.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -393,10 +395,9 @@
     <Content Include="Views\SalesServeAreas\Details.cshtml" />
     <Content Include="Views\SalesServeAreas\Edit.cshtml" />
     <Content Include="Views\SalesServeAreas\Index.cshtml" />
+    <Content Include="Views\Shared\_PartialSelectCityView.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\SalesArea\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />

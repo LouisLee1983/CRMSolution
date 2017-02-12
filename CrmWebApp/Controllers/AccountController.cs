@@ -96,7 +96,7 @@ namespace CrmWebApp.Controllers
                 case SignInStatus.Success:
                     if (returnUrl == null)
                     {
-                        return RedirectToAction("UserList", "Account");
+                        return RedirectToAction("Index", "Home");
                     }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
