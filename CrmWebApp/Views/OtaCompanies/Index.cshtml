@@ -12,17 +12,14 @@
 <table class="table">
     <tr>
         <th>
+            @Html.DisplayNameFor(model => model.SalesUserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CityName)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.CompanyName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LegalPerson)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LegalPersonIdNo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LegalPersonPhone)
-        </th>
+        </th>        
         <th>
             @Html.DisplayNameFor(model => model.RegisterAddress)
         </th>
@@ -33,49 +30,25 @@
             @Html.DisplayNameFor(model => model.OfficeNo)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.LegalPerson)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.BossName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.BossIdNo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.BossBackground)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.BossBusinessDesp)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.OtherInvest)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CapitalAsserts)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SalesUserName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CityId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CityName)
-        </th>
+        </th>        
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
         <td>
+            @Html.DisplayFor(modelItem => item.SalesUserName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CityName)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.CompanyName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LegalPerson)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LegalPersonIdNo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LegalPersonPhone)
-        </td>
+        </td>        
         <td>
             @Html.DisplayFor(modelItem => item.RegisterAddress)
         </td>
@@ -86,32 +59,11 @@
             @Html.DisplayFor(modelItem => item.OfficeNo)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.LegalPerson)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.BossName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BossIdNo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BossBackground)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BossBusinessDesp)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OtherInvest)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CapitalAsserts)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SalesUserName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CityId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CityName)
-        </td>
+        </td>        
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
             @Html.ActionLink("Details", "Details", new { id=item.Id }) |
