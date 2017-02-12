@@ -65,6 +65,7 @@ namespace CrmWebApp.Models
     {
         [Required]
         [Display(Name = "用户名")]
+        [RegularExpression(@"^[a-zA-Z_0-9]+$", ErrorMessage ="用户名不能有特殊字符")]
         public string UserName { get; set; }
 
         [Required]

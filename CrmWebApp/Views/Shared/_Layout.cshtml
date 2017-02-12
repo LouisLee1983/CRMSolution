@@ -22,15 +22,14 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("主页", "Index", "Home")</li>
-                    <li>@Html.ActionLink("联系", "Contact", "Home")</li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" href="#" data-toggle="dropdown">工作<strong class="caret"></strong></a>
                         <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("负责区域", "RoleList", "Account")</li>
+                            <li>@Html.ActionLink("负责区域", "Index", "SalesServeAreas")</li>
                             <li>@Html.ActionLink("客户列表", "Index", "OtaCompanies")</li>
-                            <li>@Html.ActionLink("拜访记录", "Index", "ParamDicts")</li>
-                            <li>@Html.ActionLink("日报周报", "Index", "ParamDicts")</li>
+                            <li>@Html.ActionLink("客户运营信息", "Index", "CompanyBusinessDailies")</li>
+                            <li>@Html.ActionLink("客户业务信息", "Index", "CompanySalesDailies")</li>
+                            <li>@Html.ActionLink("拜访记录", "Index", "CompanyMeetings")</li>
                         </ul>
                     </li>
                     @if (User != null && User.IsInRole("Admin"))
@@ -45,6 +44,8 @@
                             </ul>
                         </li>
                     }
+                    <li>@Html.ActionLink("主页", "Index", "Home")</li>
+                    <li>@Html.ActionLink("联系", "Contact", "Home")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
