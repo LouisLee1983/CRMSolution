@@ -49,6 +49,14 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -170,9 +178,26 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CompanyBusinessDailiesController.cs" />
+    <Compile Include="Controllers\CompanyBusinessDailyParamsController.cs" />
+    <Compile Include="Controllers\CompanyBusinessDailyPhotoesController.cs" />
+    <Compile Include="Controllers\CompanyBusinessDailySoundRecordsController.cs" />
+    <Compile Include="Controllers\CompanyCertificatesController.cs" />
+    <Compile Include="Controllers\CompanyMediasController.cs" />
+    <Compile Include="Controllers\CompanyMeetingsController.cs" />
+    <Compile Include="Controllers\CompanyMeetingSubjectsController.cs" />
+    <Compile Include="Controllers\CompanySalesDailiesController.cs" />
+    <Compile Include="Controllers\CompanySalesDailyFundsController.cs" />
+    <Compile Include="Controllers\CompanySalesDailyParamsController.cs" />
+    <Compile Include="Controllers\CompanySalesDailyProductDespsController.cs" />
+    <Compile Include="Controllers\CompanySalesDailySalesSourcesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\OtaCompaniesController.cs" />
     <Compile Include="Controllers\ParamDictsController.cs" />
+    <Compile Include="Controllers\SalesServeAreasController.cs" />
+    <Compile Include="Controllers\S_CityController.cs" />
+    <Compile Include="Controllers\S_ProvinceController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -202,7 +227,6 @@
     <Compile Include="Models\ParamDict.cs" />
     <Compile Include="Models\SalesServeArea.cs" />
     <Compile Include="Models\S_City.cs" />
-    <Compile Include="Models\S_District.cs" />
     <Compile Include="Models\S_Province.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -214,6 +238,7 @@
     </Content>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -282,6 +307,92 @@
     <Content Include="Views\ParamDicts\Details.cshtml" />
     <Content Include="Views\ParamDicts\Edit.cshtml" />
     <Content Include="Views\ParamDicts\Index.cshtml" />
+    <Content Include="Views\OtaCompanies\Create.cshtml" />
+    <Content Include="Views\OtaCompanies\Delete.cshtml" />
+    <Content Include="Views\OtaCompanies\Details.cshtml" />
+    <Content Include="Views\OtaCompanies\Edit.cshtml" />
+    <Content Include="Views\OtaCompanies\Index.cshtml" />
+    <Content Include="Views\S_Province\Create.cshtml" />
+    <Content Include="Views\S_Province\Delete.cshtml" />
+    <Content Include="Views\S_Province\Details.cshtml" />
+    <Content Include="Views\S_Province\Edit.cshtml" />
+    <Content Include="Views\S_Province\Index.cshtml" />
+    <Content Include="Views\S_City\Create.cshtml" />
+    <Content Include="Views\S_City\Delete.cshtml" />
+    <Content Include="Views\S_City\Details.cshtml" />
+    <Content Include="Views\S_City\Edit.cshtml" />
+    <Content Include="Views\S_City\Index.cshtml" />
+    <Content Include="Views\Shared\_PartialCityListView.cshtml" />
+    <Content Include="Views\CompanyBusinessDailies\Create.cshtml" />
+    <Content Include="Views\CompanyBusinessDailies\Delete.cshtml" />
+    <Content Include="Views\CompanyBusinessDailies\Details.cshtml" />
+    <Content Include="Views\CompanyBusinessDailies\Edit.cshtml" />
+    <Content Include="Views\CompanyBusinessDailies\Index.cshtml" />
+    <Content Include="Views\CompanyBusinessDailyParams\Create.cshtml" />
+    <Content Include="Views\CompanyBusinessDailyParams\Delete.cshtml" />
+    <Content Include="Views\CompanyBusinessDailyParams\Details.cshtml" />
+    <Content Include="Views\CompanyBusinessDailyParams\Edit.cshtml" />
+    <Content Include="Views\CompanyBusinessDailyParams\Index.cshtml" />
+    <Content Include="Views\CompanyBusinessDailyPhotoes\Create.cshtml" />
+    <Content Include="Views\CompanyBusinessDailyPhotoes\Delete.cshtml" />
+    <Content Include="Views\CompanyBusinessDailyPhotoes\Details.cshtml" />
+    <Content Include="Views\CompanyBusinessDailyPhotoes\Edit.cshtml" />
+    <Content Include="Views\CompanyBusinessDailyPhotoes\Index.cshtml" />
+    <Content Include="Views\CompanyBusinessDailySoundRecords\Create.cshtml" />
+    <Content Include="Views\CompanyBusinessDailySoundRecords\Delete.cshtml" />
+    <Content Include="Views\CompanyBusinessDailySoundRecords\Details.cshtml" />
+    <Content Include="Views\CompanyBusinessDailySoundRecords\Edit.cshtml" />
+    <Content Include="Views\CompanyBusinessDailySoundRecords\Index.cshtml" />
+    <Content Include="Views\CompanyCertificates\Create.cshtml" />
+    <Content Include="Views\CompanyCertificates\Delete.cshtml" />
+    <Content Include="Views\CompanyCertificates\Details.cshtml" />
+    <Content Include="Views\CompanyCertificates\Edit.cshtml" />
+    <Content Include="Views\CompanyCertificates\Index.cshtml" />
+    <Content Include="Views\CompanyMedias\Create.cshtml" />
+    <Content Include="Views\CompanyMedias\Delete.cshtml" />
+    <Content Include="Views\CompanyMedias\Details.cshtml" />
+    <Content Include="Views\CompanyMedias\Edit.cshtml" />
+    <Content Include="Views\CompanyMedias\Index.cshtml" />
+    <Content Include="Views\CompanyMeetings\Create.cshtml" />
+    <Content Include="Views\CompanyMeetings\Delete.cshtml" />
+    <Content Include="Views\CompanyMeetings\Details.cshtml" />
+    <Content Include="Views\CompanyMeetings\Edit.cshtml" />
+    <Content Include="Views\CompanyMeetings\Index.cshtml" />
+    <Content Include="Views\CompanyMeetingSubjects\Create.cshtml" />
+    <Content Include="Views\CompanyMeetingSubjects\Delete.cshtml" />
+    <Content Include="Views\CompanyMeetingSubjects\Details.cshtml" />
+    <Content Include="Views\CompanyMeetingSubjects\Edit.cshtml" />
+    <Content Include="Views\CompanyMeetingSubjects\Index.cshtml" />
+    <Content Include="Views\CompanySalesDailies\Create.cshtml" />
+    <Content Include="Views\CompanySalesDailies\Delete.cshtml" />
+    <Content Include="Views\CompanySalesDailies\Details.cshtml" />
+    <Content Include="Views\CompanySalesDailies\Edit.cshtml" />
+    <Content Include="Views\CompanySalesDailies\Index.cshtml" />
+    <Content Include="Views\CompanySalesDailyFunds\Create.cshtml" />
+    <Content Include="Views\CompanySalesDailyFunds\Delete.cshtml" />
+    <Content Include="Views\CompanySalesDailyFunds\Details.cshtml" />
+    <Content Include="Views\CompanySalesDailyFunds\Edit.cshtml" />
+    <Content Include="Views\CompanySalesDailyFunds\Index.cshtml" />
+    <Content Include="Views\CompanySalesDailyParams\Create.cshtml" />
+    <Content Include="Views\CompanySalesDailyParams\Delete.cshtml" />
+    <Content Include="Views\CompanySalesDailyParams\Details.cshtml" />
+    <Content Include="Views\CompanySalesDailyParams\Edit.cshtml" />
+    <Content Include="Views\CompanySalesDailyParams\Index.cshtml" />
+    <Content Include="Views\CompanySalesDailyProductDesps\Create.cshtml" />
+    <Content Include="Views\CompanySalesDailyProductDesps\Delete.cshtml" />
+    <Content Include="Views\CompanySalesDailyProductDesps\Details.cshtml" />
+    <Content Include="Views\CompanySalesDailyProductDesps\Edit.cshtml" />
+    <Content Include="Views\CompanySalesDailyProductDesps\Index.cshtml" />
+    <Content Include="Views\CompanySalesDailySalesSources\Create.cshtml" />
+    <Content Include="Views\CompanySalesDailySalesSources\Delete.cshtml" />
+    <Content Include="Views\CompanySalesDailySalesSources\Details.cshtml" />
+    <Content Include="Views\CompanySalesDailySalesSources\Edit.cshtml" />
+    <Content Include="Views\CompanySalesDailySalesSources\Index.cshtml" />
+    <Content Include="Views\SalesServeAreas\Create.cshtml" />
+    <Content Include="Views\SalesServeAreas\Delete.cshtml" />
+    <Content Include="Views\SalesServeAreas\Details.cshtml" />
+    <Content Include="Views\SalesServeAreas\Edit.cshtml" />
+    <Content Include="Views\SalesServeAreas\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\SalesArea\" />

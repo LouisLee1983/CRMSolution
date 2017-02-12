@@ -1,4 +1,4 @@
-namespace CrmWebApp.Models
+﻿namespace CrmWebApp.Models
 {
     using System;
     using System.Collections.Generic;
@@ -13,10 +13,12 @@ namespace CrmWebApp.Models
 
         [Required]
         [StringLength(50)]
+        [Display(Name ="属性类别")]
         public string ParamName { get; set; }
 
         [Required]
         [StringLength(50)]
+        [Display(Name = "子属性名")]
         public string SubItemName { get; set; }
     }
 }

@@ -19,8 +19,9 @@ namespace CrmWebApp.Models
 
         public long? ProvinceID { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime? DateCreated { get; set; }
-
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime? DateUpdated { get; set; }
     }
 }

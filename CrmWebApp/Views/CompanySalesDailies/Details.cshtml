@@ -1,0 +1,82 @@
+﻿@model CrmWebApp.Models.CompanySalesDaily
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>CompanySalesDaily</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompanyId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompanyName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ManagerName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ManagerName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ManagerPhone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ManagerPhone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SalesType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SalesType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateUserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreateUserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreateTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SalesLogDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SalesLogDate)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,24 @@
+﻿@model IEnumerable<CrmWebApp.Models.S_City>
+
+<table class="table">
+    <tr>
+        <th>
+            城市名
+        </th>
+        <th>
+            邮编
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CityName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ZipCode)
+            </td>
+        </tr>
+    }
+
+</table>

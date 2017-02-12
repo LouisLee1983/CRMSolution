@@ -1,0 +1,73 @@
+﻿@model IEnumerable<CrmWebApp.Models.S_Province>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ProvinceName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateCreated)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateUpdated)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProvinceName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateCreated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateUpdated)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ProvinceID }, new { @class = "btn btn-default" }) 
+                @Html.ActionLink("Details", "Details", new { id = item.ProvinceID }, new { @class = "btn btn-default" }) 
+                @Html.ActionLink("Delete", "Delete", new { id = item.ProvinceID }, new { @class = "btn btn-default" })
+                <a href="#" class="btn btn-default" data-toggle="modal" data-target="#cityListModalDiv" onclick="ShowCityList(@item.ProvinceID)">城市</a>
+            </td>
+        </tr>
+    }
+
+</table>
+<div class="modal" id="cityListModalDiv" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+                <h3 class="modal-title">city list</h3>
+            </div>
+            <div class="modal-body" id="cityListModalBodyDiv">
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var ShowCityList = function (provinceId) {
+        var serverUrl = "@Url.Content("~/")";
+        var url = serverUrl + "S_Province/ShowCityList?provinceId=" + provinceId;
+        $("#cityListModalBodyDiv").load(url, function () {
+            $("cityListModalDiv").modal("show");
+        })
+    }
+</script>

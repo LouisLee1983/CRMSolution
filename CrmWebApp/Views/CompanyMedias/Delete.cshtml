@@ -1,0 +1,56 @@
+﻿@model CrmWebApp.Models.CompanyMedia
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>CompanyMedia</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.OuterKeyId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OuterKeyId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MediaFor)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MediaFor)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MediaName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MediaName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MediaUrl)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MediaUrl)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

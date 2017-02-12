@@ -446,6 +446,10 @@ namespace CrmWebApp.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult EditUser(string id, ManageMessageId? Message = null)
         {
+            if (string.IsNullOrEmpty(id))
+            {
+                id = User.Identity.Name;
+            }
             var Db = new ApplicationDbContext();
             var user = Db.Users.First(u => u.UserName == id);
             var model = new EditUserViewModel(user);
@@ -495,6 +499,10 @@ namespace CrmWebApp.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult EditUserRoles(string id)
         {
+            if (string.IsNullOrEmpty(id))
+            {
+                id = User.Identity.GetUserName();
+            }
             var Db = new ApplicationDbContext();
             var user = Db.Users.First(u => u.UserName == id);
             var model = new SelectUserRolesViewModel(user);

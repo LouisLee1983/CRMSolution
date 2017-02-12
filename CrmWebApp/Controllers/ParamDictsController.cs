@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using CrmWebApp.Models;
+using PagedList;
 
 namespace CrmWebApp.Controllers
 {
@@ -16,9 +17,49 @@ namespace CrmWebApp.Controllers
         private OtaCrmModel db = new OtaCrmModel();
 
         // GET: ParamDicts
-        public async Task<ActionResult> Index()
+        public ActionResult Index(string sortOrder, string searchString, string currentFilter, int? page)
         {
-            return View(await db.ParamDict.ToListAsync());
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.ParamNameSortParm = string.IsNullOrEmpty(sortOrder) ? "paramName_desc" : "";
+            ViewBag.SubItemNameSortParm = sortOrder == "subItemName" ? "subItemName_desc" : "subItemName";
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.CurrentFilter = searchString;
+
+            var paramDicts = from p in db.ParamDict
+                             select p;
+
+            //搜索
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                paramDicts = paramDicts.Where(p => p.ParamName.Contains(searchString) || p.SubItemName.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "paramName_desc":
+                    paramDicts = paramDicts.OrderByDescending(o => o.ParamName);
+                    break;
+                case "subItemName_desc":
+                    paramDicts = paramDicts.OrderByDescending(o => o.SubItemName);
+                    break;
+                case "subItemName":
+                    paramDicts = paramDicts.OrderBy(o => o.SubItemName);
+                    break;
+                default:
+                    paramDicts = paramDicts.OrderBy(o => o.ParamName);
+                    break;
+            }
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+
+            return View(paramDicts.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: ParamDicts/Details/5

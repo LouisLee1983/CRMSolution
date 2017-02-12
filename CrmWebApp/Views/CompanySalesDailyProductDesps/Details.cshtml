@@ -1,0 +1,50 @@
+﻿@model CrmWebApp.Models.CompanySalesDailyProductDesp
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>CompanySalesDailyProductDesp</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanySalesDailyId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompanySalesDailyId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SalesSource)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SalesSource)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SalesProduct)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SalesProduct)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SalesCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SalesCount)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

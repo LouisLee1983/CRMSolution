@@ -28,7 +28,6 @@ namespace CrmWebApp.Models
         public virtual DbSet<OtaCompany> OtaCompany { get; set; }
         public virtual DbSet<ParamDict> ParamDict { get; set; }
         public virtual DbSet<S_City> S_City { get; set; }
-        public virtual DbSet<S_District> S_District { get; set; }
         public virtual DbSet<S_Province> S_Province { get; set; }
         public virtual DbSet<SalesServeArea> SalesServeArea { get; set; }
 

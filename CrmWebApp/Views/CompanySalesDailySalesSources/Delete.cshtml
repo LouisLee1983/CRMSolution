@@ -1,0 +1,64 @@
+﻿@model CrmWebApp.Models.CompanySalesDailySalesSource
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>CompanySalesDailySalesSource</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanySalesDailyId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompanySalesDailyId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SaleSource)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SaleSource)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EmployeeCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EmployeeCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TicketCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TicketCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EmployeePayment)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EmployeePayment)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

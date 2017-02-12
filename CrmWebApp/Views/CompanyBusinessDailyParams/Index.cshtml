@@ -1,0 +1,51 @@
+﻿@model IEnumerable<CrmWebApp.Models.CompanyBusinessDailyParam>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CompanyBusinessDailyId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ParamName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SubParamItem)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ItemAmount)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CompanyBusinessDailyId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ParamName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SubParamItem)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ItemAmount)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,146 @@
+﻿@model CrmWebApp.Models.OtaCompany
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>OtaCompany</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompanyName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LegalPerson)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LegalPerson)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LegalPersonIdNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LegalPersonIdNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LegalPersonPhone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LegalPersonPhone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RegisterAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RegisterAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RealAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RealAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OfficeNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OfficeNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BossName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BossName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BossIdNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BossIdNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BossBackground)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BossBackground)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BossBusinessDesp)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BossBusinessDesp)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OtherInvest)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OtherInvest)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CapitalAsserts)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CapitalAsserts)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SalesUserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SalesUserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CityId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CityId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CityName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CityName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
