@@ -6,10 +6,10 @@
 
 <h2>Create</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>CompanySalesDaily</h4>
         <hr />
@@ -49,7 +49,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.SalesType, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.SalesType, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownListFor(model => model.SalesType, ViewData["SalesTypeList"] as List<SelectListItem>, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.SalesType, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -87,5 +87,5 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "Index", new { companyId = Model.CompanyId })
 </div>

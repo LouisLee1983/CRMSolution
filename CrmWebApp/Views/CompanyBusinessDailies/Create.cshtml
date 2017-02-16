@@ -6,14 +6,22 @@
 
 <h2>Create</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
-        <h4>CompanyBusinessDaily</h4>
+        <h4>@ViewBag.CompanyName</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.BussinessType, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.BussinessType, ViewData["BussinessTypeList"] as List<SelectListItem>, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.BussinessType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
         <div class="form-group">
             @Html.LabelFor(model => model.CompanyId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -27,14 +35,6 @@
             <div class="col-md-10">
                 @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.BussinessType, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.BussinessType, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.BussinessType, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -65,7 +65,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.BussinessLogDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.BussinessLogDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.BussinessLogDate, new { htmlAttributes = new { @class = "form-control datetimepicker" } })
                 @Html.ValidationMessageFor(model => model.BussinessLogDate, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -79,5 +79,11 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "Index", new { companyId = Model.CompanyId })
 </div>
+
+<script type="text/javascript">
+    $(".datetimepicker").datetimepicker({
+        format: "YYYY-MM-DD"
+    });
+</script>

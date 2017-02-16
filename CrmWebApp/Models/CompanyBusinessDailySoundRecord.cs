@@ -1,4 +1,4 @@
-namespace CrmWebApp.Models
+﻿namespace CrmWebApp.Models
 {
     using System;
     using System.Collections.Generic;
@@ -10,15 +10,17 @@ namespace CrmWebApp.Models
     public partial class CompanyBusinessDailySoundRecord
     {
         public int Id { get; set; }
-
+        [Display(Name = "运营记录ID")]
         public int CompanyBusinessDailyId { get; set; }
 
         [Required]
         [StringLength(50)]
+        [Display(Name = "录音名称")]
         public string SoundRecordName { get; set; }
 
         [Required]
         [StringLength(128)]
+        [Display(Name = "录音地址")]
         public string SoundRecordUrl { get; set; }
     }
 }

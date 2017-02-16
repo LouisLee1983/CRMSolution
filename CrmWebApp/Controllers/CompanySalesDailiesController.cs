@@ -16,9 +16,18 @@ namespace CrmWebApp.Controllers
         private OtaCrmModel db = new OtaCrmModel();
 
         // GET: CompanySalesDailies
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(int? companyId)
         {
-            return View(await db.CompanySalesDaily.ToListAsync());
+            var model = from cbd in db.CompanySalesDaily
+                        select cbd;
+            if (companyId.HasValue)
+            {
+                model = model.Where(p => p.CompanyId == companyId.Value);
+                ViewBag.CompanyId = companyId.Value;
+                ViewBag.CompanyName = db.OtaCompany.FirstOrDefault(p => p.Id == companyId.Value).CompanyName;
+            }
+
+            return View(await model.ToListAsync());
         }
 
         // GET: CompanySalesDailies/Details/5
@@ -37,9 +46,46 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanySalesDailies/Create
-        public ActionResult Create()
+        public ActionResult Create(int? companyId)
         {
-            return View();
+            var model = new CompanySalesDaily();
+            if (companyId.HasValue)
+            {
+                model.CompanyId = companyId.Value;
+                var company = db.OtaCompany.FirstOrDefault(p => p.Id == companyId.Value);
+                if (company != null)
+                {
+                    model.CompanyName = company.CompanyName;
+                }
+                model.CreateUserName = User.Identity.Name;
+                model.SalesLogDate = DateTime.Today;
+                model.CreateTime = DateTime.Now;
+                model.ManagerName = ""; //取上一个记录得数据
+                model.ManagerPhone = ""; //取上一个记录得数据
+                model.SalesType = "";
+            }
+            ViewData["SalesTypeList"] = GetSalesTypeList("国内");
+            return View(model);
+        }
+
+        private List<SelectListItem> GetSalesTypeList(string defaultValue)
+        {
+            var bussinessTypes = from p in db.ParamDict
+                                 where p.ParamName == "BussinessType"
+                                 select p;
+            List<SelectListItem> result = new List<SelectListItem>();
+            foreach (var item in bussinessTypes)
+            {
+                SelectListItem selectItem = new SelectListItem();
+                selectItem.Value = item.SubItemName;
+                selectItem.Text = item.SubItemName;
+                if (!string.IsNullOrEmpty(defaultValue) && defaultValue == item.SubItemName)
+                {
+                    selectItem.Selected = true;
+                }
+                result.Add(selectItem);
+            }
+            return result;
         }
 
         // POST: CompanySalesDailies/Create
@@ -53,7 +99,7 @@ namespace CrmWebApp.Controllers
             {
                 db.CompanySalesDaily.Add(companySalesDaily);
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { companyId = companySalesDaily.CompanyId });
             }
 
             return View(companySalesDaily);

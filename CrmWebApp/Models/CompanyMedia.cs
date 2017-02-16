@@ -1,4 +1,4 @@
-namespace CrmWebApp.Models
+﻿namespace CrmWebApp.Models
 {
     using System;
     using System.Collections.Generic;
@@ -10,17 +10,20 @@ namespace CrmWebApp.Models
     public partial class CompanyMedia
     {
         public int Id { get; set; }
-
+        [Display(Name = "外部ID")]
         public int OuterKeyId { get; set; }
 
         [Required]
         [StringLength(50)]
+        [Display(Name = "媒体类属")]
         public string MediaFor { get; set; }
 
         [StringLength(50)]
+        [Display(Name = "媒体名称")]
         public string MediaName { get; set; }
 
         [StringLength(128)]
+        [Display(Name = "媒体网址")]
         public string MediaUrl { get; set; }
     }
 }
