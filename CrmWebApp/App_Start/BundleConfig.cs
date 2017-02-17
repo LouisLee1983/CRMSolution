@@ -24,12 +24,16 @@ namespace CrmWebApp
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/moment.js",
                       "~/Scripts/bootstrap-datetimepicker.js",
-                      "~/Scripts/respond.js"));
+                      "~/Scripts/respond.js",
+                      "~/Scripts/fileinput.js",
+                      "~/Scripts/locales/zh.js"
+                      ));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/bootstrap-datetimepicker.css",
-                      "~/Content/bootstrap - theme.css",                      
+                      "~/Content/bootstrap - theme.css",
+                      "~/Content/bootstrap-fileinput/css/fileinput.css",
                       "~/Content/site.css"));
         }
     }

@@ -68,6 +68,7 @@
             @Html.ActionLink("编辑", "Edit", new { id=item.Id }, new { @class = "btn btn-default" })
             @Html.ActionLink("详情", "Details", new { id=item.Id }, new { @class = "btn btn-default" })
             @Html.ActionLink("删除", "Delete", new { id=item.Id }, new { @class = "btn btn-default" })
+            <a class="btn btn-default" href="../CompanyCertificates/Index?companyId=@item.Id">资质</a>
             <a class="btn btn-default" href="../CompanyBusinessDailies/Index?companyId=@item.Id">运营</a>
             <a class="btn btn-default" href="../CompanySalesDailies/Index?companyId=@item.Id">业务</a>
             <a class="btn btn-default" href="../CompanyMeetings/Index?companyId=@item.Id">拜访</a>

@@ -31,10 +31,12 @@
         public string CreateUserName { get; set; }
 
         [Display(Name ="录入时间")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime? CreateTime { get; set; }
 
         [Column(TypeName = "date")]
         [Display(Name ="运营状况日期")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime? BussinessLogDate { get; set; }
     }
 }

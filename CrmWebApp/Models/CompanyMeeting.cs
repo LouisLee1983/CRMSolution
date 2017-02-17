@@ -41,6 +41,7 @@
         public string CreateUserName { get; set; }
 
         [Display(Name = "录入时间")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime? CreateTime { get; set; }
     }
 }

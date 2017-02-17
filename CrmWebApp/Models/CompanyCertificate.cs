@@ -25,6 +25,7 @@
         [Display(Name = "图片网址")]
         public string PictureUrl { get; set; }
         [Display(Name = "录入时间")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime? CreateTime { get; set; }
 
         [StringLength(50)]

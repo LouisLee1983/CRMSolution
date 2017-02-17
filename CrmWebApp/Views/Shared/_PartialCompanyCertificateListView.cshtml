@@ -1,0 +1,16 @@
+﻿@model IEnumerable<CrmWebApp.Models.CompanyCertificate>
+<div class="row">
+    @foreach (var item in Model)
+    {
+        var imageUrl = @Url.Content("~/CompanyImages/Certificates/" + item.CompanyName + "/" + item.PictureUrl);
+        <div class="col-md-2">
+            <a href="@imageUrl" class="thumbnail">
+                <img src="@imageUrl" style="height:100px;width:100px;display: block" />
+            </a>
+            <div class="caption">
+                <h6>@item.CertificateName</h6>
+                <p>@item.CreateTime.Value.ToString("yyyyMMddHHmmss")</p>
+            </div>
+        </div>
+    }
+</div>

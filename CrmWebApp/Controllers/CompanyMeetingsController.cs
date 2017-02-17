@@ -16,9 +16,18 @@ namespace CrmWebApp.Controllers
         private OtaCrmModel db = new OtaCrmModel();
 
         // GET: CompanyMeetings
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(int? companyId)
         {
-            return View(await db.CompanyMeeting.ToListAsync());
+            var model = from cbd in db.CompanyMeeting
+                        select cbd;
+            if (companyId.HasValue)
+            {
+                model = model.Where(p => p.CompanyId == companyId.Value);
+                ViewBag.CompanyId = companyId.Value;
+                ViewBag.CompanyName = db.OtaCompany.FirstOrDefault(p => p.Id == companyId.Value).CompanyName;
+            }
+
+            return View(await model.ToListAsync());
         }
 
         // GET: CompanyMeetings/Details/5
@@ -37,9 +46,45 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyMeetings/Create
-        public ActionResult Create()
+        public ActionResult Create(int? companyId)
         {
-            return View();
+            var model = new CompanyMeeting();
+            if (companyId.HasValue)
+            {
+                model.CompanyId = companyId.Value;
+                var company = db.OtaCompany.FirstOrDefault(p => p.Id == companyId.Value);
+                if (company != null)
+                {
+                    model.CompanyName = company.CompanyName;
+                }
+                model.CreateUserName = User.Identity.Name;
+                model.MeetDate = DateTime.Today;
+                model.CreateTime = DateTime.Now;
+                model.MeetAddress = ""; //取上一个记录得数据
+                model.MeetingType = ""; //取上一个记录得数据
+                model.MeetNames = ""; //取上一个记录得数据
+            }
+            ViewData["MeetingTypeList"] = GetMeetingTypeList("上门");
+            return View(model);
+        }
+        private List<SelectListItem> GetMeetingTypeList(string defaultValue)
+        {
+            var bussinessTypes = from p in db.ParamDict
+                                 where p.ParamName == "MeetingType"
+                                 select p;
+            List<SelectListItem> result = new List<SelectListItem>();
+            foreach (var item in bussinessTypes)
+            {
+                SelectListItem selectItem = new SelectListItem();
+                selectItem.Value = item.SubItemName;
+                selectItem.Text = item.SubItemName;
+                if (!string.IsNullOrEmpty(defaultValue) && defaultValue == item.SubItemName)
+                {
+                    selectItem.Selected = true;
+                }
+                result.Add(selectItem);
+            }
+            return result;
         }
 
         // POST: CompanyMeetings/Create

@@ -6,14 +6,22 @@
 
 <h2>Create</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm("Create", "CompanyCertificates", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
-        <h4>CompanyCertificate</h4>
+        <h4>@ViewBag.CompanyName</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.CertificateName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.CertificateName, ViewData["CertificateNameList"] as List<SelectListItem>, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CertificateName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
         <div class="form-group">
             @Html.LabelFor(model => model.CompanyId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -23,26 +31,10 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.CertificateName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CertificateName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CertificateName, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
             @Html.LabelFor(model => model.CompanyName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.PictureUrl, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.PictureUrl, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.PictureUrl, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -63,6 +55,15 @@
         </div>
 
         <div class="form-group">
+            <label class="control-label col-md-2">图片上传</label>
+            <div class="col-md-10">
+                <div>
+                    <input id="imageFile" type="file" name="imageFile" class="form-control file-loading" accept="image/*">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
@@ -73,3 +74,21 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
+
+<script>
+    $("#imageFile").fileinput({
+        language: 'zh', //设置语言
+        uploadUrl: '/CompanyCertificates/Create', //上传的地址
+        allowedFileExtensions: ['jpg', 'png', 'gif'],//接收的文件后缀
+        showUpload: true, //是否显示上传按钮
+        showCaption: false,//是否显示标题
+        showPreview: true,
+        browseClass: "btn btn-primary", //按钮样式
+        previewFileType: 'image',
+        enctype: 'multipart/form-data',
+        validateInitialCount: true,
+        previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+    })
+
+
+</script>

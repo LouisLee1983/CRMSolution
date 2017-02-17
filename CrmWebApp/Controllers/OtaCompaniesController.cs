@@ -35,6 +35,8 @@ namespace CrmWebApp.Controllers
             {
                 return HttpNotFound();
             }
+
+            ViewData["CompanyCertificateList"] = db.CompanyCertificate.Where(p => p.CompanyId == id).ToList();
             return View(otaCompany);
         }
 
