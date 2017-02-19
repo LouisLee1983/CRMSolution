@@ -1,0 +1,14 @@
+﻿@model List<CrmWebApp.Models.CompanyBusinessDailyParam>
+    <table>
+        @foreach(var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(m=>item.SubParamItem)
+                </td>
+                <td>
+                    @Html.DisplayFor(m=>item.ItemAmount)
+                </td>
+            </tr>
+        }
+    </table>

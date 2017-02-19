@@ -65,7 +65,7 @@ namespace CrmWebApp.Controllers
             }
             ViewData["CertificateNameList"] = GetCertificateNameList("营业执照");
 
-            return View(model);
+            return PartialView("_PartialCertificateUpload",model);
         }
 
         private List<SelectListItem> GetCertificateNameList(string defaultValue)
@@ -133,7 +133,7 @@ namespace CrmWebApp.Controllers
                     }
                 }
 
-                return RedirectToAction("Create", new { companyId = companyCertificate.CompanyId });
+                return RedirectToAction("Index", new { companyId = companyCertificate.CompanyId });
             }
             ViewData["CertificateNameList"] = GetCertificateNameList("营业执照");
 

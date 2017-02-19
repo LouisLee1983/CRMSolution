@@ -69,10 +69,12 @@
         [Display(Name = "销售")]
         public string SalesUserName { get; set; }
         
-        public int? CityId { get; set; }
-
         [StringLength(50)]
         [Display(Name = "所在城市")]
         public string CityName { get; set; }
+
+        [Display(Name = "录入时间")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
+        public DateTime? CreateTime { get; set; }
     }
 }

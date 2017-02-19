@@ -1,13 +1,8 @@
 ﻿@model CrmWebApp.Models.CompanyCertificate
-
-@{
-    ViewBag.Title = "Create";
-}
-
 @using (Html.BeginForm("Create", "CompanyCertificates", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    @Html.HiddenFor(model=>model.CompanyId)
+    @Html.HiddenFor(model => model.CompanyId)
     @Html.HiddenFor(model => model.CompanyName)
     @Html.HiddenFor(model => model.CreateTime)
     @Html.HiddenFor(model => model.CreateUserName)
@@ -39,10 +34,6 @@
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
 <script>
     $("#imageFile").fileinput({

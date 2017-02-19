@@ -121,15 +121,7 @@
         <dd>
             @Html.DisplayFor(model => model.SalesUserName)
         </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CityId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CityId)
-        </dd>
-
+        
         <dt>
             @Html.DisplayNameFor(model => model.CityName)
         </dt>
@@ -137,9 +129,19 @@
         <dd>
             @Html.DisplayFor(model => model.CityName)
         </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreateTime)
+        </dd>
+
         <dt>
             资质
         </dt>
+
         <dd>
             @Html.Partial("_PartialCompanyCertificateListView", ViewData["CompanyCertificateList"])
         </dd>

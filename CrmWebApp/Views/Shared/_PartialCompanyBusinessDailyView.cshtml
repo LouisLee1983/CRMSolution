@@ -1,0 +1,142 @@
+﻿@model CrmWebApp.Models.CompanyBusinessDailyViewModel
+<table>
+    <tr>
+        <td>
+            <h4>公司名</h4>
+        </td>
+        <td>
+            @Model.CompanyName
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <h4>@Html.DisplayNameFor(model => model.BussinessType)</h4>
+        </td>
+
+        <td>
+            @Html.DisplayFor(model => model.BussinessType)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <h4>@Html.DisplayNameFor(model => model.ManagerName)</h4>
+        </td>
+
+        <td>
+            @Html.DisplayFor(model => model.ManagerName)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <h4>
+                @Html.DisplayNameFor(model => model.CreateUserName)
+            </h4>
+        </td>
+
+        <td>
+            @Html.DisplayFor(model => model.CreateUserName)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <h4>
+                @Html.DisplayNameFor(model => model.CreateTime)
+            </h4>
+        </td>
+
+        <td>
+            @Html.DisplayFor(model => model.CreateTime)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <h4>
+                @Html.DisplayNameFor(model => model.BussinessLogDate)
+            </h4>
+        </td>
+
+        <td>
+            @Html.DisplayFor(model => model.BussinessLogDate)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <h4>员工数</h4>
+        </td>
+        <td>
+            <table class="table">
+                @foreach (var item in Model.EmployeeList)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SubParamItem)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ItemAmount)<label>人</label>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <h4>软件系统</h4>
+        </td>
+        <td>
+            <table class="table">
+                @foreach (var item in Model.ItSystemList)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SubParamItem)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ItemAmount)<label>套</label>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <h4>业务结构</h4>
+        </td>
+        <td>
+            <table class="table">
+                @foreach (var item in Model.BusinessAmountList)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SubParamItem)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ItemAmount)<label>张/天</label>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <h4>新业务</h4>
+        </td>
+        <td>
+            <table class="table">
+                @foreach (var item in Model.NewBusinessList)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SubParamItem)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ItemAmount)<label>单/天</label>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </td>
+    </tr>
+</table>

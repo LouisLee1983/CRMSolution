@@ -16,9 +16,17 @@ namespace CrmWebApp.Controllers
         private OtaCrmModel db = new OtaCrmModel();
 
         // GET: CompanyBusinessDailyParams
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(int? dailyId)
         {
-            return View(await db.CompanyBusinessDailyParam.ToListAsync());
+            var model = from cbd in db.CompanyBusinessDailyParam
+                        select cbd;
+            if (dailyId.HasValue)
+            {
+                model = model.Where(p => p.CompanyBusinessDailyId == dailyId.Value);
+                ViewBag.DailyId = dailyId.Value;
+            }
+
+            return View(await model.ToListAsync());
         }
 
         // GET: CompanyBusinessDailyParams/Details/5
@@ -37,9 +45,14 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyBusinessDailyParams/Create
-        public ActionResult Create()
+        public ActionResult Create(int? dailyId)
         {
-            return View();
+            var model = new CompanyBusinessDailyParam();
+            if (dailyId.HasValue)
+            {
+                model.CompanyBusinessDailyId = dailyId.Value;
+            }
+            return View(model);
         }
 
         // POST: CompanyBusinessDailyParams/Create

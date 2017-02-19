@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using CrmWebApp.Models;
+using System.Data.SqlClient;
 
 namespace CrmWebApp.Controllers
 {
@@ -29,6 +30,21 @@ namespace CrmWebApp.Controllers
 
             return View(await model.ToListAsync());
         }
+        public ActionResult ShowViewPartial(int companyBusinessDailyId)
+        {
+            CompanyBusinessDaily dailyItem = db.CompanyBusinessDaily.FirstOrDefault(p => p.Id == companyBusinessDailyId);
+            var paramList = from p in db.CompanyBusinessDailyParam
+                            where p.CompanyBusinessDailyId == companyBusinessDailyId
+                            select p;
+            var photoList = from p in db.CompanyBusinessDailyPhoto
+                            where p.CompanyBusinessDailyId == companyBusinessDailyId
+                            select p;
+            var soundList = from p in db.CompanyBusinessDailySoundRecord
+                            where p.CompanyBusinessDailyId == companyBusinessDailyId
+                            select p;
+            var model = new CompanyBusinessDailyViewModel(dailyItem, paramList.ToList(), photoList.ToList(), soundList.ToList());
+            return PartialView("_PartialCompanyBusinessDailyView", model);
+        }
 
         // GET: CompanyBusinessDailies/Details/5
         public async Task<ActionResult> Details(int? id)
@@ -42,7 +58,17 @@ namespace CrmWebApp.Controllers
             {
                 return HttpNotFound();
             }
-            return View(companyBusinessDaily);
+            var paramList = from p in db.CompanyBusinessDailyParam
+                            where p.CompanyBusinessDailyId == id.Value
+                            select p;
+            var photoList = from p in db.CompanyBusinessDailyPhoto
+                            where p.CompanyBusinessDailyId == id.Value
+                            select p;
+            var soundList = from p in db.CompanyBusinessDailySoundRecord
+                            where p.CompanyBusinessDailyId == id.Value
+                            select p;
+            var model = new CompanyBusinessDailyViewModel(companyBusinessDaily, paramList.ToList(), photoList.ToList(), soundList.ToList());
+            return View(model);
         }
 
         // GET: CompanyBusinessDailies/Create
@@ -98,7 +124,7 @@ namespace CrmWebApp.Controllers
             {
                 db.CompanyBusinessDaily.Add(companyBusinessDaily);
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index", new { companyId = companyBusinessDaily.CompanyId });
+                return RedirectToAction("Details", new { id = companyBusinessDaily.Id });
             }
 
             return View(companyBusinessDaily);
@@ -116,7 +142,58 @@ namespace CrmWebApp.Controllers
             {
                 return HttpNotFound();
             }
-            return View(companyBusinessDaily);
+
+            var paramList = from p in db.CompanyBusinessDailyParam
+                            where p.CompanyBusinessDailyId == id.Value
+                            select p;
+
+            var photoList = from p in db.CompanyBusinessDailyPhoto
+                            where p.CompanyBusinessDailyId == id.Value
+                            select p;
+            var soundList = from p in db.CompanyBusinessDailySoundRecord
+                            where p.CompanyBusinessDailyId == id.Value
+                            select p;
+            var model = new CompanyBusinessDailyViewModel(companyBusinessDaily, paramList.ToList(), photoList.ToList(), soundList.ToList());
+            //如果没有默认值，就需要赋值默认值
+            if (model.BusinessAmountList == null || model.BusinessAmountList.Count == 0)
+            {
+                model.BusinessAmountList = GetDefaultDailyParamList(id.Value, "业务结构");
+            }
+            if (model.EmployeeList == null || model.EmployeeList.Count == 0)
+            {
+                model.EmployeeList = GetDefaultDailyParamList(id.Value, "员工数量");
+            }
+            if (model.NewBusinessList == null || model.NewBusinessList.Count == 0)
+            {
+                model.NewBusinessList = GetDefaultDailyParamList(id.Value, "新业务量");
+            }
+            if (model.ItSystemList == null || model.ItSystemList.Count == 0)
+            {
+                model.ItSystemList = GetDefaultDailyParamList(id.Value, "软件系统");
+            }
+
+            return View(model);
+        }
+
+        public List<CompanyBusinessDailyParam> GetDefaultDailyParamList(int dailyId, string paramName)
+        {
+            //从字典表里面读取并赋值
+            List<CompanyBusinessDailyParam> result = new List<Models.CompanyBusinessDailyParam>();
+            var paramDicts = from p in db.ParamDict
+                             where p.ParamName == paramName
+                             select p;
+            foreach (ParamDict paramDict in paramDicts)
+            {
+                CompanyBusinessDailyParam companyBusinessDailyParam = new CompanyBusinessDailyParam();
+                companyBusinessDailyParam.CompanyBusinessDailyId = dailyId;
+                companyBusinessDailyParam.Id = 0;
+                companyBusinessDailyParam.ParamName = paramName;
+                companyBusinessDailyParam.SubParamItem = paramDict.SubItemName;
+                companyBusinessDailyParam.ItemAmount = 0;
+
+                result.Add(companyBusinessDailyParam);
+            }
+            return result;
         }
 
         // POST: CompanyBusinessDailies/Edit/5
@@ -124,15 +201,61 @@ namespace CrmWebApp.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,CompanyId,CompanyName,BussinessType,ManagerName,CreateUserName,CreateTime,BussinessLogDate")] CompanyBusinessDaily companyBusinessDaily)
+        public async Task<ActionResult> Edit(CompanyBusinessDailyViewModel model, List<CompanyBusinessDailyParam> employeeList, List<CompanyBusinessDailyParam> businessAmountList,
+            List<CompanyBusinessDailyParam> newBusinessList, List<CompanyBusinessDailyParam> itSystemList)
         {
-            if (ModelState.IsValid)
+            CompanyBusinessDaily companyBusinessDaily = db.CompanyBusinessDaily.FirstOrDefault(p => p.Id == model.Id);
+            companyBusinessDaily.BussinessLogDate = model.BussinessLogDate;
+            companyBusinessDaily.ManagerName = model.ManagerName;
+            await db.SaveChangesAsync();    //看看保存运营记录，保存相关的具体运营信息
+
+            string sql = "Delete From CompanyBusinessDailyParam Where CompanyBusinessDailyId=@CompanyBusinessDailyId";
+            SqlParameter[] paras = new SqlParameter[] {
+                     new SqlParameter("@CompanyBusinessDailyId",model.Id)
+                    };
+            db.Database.ExecuteSqlCommand(sql, paras);
+            //有id的更新，id=0的新增
+            foreach (CompanyBusinessDailyParam paramItem in employeeList)
             {
-                db.Entry(companyBusinessDaily).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                db.CompanyBusinessDailyParam.Add(paramItem);
             }
-            return View(companyBusinessDaily);
+            foreach (CompanyBusinessDailyParam paramItem in businessAmountList)
+            {
+                db.CompanyBusinessDailyParam.Add(paramItem);
+            }
+            foreach (CompanyBusinessDailyParam paramItem in newBusinessList)
+            {
+                db.CompanyBusinessDailyParam.Add(paramItem);
+            }
+            foreach (CompanyBusinessDailyParam paramItem in itSystemList)
+            {
+                db.CompanyBusinessDailyParam.Add(paramItem);
+            }
+            await db.SaveChangesAsync();
+
+
+            return RedirectToAction("Index", new { companyId = model.CompanyId });
+        }
+
+        public ActionResult AddBusinessDailyParam(int dailyId, string paramName)
+        {
+            var model = new CompanyBusinessDailyParam();
+            model.CompanyBusinessDailyId = dailyId;
+            model.Id = 0;
+            model.ItemAmount = 0;
+            model.ParamName = paramName;
+            model.SubParamItem = "其他";
+
+            return PartialView("_PartialBusinessParamEditor", model);
+        }
+
+        [HttpPost]
+        public ActionResult AddBusinessDailyParam(CompanyBusinessDailyParam model)
+        {
+            db.CompanyBusinessDailyParam.Add(model);
+            db.SaveChanges();
+
+            return RedirectToAction("Edit", new { id = model.CompanyBusinessDailyId });
         }
 
         // GET: CompanyBusinessDailies/Delete/5

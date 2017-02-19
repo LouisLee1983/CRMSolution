@@ -16,9 +16,17 @@ namespace CrmWebApp.Controllers
         private OtaCrmModel db = new OtaCrmModel();
 
         // GET: CompanyBusinessDailySoundRecords
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(int? dailyId)
         {
-            return View(await db.CompanyBusinessDailySoundRecord.ToListAsync());
+            var model = from cbd in db.CompanyBusinessDailySoundRecord
+                        select cbd;
+            if (dailyId.HasValue)
+            {
+                model = model.Where(p => p.CompanyBusinessDailyId == dailyId.Value);
+                ViewBag.DailyId = dailyId.Value;
+            }
+
+            return View(await model.ToListAsync());
         }
 
         // GET: CompanyBusinessDailySoundRecords/Details/5

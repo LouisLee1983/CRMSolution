@@ -1,4 +1,4 @@
-﻿@model CrmWebApp.Models.CompanyBusinessDaily
+﻿@model CrmWebApp.Models.CompanyBusinessDailyViewModel
 
 @{
     ViewBag.Title = "Edit";
@@ -9,7 +9,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>CompanyBusinessDaily</h4>
         <hr />
@@ -59,7 +59,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.CreateTime, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.CreateTime, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.CreateTime, new { htmlAttributes = new { @class = "form-control datetimepicker" } })
                 @Html.ValidationMessageFor(model => model.CreateTime, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -67,10 +67,145 @@
         <div class="form-group">
             @Html.LabelFor(model => model.BussinessLogDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.BussinessLogDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.BussinessLogDate, new { htmlAttributes = new { @class = "form-control datetimepicker" } })
                 @Html.ValidationMessageFor(model => model.BussinessLogDate, "", new { @class = "text-danger" })
             </div>
         </div>
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.EmployeeList, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <a href="#" class="glyphicon glyphicon-plus" onclick="ShowModal(@Model.Id , '员工数量')"></a>
+                <table class="table">
+                    @for (int i = 0; i < Model.EmployeeList.Count; i++)
+                    {
+                        <tr>
+                            @Html.HiddenFor(e => Model.EmployeeList[i].Id, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.HiddenFor(e => Model.EmployeeList[i].CompanyBusinessDailyId, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.HiddenFor(e => Model.EmployeeList[i].ParamName, new { htmlAttributes = new { @class = "form-control" } })
+                            <td>
+                                @Html.EditorFor(e => Model.EmployeeList[i].SubParamItem, new { htmlAttributes = new { @class = "form-control" } })
+                            </td>
+                            <td>
+                                @Html.EditorFor(e => Model.EmployeeList[i].ItemAmount, new { htmlAttributes = new { @class = "form-control" } })
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.BusinessAmountList, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <a href="#" class="glyphicon glyphicon-plus" onclick="ShowModal(@Model.Id , '业务结构')"></a>
+                <table class="table">
+                    @for (int i = 0; i < Model.BusinessAmountList.Count; i++)
+                    {
+                        <tr>
+                            @Html.HiddenFor(e => Model.BusinessAmountList[i].Id, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.HiddenFor(e => Model.BusinessAmountList[i].CompanyBusinessDailyId, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.HiddenFor(e => Model.BusinessAmountList[i].ParamName, new { htmlAttributes = new { @class = "form-control" } })
+                            <td>
+                                @Html.EditorFor(e => Model.BusinessAmountList[i].SubParamItem, new { htmlAttributes = new { @class = "form-control" } })
+                            </td>
+                            <td>
+                                @Html.EditorFor(e => Model.BusinessAmountList[i].ItemAmount, new { htmlAttributes = new { @class = "form-control" } })
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.NewBusinessList, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <a href="#" class="glyphicon glyphicon-plus" onclick="ShowModal(@Model.Id , '新业务量')"></a>
+                <table class="table">
+                    @for (int i = 0; i < Model.NewBusinessList.Count; i++)
+                    {
+                        <tr>
+                            @Html.HiddenFor(e => Model.NewBusinessList[i].Id, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.HiddenFor(e => Model.NewBusinessList[i].CompanyBusinessDailyId, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.HiddenFor(e => Model.NewBusinessList[i].ParamName, new { htmlAttributes = new { @class = "form-control" } })
+                            <td>
+                                @Html.EditorFor(e => Model.NewBusinessList[i].SubParamItem, new { htmlAttributes = new { @class = "form-control" } })
+                            </td>
+                            <td>
+                                @Html.EditorFor(e => Model.NewBusinessList[i].ItemAmount, new { htmlAttributes = new { @class = "form-control" } })
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.ItSystemList, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <a href="#" class="glyphicon glyphicon-plus" onclick="ShowModal(@Model.Id , '软件系统')"></a>
+                <table class="table">
+                    @for (int i = 0; i < Model.ItSystemList.Count; i++)
+                    {
+                        <tr>
+                            @Html.HiddenFor(e => Model.ItSystemList[i].Id, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.HiddenFor(e => Model.ItSystemList[i].CompanyBusinessDailyId, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.HiddenFor(e => Model.ItSystemList[i].ParamName, new { htmlAttributes = new { @class = "form-control" } })
+                            <td>
+                                @Html.EditorFor(e => Model.ItSystemList[i].SubParamItem, new { htmlAttributes = new { @class = "form-control" } })
+                            </td>
+                            <td>
+                                @Html.EditorFor(e => Model.ItSystemList[i].ItemAmount, new { htmlAttributes = new { @class = "form-control" } })
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.PhotoList, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <a href="#" class="glyphicon glyphicon-plus" onclick=""></a>
+                <hr />
+                @if (Model.PhotoList != null && Model.PhotoList.Count > 0)
+                {
+                    for (int i = 0; i < Model.PhotoList.Count; i++)
+                    {
+                        var imageUrl = @Url.Content("~/CompanyImages/BusinessDaily/" + Model.PhotoList[i].CompanyBusinessDailyId + "/" + Model.PhotoList[i].PhotoUrl);
+                        <div class="col-md-2">
+                            <a href="@imageUrl" class="thumbnail" target="_blank">
+                                <img src="@imageUrl" style="height:100px;width:100px;display: block" />
+                            </a>
+                            <div class="caption">
+                                <h6>@Model.PhotoList[i].PhotoName</h6>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.SoundRecordList, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <a href="#" class="glyphicon glyphicon-plus" onclick=""></a>
+                <hr />
+                @if (Model.SoundRecordList != null && Model.SoundRecordList.Count > 0)
+                {
+                    for (int i = 0; i < Model.SoundRecordList.Count; i++)
+                    {
+                        var url = @Url.Content("~/CompanyImages/BusinessDaily/" + Model.PhotoList[i].CompanyBusinessDailyId + "/" + Model.SoundRecordList[i].SoundRecordName);
+                        <audio controls="controls">
+                            <source src="@url" type="audio/mp3" />
+                        </audio>
+                    }
+                }
+            </div>
+        </div>
+        <hr />
+
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -83,3 +218,37 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
+
+<div class="modal" id="modalDiv" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+                <h3 class="modal-title"></h3>
+            </div>
+            <div class="modal-body" id="modalBodyDiv">
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    $(".datetimepicker").datetimepicker({
+        format: "YYYY-MM-DD"
+    });
+
+    var ShowModal = function (dailyId, paramName) {
+        var serverUrl = "@Url.Content("~/")";
+        var url = serverUrl + "CompanyBusinessDailies/AddBusinessDailyParam?dailyId=" + dailyId + "&paramName=" + paramName;
+        $("#modalBodyDiv").load(url, function () {
+            $("#modalDiv").modal("show");
+        })
+    }
+
+</script>

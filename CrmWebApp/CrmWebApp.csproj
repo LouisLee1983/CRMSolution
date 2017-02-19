@@ -213,6 +213,7 @@
     <Compile Include="Models\CompanyBusinessDailyParam.cs" />
     <Compile Include="Models\CompanyBusinessDailyPhoto.cs" />
     <Compile Include="Models\CompanyBusinessDailySoundRecord.cs" />
+    <Compile Include="Models\CompanyBusinessDailyViewModels.cs" />
     <Compile Include="Models\CompanyCertificate.cs" />
     <Compile Include="Models\CompanyMedia.cs" />
     <Compile Include="Models\CompanyMeeting.cs" />
@@ -547,6 +548,10 @@
     <Content Include="Views\SalesServeAreas\Index.cshtml" />
     <Content Include="Views\Shared\_PartialSelectCityView.cshtml" />
     <Content Include="Views\Shared\_PartialCompanyCertificateListView.cshtml" />
+    <Content Include="Views\Shared\_PartialCompanyBusinessDailyView.cshtml" />
+    <Content Include="Views\Shared\_PartialBusinessParamEditor.cshtml" />
+    <Content Include="Views\Shared\_PartialBusinessParamListView.cshtml" />
+    <Content Include="Views\Shared\_PartialCertificateUpload.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CompanyImages\Certificates\" />
