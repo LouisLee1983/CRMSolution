@@ -26,6 +26,7 @@
 
         [Column(TypeName = "date")]
         [Display(Name = "沟通日期")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime MeetDate { get; set; }
 
         [StringLength(128)]

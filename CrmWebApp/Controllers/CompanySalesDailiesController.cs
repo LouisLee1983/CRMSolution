@@ -180,7 +180,7 @@ namespace CrmWebApp.Controllers
             {
                 model.SalesFundList = GetDefaultSalesFundList(id.Value);
             }
-
+            ViewData["SalesTypeList"] = GetSalesTypeList("国内");
             return View(model);
         }
 
@@ -295,6 +295,7 @@ namespace CrmWebApp.Controllers
 
                 return RedirectToAction("Index", new { companyId = model.CompanyId });
             }
+            ViewData["SalesTypeList"] = GetSalesTypeList("国内");
             return View(model);
         }
 

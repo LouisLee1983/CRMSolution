@@ -4,16 +4,24 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<div class="row-fluid">
+    <div class="span12">
+        <ul class="breadcrumb">
+            <li>
+                <a href="~/Home/Index">主页</a> <span class="divider"></span>
+            </li>
+            <li class="active">
+                <a href="#">负责区域</a> <span class="divider"></span>
+            </li>
+        </ul>
+    </div>
+</div>
 
 <p>
     <a href="#" class="btn btn-default" data-toggle="modal" data-target="#cityListModalDiv" onclick="ShowCityList('@ViewBag.UserName')">编辑</a>
 </p>
 <table class="table">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.UserName)
-        </th>
         <th>
             @Html.DisplayNameFor(model => model.Province)
         </th>
@@ -27,32 +35,26 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.UserName)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Province)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.City)
             </td>
             <td>
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                @Html.ActionLink("删除", "Delete", new { id = item.Id }, new { @class = "btn btn-default" })
             </td>
         </tr>
     }
 
 </table>
 
-<div class="modal" id="cityListModalDiv" tabindex="-1">
+<div class="modal" id="cityListModalDiv" tabindex="-1" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <a href="#" class="close" data-dismiss="modal">&times;</a>
-                <h3 class="modal-title">city list</h3>
             </div>
             <div class="modal-body" id="cityListModalBodyDiv">
-
             </div>
             <div class="modal-footer">
                 <a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>
@@ -61,7 +63,7 @@
     </div>
 </div>
 
-<script>   
+<script>
 
     var ShowCityList = function (userName) {
         var serverUrl = "@Url.Content("~/")";

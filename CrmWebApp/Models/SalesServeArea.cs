@@ -13,12 +13,15 @@ namespace CrmWebApp.Models
 
         [Required]
         [StringLength(50)]
+        [Display(Name ="用户名")]
         public string UserName { get; set; }
 
         [StringLength(50)]
+        [Display(Name = "省")]
         public string Province { get; set; }
 
         [StringLength(50)]
+        [Display(Name = "市")]
         public string City { get; set; }
     }
 }

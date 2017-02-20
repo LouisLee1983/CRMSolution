@@ -4,16 +4,30 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<div class="row-fluid">
+    <div class="span12">
+        <ul class="breadcrumb">
+            <li>
+                <a href="~/Home/Index">主页</a> <span class="divider"></span>
+            </li>
+            <li>
+                <a href="~/OtaCompanies/Index">公司</a> <span class="divider"></span>
+            </li>
+            <li>
+                <a href="#">业务情况</a> <span class="divider"></span>
+            </li>
+            <li class="active">
+                <a href="#">@ViewBag.CompanyName</a> <span class="divider"></span>
+            </li>
+        </ul>
+    </div>
+</div>
 
 <p>
-    @Html.ActionLink("Create New", "Create", new { companyId = ViewBag.CompanyId })
+    @Html.ActionLink("新建", "Create", "CompanySalesDailies", new { companyId = ViewBag.CompanyId }, new { @class = "btn btn-default" })
 </p>
 <table class="table">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.CompanyName)
-        </th>
         <th>
             @Html.DisplayNameFor(model => model.ManagerName)
         </th>
@@ -35,40 +49,38 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.CompanyName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ManagerName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ManagerPhone)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SalesType)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreateUserName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreateTime)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SalesLogDate)
-        </td>
-        <td>
-            <a href="#" class="btn btn-default" data-toggle="modal" data-target="#modalDiv" onclick="ShowModalDiv('@item.Id')">查看</a> |
-            @Html.ActionLink("修改", "Edit", new { id = item.Id }, new { @class = "btn btn-default" }) |
-            @Html.ActionLink("删除", "Delete", new { id = item.Id }, new { @class = "btn btn-default" })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ManagerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ManagerPhone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SalesType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateUserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SalesLogDate)
+            </td>
+            <td>
+                <a href="#" class="btn btn-default" data-toggle="modal" data-target="#modalDiv" onclick="ShowModalDiv('@item.Id')">查看</a>
+                @Html.ActionLink("修改", "Edit", new { id = item.Id }, new { @class = "btn btn-default" })
+                @Html.ActionLink("删除", "Delete", new { id = item.Id }, new { onclick = "return confirm('确定要删除?')", @class = "btn btn-default" })
+            </td>
+        </tr>
+    }
 
 </table>
 
-<div class="modal" id="modalDiv" tabindex="-1">
+<div class="modal" id="modalDiv" tabindex="-1" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

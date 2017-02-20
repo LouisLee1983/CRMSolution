@@ -115,7 +115,7 @@ namespace CrmWebApp.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-
+            ViewData["MeetingTypeList"] = GetMeetingTypeList("上门拜访");
             return View(companyMeeting);
         }
 
@@ -138,6 +138,7 @@ namespace CrmWebApp.Controllers
                             where p.OuterKeyId == id.Value && p.MediaFor == "拜访记录"
                             select p;
             var model = new CompanyMeetingViewModel(companyMeeting, meetingSubjects.ToList(), mediaList.ToList());
+            ViewData["MeetingTypeList"] = GetMeetingTypeList("上门拜访");
             return View(model);
         }
 
@@ -169,6 +170,7 @@ namespace CrmWebApp.Controllers
 
                 return RedirectToAction("Index", new { companyId = model.CompanyId });
             }
+            ViewData["MeetingTypeList"] = GetMeetingTypeList("上门拜访");
             return View(model);
         }
 

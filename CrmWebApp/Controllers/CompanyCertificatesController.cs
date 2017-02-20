@@ -71,7 +71,7 @@ namespace CrmWebApp.Controllers
         private List<SelectListItem> GetCertificateNameList(string defaultValue)
         {
             var bussinessTypes = from p in db.ParamDict
-                                 where p.ParamName == "CertificateType"
+                                 where p.ParamName == "资质"
                                  select p;
             List<SelectListItem> result = new List<SelectListItem>();
             foreach (var item in bussinessTypes)

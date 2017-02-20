@@ -18,23 +18,26 @@ namespace CrmWebApp.Controllers
         [HttpPost]
         public void ChangeSalesServeArea(string userName, string province, string city)
         {
-            OtaCrmModel db = new OtaCrmModel();
-            var salesServeArea = (from s in db.SalesServeArea
-                                  where s.UserName == userName && s.Province == province && s.City == city
-                                  select s).FirstOrDefault();
-            if (salesServeArea == null)
+            if (!string.IsNullOrEmpty(userName))
             {
-                SalesServeArea newItem = new SalesServeArea();
-                newItem.City = city;
-                newItem.Province = province;
-                newItem.UserName = userName;
-                db.SalesServeArea.Add(newItem);
-                db.SaveChanges();
-            }
-            else
-            {
-                db.SalesServeArea.Remove(salesServeArea);
-                db.SaveChanges();
+                OtaCrmModel db = new OtaCrmModel();
+                var salesServeArea = (from s in db.SalesServeArea
+                                      where s.UserName == userName && s.Province == province && s.City == city
+                                      select s).FirstOrDefault();
+                if (salesServeArea == null)
+                {
+                    SalesServeArea newItem = new SalesServeArea();
+                    newItem.City = city;
+                    newItem.Province = province;
+                    newItem.UserName = userName;
+                    db.SalesServeArea.Add(newItem);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    db.SalesServeArea.Remove(salesServeArea);
+                    db.SaveChanges();
+                }
             }
         }
 

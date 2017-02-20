@@ -242,6 +242,14 @@
     <Content Include="App_Data\aspnet-CrmWebApp-20170204054837_log.ldf">
       <DependentUpon>aspnet-CrmWebApp-20170204054837.mdf</DependentUpon>
     </Content>
+    <Content Include="CompanyImages\BussinessDailies\3\3_场地_20170220083143.JPG" />
+    <Content Include="CompanyImages\BussinessDailies\3\3_场地_20170220085517.mp3" />
+    <Content Include="CompanyImages\BussinessDailies\3\3_场地_20170220095123.JPG" />
+    <Content Include="CompanyImages\Certificates\北京机票代理服务有限公司\北京机票代理服务有限公司_CATA一类_20170219104017.JPG" />
+    <Content Include="CompanyImages\Certificates\北京机票代理服务有限公司\北京机票代理服务有限公司_IATA一类_20170219105908.JPG" />
+    <Content Include="CompanyImages\Certificates\北京机票代理服务有限公司\北京机票代理服务有限公司_法人身份证_20170218002018.png" />
+    <Content Include="CompanyImages\Certificates\北京机票代理服务有限公司\北京机票代理服务有限公司_营业执照_20170217200454.JPG" />
+    <Content Include="CompanyImages\Certificates\北京机票代理服务有限公司\北京机票代理服务有限公司_营业执照_20170217212700.JPG" />
     <Content Include="Content\bootstrap-datetimepicker.css" />
     <Content Include="Content\bootstrap-datetimepicker.min.css" />
     <Content Include="Content\bootstrap-fileinput\css\fileinput.css" />
@@ -348,6 +356,7 @@
     <Content Include="Content\bootstrap\badges.less" />
     <Content Include="Content\bootstrap\alerts.less" />
     <Content Include="Content\bootstrap-fileinput\sass\fileinput.scss" />
+    <Content Include="CompanyImages\Meetings\1\1_附件_20170220190345.xlsx" />
     <None Include="Properties\PublishProfiles\crmwebapp.config.pubxml" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -565,11 +574,7 @@
     <Content Include="Views\Shared\_PartialCompanyMeetingView.cshtml" />
     <Content Include="Views\Shared\_PartialAddCompanyMedia.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CompanyImages\BussinessDailies\" />
-    <Folder Include="CompanyImages\Certificates\" />
-    <Folder Include="CompanyImages\Meetings\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
