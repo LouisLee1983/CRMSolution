@@ -21,6 +21,50 @@ namespace CrmWebApp.Controllers
             return View(await db.CompanyMeetingSubject.ToListAsync());
         }
 
+        public ActionResult AddNew(int dailyId)
+        {
+            var model = new CompanyMeetingSubject();
+            model.CompanyMeetingId = dailyId;
+            model.Id = 0;
+            model.Problem = "问题";
+            model.Resolve = "解决办法";
+            model.ResolveTime = DateTime.Today;
+            model.Subject = "产品";
+
+            ViewData["MeetingSubjectList"] = GetMeetingSubjectList("产品");
+
+            return PartialView("_PartialAddMeetingSubject", model);
+        }
+
+        public List<SelectListItem> GetMeetingSubjectList(string defaultValue)
+        {
+            List<SelectListItem> result = new List<SelectListItem>();
+            var q = from p in db.ParamDict
+                    where p.ParamName == "反馈分类"
+                    select p;
+            foreach (var item in q)
+            {
+                SelectListItem selectListItem = new SelectListItem();
+                selectListItem.Text = item.SubItemName;
+                selectListItem.Value = item.SubItemName;
+                if (item.SubItemName == defaultValue)
+                {
+                    selectListItem.Selected = true;
+                }
+                result.Add(selectListItem);
+            }
+            return result;
+        }
+
+        [HttpPost]
+        public ActionResult AddNew(CompanyMeetingSubject model)
+        {
+            db.CompanyMeetingSubject.Add(model);
+            db.SaveChanges();
+
+            return RedirectToAction("Edit", "CompanyMeetings", new { id = model.CompanyMeetingId });
+        }
+
         // GET: CompanyMeetingSubjects/Details/5
         public async Task<ActionResult> Details(int? id)
         {

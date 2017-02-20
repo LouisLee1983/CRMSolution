@@ -12,9 +12,6 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.CompanyId)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.CompanyName)
         </th>
         <th>
@@ -41,9 +38,6 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.CompanyId)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.CompanyName)
         </td>
         <td>
@@ -65,11 +59,37 @@
             @Html.DisplayFor(modelItem => item.SalesLogDate)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            <a href="#" class="btn btn-default" data-toggle="modal" data-target="#modalDiv" onclick="ShowModalDiv('@item.Id')">查看</a> |
+            @Html.ActionLink("修改", "Edit", new { id = item.Id }, new { @class = "btn btn-default" }) |
+            @Html.ActionLink("删除", "Delete", new { id = item.Id }, new { @class = "btn btn-default" })
         </td>
     </tr>
 }
 
 </table>
+
+<div class="modal" id="modalDiv" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+            </div>
+            <div class="modal-body" id="modalBodyDiv">
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    var ShowModalDiv = function (modelParam) {
+        var serverUrl = "@Url.Content("~/")";
+        var url = serverUrl + "CompanySalesDailies/ShowViewPartial?id=" + modelParam;
+        $("#modalBodyDiv").load(url, function () {
+            $("#modalDiv").modal("show");
+        })
+    }
+</script>

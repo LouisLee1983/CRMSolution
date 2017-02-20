@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using CrmWebApp.Models;
+using System.IO;
 
 namespace CrmWebApp.Controllers
 {
@@ -37,9 +38,34 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyMedias/Create
-        public ActionResult Create()
+        public ActionResult Create(int outerId, string mediaFor)
         {
-            return View();
+            var model = new CompanyMedia();
+            model.Id = 0;
+            model.MediaFor = mediaFor;
+            model.MediaName = "附件";
+            model.MediaUrl = "";
+            model.OuterKeyId = outerId;
+
+            return PartialView("_PartialAddCompanyMedia", model);
+        }
+
+        private bool CreateFolderIfNeeded(string path)
+        {
+            bool result = true;
+            if (!Directory.Exists(path))
+            {
+                try
+                {
+                    Directory.CreateDirectory(path);
+                }
+                catch (Exception)
+                {
+                    /*TODO: You must process this exception.*/
+                    result = false;
+                }
+            }
+            return result;
         }
 
         // POST: CompanyMedias/Create
@@ -47,13 +73,31 @@ namespace CrmWebApp.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,OuterKeyId,MediaFor,MediaName,MediaUrl")] CompanyMedia companyMedia)
+        public ActionResult Create([Bind(Include = "Id,OuterKeyId,MediaFor,MediaName,MediaUrl")] CompanyMedia companyMedia, HttpPostedFileBase imageFile)
         {
             if (ModelState.IsValid)
             {
-                db.CompanyMedia.Add(companyMedia);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                //上传图片先
+                string pathForSaving = Server.MapPath("~/CompanyImages/Meetings/" + companyMedia.OuterKeyId);
+                if (this.CreateFolderIfNeeded(pathForSaving))
+                {
+                    try
+                    {
+                        string fileName = companyMedia.OuterKeyId + "_" + companyMedia.MediaName + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
+                        string fileExtension = Path.GetExtension(imageFile.FileName);
+                        imageFile.SaveAs(Path.Combine(pathForSaving, fileName + fileExtension));
+
+                        companyMedia.MediaUrl = fileName + fileExtension;   //保存图片名
+                        db.CompanyMedia.Add(companyMedia);
+                        db.SaveChanges();
+                    }
+                    catch (Exception ex)
+                    {
+                        ViewBag.ErrorMessage = string.Format("File upload failed: {0}", ex.Message);
+                    }
+                }
+
+                return RedirectToAction("Edit", "CompanyMeetings", new { id = companyMedia.OuterKeyId });
             }
 
             return View(companyMedia);

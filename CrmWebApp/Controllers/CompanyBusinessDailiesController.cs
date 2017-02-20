@@ -96,7 +96,7 @@ namespace CrmWebApp.Controllers
         private List<SelectListItem> GetBussinessTypeList(string defaultValue)
         {
             var bussinessTypes = from p in db.ParamDict
-                                 where p.ParamName == "BussinessType"
+                                 where p.ParamName == "业务类型"
                                  select p;
             List<SelectListItem> result = new List<SelectListItem>();
             foreach (var item in bussinessTypes)
@@ -124,7 +124,7 @@ namespace CrmWebApp.Controllers
             {
                 db.CompanyBusinessDaily.Add(companyBusinessDaily);
                 await db.SaveChangesAsync();
-                return RedirectToAction("Details", new { id = companyBusinessDaily.Id });
+                return RedirectToAction("Edit", new { id = companyBusinessDaily.Id });
             }
 
             return View(companyBusinessDaily);

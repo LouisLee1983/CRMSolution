@@ -12,8 +12,7 @@
         public int Id { get; set; }
         [Display(Name = "运营记录ID")]
         public int CompanyBusinessDailyId { get; set; }
-
-        [Required]
+        
         [StringLength(128)]
         [Display(Name = "图片网址")]
         public string PhotoUrl { get; set; }

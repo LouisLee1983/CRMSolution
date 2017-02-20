@@ -1,0 +1,187 @@
+﻿
+@model CrmWebApp.Models.CompanySalesDailyViewModel
+
+<div class="form-horizontal">
+    <div class="form-group">
+        @Html.LabelFor(model => model.CompanyName, htmlAttributes: new { @class = "control-label col-md-3" })
+        <div class="col-md-8">
+            @Html.DisplayFor(model => model.CompanyName)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.SalesType, htmlAttributes: new { @class = "control-label col-md-3" })
+        <div class="col-md-8">
+            @Html.DisplayFor(model => model.SalesType, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.SalesLogDate, htmlAttributes: new { @class = "control-label col-md-3" })
+        <div class="col-md-8">
+            @Html.DisplayFor(model => model.SalesLogDate, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.ManagerName, htmlAttributes: new { @class = "control-label col-md-3" })
+        <div class="col-md-8">
+            @Html.DisplayFor(model => model.ManagerName, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.ManagerPhone, htmlAttributes: new { @class = "control-label col-md-3" })
+        <div class="col-md-8">
+            @Html.DisplayFor(model => model.ManagerPhone, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.CreateUserName, htmlAttributes: new { @class = "control-label col-md-3" })
+        <div class="col-md-8">
+            @Html.DisplayFor(model => model.CreateUserName, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.CreateTime, htmlAttributes: new { @class = "control-label col-md-3" })
+        <div class="col-md-8">
+            @Html.DisplayFor(model => model.CreateTime, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+    <hr />
+    <div class="form-group">
+        @Html.LabelFor(model => model.SalesSourceList, htmlAttributes: new { @class = "control-label col-md-3" })
+        <div class="col-md-8">
+            @if (Model.SalesSourceList != null && Model.SalesSourceList.Count > 0)
+            {
+                <table class="table">
+                    @for (int i = 0; i < Model.SalesSourceList.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(e => Model.SalesSourceList[i].SaleSource)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(e => Model.SalesSourceList[i].EmployeeCount)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(e => Model.SalesSourceList[i].TicketCount)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(e => Model.SalesSourceList[i].EmployeePayment)
+                            </td>
+                        </tr>
+                    }
+                </table>
+            }
+        </div>
+    </div>
+    <hr />
+    <div class="form-group">
+        @Html.LabelFor(model => model.SalesProductDespList, htmlAttributes: new { @class = "control-label col-md-3" })
+        <div class="col-md-8">
+            @if (Model.SalesSourceList != null && Model.SalesSourceList.Count > 0)
+            {
+                <table class="table">
+                    @for (int i = 0; i < Model.SalesProductDespList.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(e => Model.SalesProductDespList[i].SalesSource)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(e => Model.SalesProductDespList[i].SalesProduct)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(e => Model.SalesProductDespList[i].SalesCount)
+                            </td>
+                        </tr>
+                    }
+                </table>
+            }
+        </div>
+    </div>
+    <hr />
+    <div class="form-group">
+        @Html.LabelFor(model => model.SalesProductPercentList, htmlAttributes: new { @class = "control-label col-md-3" })
+        <div class="col-md-8">
+            @if (Model.SalesProductPercentList != null && Model.SalesProductPercentList.Count > 0)
+            {
+                <table class="table">
+                    @for (int i = 0; i < Model.SalesProductPercentList.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(e => Model.SalesProductPercentList[i].SubParamItem)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(e => Model.SalesProductPercentList[i].ItemAmount)
+                            </td>
+                        </tr>
+                    }
+                </table>
+            }
+        </div>
+    </div>
+    <hr />
+    <div class="form-group">
+        @Html.LabelFor(model => model.SalesProfitList, htmlAttributes: new { @class = "control-label col-md-3" })
+        <div class="col-md-8">
+            @if (Model.SalesProductPercentList != null && Model.SalesProductPercentList.Count > 0)
+            {
+                <table class="table">
+                    @for (int i = 0; i < Model.SalesProfitList.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(e => Model.SalesProfitList[i].SubParamItem)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(e => Model.SalesProfitList[i].ItemAmount)
+                            </td>
+                        </tr>
+                    }
+                </table>
+            }
+        </div>
+    </div>
+    
+    <hr />
+    <div class="form-group">
+        @Html.LabelFor(model => model.SalesFundList, htmlAttributes: new { @class = "control-label col-md-3" })
+        <div class="col-md-8">
+            @if (Model.SalesFundList != null && Model.SalesFundList.Count > 0)
+            {
+                <table class="table">
+                    <tr>
+                        <th>
+                            渠道
+                        </th>
+                        <th>
+                            冻结资金
+                        </th>
+                        <th>
+                            流动资金
+                        </th>
+                        <th>
+                            资金缺口
+                        </th>
+                    </tr>
+                    @for (int i = 0; i < Model.SalesFundList.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(e => Model.SalesFundList[i].SalesSource)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(e => Model.SalesFundList[i].FreezeFund)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(e => Model.SalesFundList[i].WorkingFund)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(e => Model.SalesFundList[i].NeededFund)
+                            </td>
+                        </tr>
+                    }
+                </table>
+            }
+        </div>
+    </div>
+</div>

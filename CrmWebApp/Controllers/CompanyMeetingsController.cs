@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using CrmWebApp.Models;
+using System.Data.SqlClient;
 
 namespace CrmWebApp.Controllers
 {
@@ -28,6 +29,20 @@ namespace CrmWebApp.Controllers
             }
 
             return View(await model.ToListAsync());
+        }
+
+        public ActionResult ShowViewPartial(int id)
+        {
+            CompanyMeeting dailyItem = db.CompanyMeeting.FirstOrDefault(p => p.Id == id);
+            var subjectList = from p in db.CompanyMeetingSubject
+                              where p.CompanyMeetingId == id
+                              select p;
+            var mediaList = from p in db.CompanyMedia
+                            where p.OuterKeyId == id && p.MediaFor == "拜访记录"
+                            select p;
+
+            var model = new CompanyMeetingViewModel(dailyItem, subjectList.ToList(), mediaList.ToList());
+            return PartialView("_PartialCompanyMeetingView", model);
         }
 
         // GET: CompanyMeetings/Details/5
@@ -64,13 +79,13 @@ namespace CrmWebApp.Controllers
                 model.MeetingType = ""; //取上一个记录得数据
                 model.MeetNames = ""; //取上一个记录得数据
             }
-            ViewData["MeetingTypeList"] = GetMeetingTypeList("上门");
+            ViewData["MeetingTypeList"] = GetMeetingTypeList("上门拜访");
             return View(model);
         }
         private List<SelectListItem> GetMeetingTypeList(string defaultValue)
         {
             var bussinessTypes = from p in db.ParamDict
-                                 where p.ParamName == "MeetingType"
+                                 where p.ParamName == "沟通方式"
                                  select p;
             List<SelectListItem> result = new List<SelectListItem>();
             foreach (var item in bussinessTypes)
@@ -116,7 +131,14 @@ namespace CrmWebApp.Controllers
             {
                 return HttpNotFound();
             }
-            return View(companyMeeting);
+            var meetingSubjects = from p in db.CompanyMeetingSubject
+                                  where p.CompanyMeetingId == id.Value
+                                  select p;
+            var mediaList = from p in db.CompanyMedia
+                            where p.OuterKeyId == id.Value && p.MediaFor == "拜访记录"
+                            select p;
+            var model = new CompanyMeetingViewModel(companyMeeting, meetingSubjects.ToList(), mediaList.ToList());
+            return View(model);
         }
 
         // POST: CompanyMeetings/Edit/5
@@ -124,15 +146,30 @@ namespace CrmWebApp.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,CompanyId,CompanyName,MeetingType,MeetDate,MeetAddress,MeetNames,CreateUserName,CreateTime")] CompanyMeeting companyMeeting)
+        public async Task<ActionResult> Edit(CompanyMeetingViewModel model, List<CompanyMeetingSubject> meetingSubjectList)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(companyMeeting).State = EntityState.Modified;
+                CompanyMeeting companyMeeting = db.CompanyMeeting.FirstOrDefault(p => p.Id == model.Id);
+                companyMeeting.MeetAddress = model.MeetAddress;
+                companyMeeting.MeetDate = model.MeetDate;
+                companyMeeting.MeetingType = model.MeetingType;
+                companyMeeting.MeetNames = model.MeetNames;
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+
+                //保存子项目
+                string sql = "Delete From CompanyMeetingSubject Where CompanyMeetingId=@CompanyMeetingId";
+                SqlParameter[] paras = new SqlParameter[] {
+                     new SqlParameter("@CompanyMeetingId",model.Id)
+                    };
+                db.Database.ExecuteSqlCommand(sql, paras);
+
+                db.CompanyMeetingSubject.AddRange(meetingSubjectList);
+                db.SaveChanges();
+
+                return RedirectToAction("Index", new { companyId = model.CompanyId });
             }
-            return View(companyMeeting);
+            return View(model);
         }
 
         // GET: CompanyMeetings/Delete/5

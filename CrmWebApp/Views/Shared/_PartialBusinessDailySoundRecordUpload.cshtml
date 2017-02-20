@@ -1,0 +1,54 @@
+﻿@model CrmWebApp.Models.CompanyBusinessDailySoundRecord
+
+@using (Html.BeginForm("Create", "CompanyBusinessDailySoundRecords", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.CompanyBusinessDailyId)
+    @Html.HiddenFor(model => model.SoundRecordName)
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.SoundRecordName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SoundRecordName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SoundRecordName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">图片上传</label>
+            <div class="col-md-10">
+                <div>
+                    <input id="imageFile" type="file" name="imageFile" class="file-loading" accept="image/*">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    $("#imageFile").fileinput({
+        language: 'zh', //设置语言
+        uploadUrl: '/CompanyBusinessDailySoundRecords/Create', //上传的地址
+        allowedFileExtensions: ['mp3', 'wav'],//接收的文件后缀
+        showUpload: true, //是否显示上传按钮
+        showCaption: false,//是否显示标题
+        showPreview: true,
+        browseClass: "btn btn-primary", //按钮样式
+        previewFileType: 'any',
+        enctype: 'multipart/form-data',
+        validateInitialCount: true,
+        previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+    })
+
+
+</script>
+

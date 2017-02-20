@@ -7,13 +7,10 @@
 <h2>@ViewBag.CompanyName</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create",new { companyId = ViewBag.CompanyId })
+    @Html.ActionLink("Create New", "Create", new { companyId = ViewBag.CompanyId })
 </p>
 <table class="table">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.CompanyId)
-        </th>
         <th>
             @Html.DisplayNameFor(model => model.CompanyName)
         </th>
@@ -24,51 +21,47 @@
             @Html.DisplayNameFor(model => model.ManagerName)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.BussinessLogDate)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.CreateUserName)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.CreateTime)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.BussinessLogDate)
-        </th>
+
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.CompanyId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CompanyName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BussinessType)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ManagerName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreateUserName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreateTime)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BussinessLogDate)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }, new { @class = "btn btn-default" }) |
-            <a href="#" class="btn btn-default" data-toggle="modal" data-target="#modalDiv" onclick="ShowModalDiv('@item.Id')">查看</a>
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id }, new { @class = "btn btn-default" })
-            <a class="btn btn-default" href="../CompanyBusinessDailyParams/Index?dailyId=@item.Id">具体描述</a>
-            <a class="btn btn-default" href="../CompanyBusinessDailyPhotoes/Index?dailyId=@item.Id">照片</a>
-            <a class="btn btn-default" href="../CompanyBusinessDailySoundRecords/Index?dailyId=@item.Id">录音</a>
-            
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CompanyName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BussinessType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ManagerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BussinessLogDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateUserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateTime)
+            </td>
+
+            <td>
+                <a href="#" class="btn btn-default" data-toggle="modal" data-target="#modalDiv" onclick="ShowModalDiv('@item.Id')">查看</a> |
+                @Html.ActionLink("修改", "Edit", new { id = item.Id }, new { @class = "btn btn-default" }) |                
+                @Html.ActionLink("删除", "Delete", new { id = item.Id }, new { @class = "btn btn-default" })
+            </td>
+        </tr>
+    }
 
 </table>
 
@@ -88,7 +81,7 @@
 </div>
 
 <script>
-    
+
     var ShowModalDiv = function (modelParam) {
         var serverUrl = "@Url.Content("~/")";
         var url = serverUrl + "CompanyBusinessDailies/ShowViewPartial?companyBusinessDailyId=" + modelParam;

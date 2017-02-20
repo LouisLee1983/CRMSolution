@@ -1,4 +1,4 @@
-﻿@model CrmWebApp.Models.CompanySalesDaily
+﻿@model CrmWebApp.Models.CompanySalesDailyViewModel
 
 @{
     ViewBag.Title = "Edit";
@@ -9,7 +9,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>CompanySalesDaily</h4>
         <hr />
@@ -67,7 +67,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.CreateTime, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.CreateTime, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.CreateTime, new { htmlAttributes = new { @class = "form-control datetimepicker" } })
                 @Html.ValidationMessageFor(model => model.CreateTime, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -75,8 +75,178 @@
         <div class="form-group">
             @Html.LabelFor(model => model.SalesLogDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.SalesLogDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.SalesLogDate, new { htmlAttributes = new { @class = "form-control datetimepicker" } })
                 @Html.ValidationMessageFor(model => model.SalesLogDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => Model.SalesSourceList, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <a href="#" class="glyphicon glyphicon-plus" onclick="AddSalesSource(@Model.Id)"></a>
+                @if (Model.SalesSourceList != null && Model.SalesSourceList.Count > 0)
+                {
+                    <table class="table">
+                        <tr>
+                            <th>渠道</th>
+                            <th>人数</th>
+                            <th>票量</th>
+                            <th>人均工资</th>
+                        </tr>
+                        @for (int i = 0; i < Model.SalesSourceList.Count; i++)
+                    {
+                            <tr>
+                                @Html.HiddenFor(e => Model.SalesSourceList[i].Id, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(e => Model.SalesSourceList[i].CompanySalesDailyId, new { htmlAttributes = new { @class = "form-control" } })
+                                <td>
+                                    @Html.EditorFor(e => Model.SalesSourceList[i].SaleSource, new { htmlAttributes = new { @class = "form-control" } })
+                                </td>
+                                <td>
+                                    @Html.EditorFor(e => Model.SalesSourceList[i].EmployeeCount, new { htmlAttributes = new { @class = "form-control" } })
+                                </td>
+                                <td>
+                                    @Html.EditorFor(e => Model.SalesSourceList[i].TicketCount, new { htmlAttributes = new { @class = "form-control" } })
+                                </td>
+                                <td>
+                                    @Html.EditorFor(e => Model.SalesSourceList[i].EmployeePayment, new { htmlAttributes = new { @class = "form-control" } })
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                }
+            </div>
+        </div>
+
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => Model.SalesProductDespList, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <a href="#" class="glyphicon glyphicon-plus" onclick="AddSalesProductDesp(@Model.Id)"></a>
+                @if (Model.SalesProductDespList != null && Model.SalesProductDespList.Count > 0)
+                {
+                    <table class="table">
+                        <tr>
+                            <th>渠道</th>
+                            <th>产品</th>
+                            <th>票量</th>
+                        </tr>
+                        @for (int i = 0; i < Model.SalesProductDespList.Count; i++)
+                    {
+                            <tr>
+                                @Html.HiddenFor(e => Model.SalesProductDespList[i].Id, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(e => Model.SalesProductDespList[i].CompanySalesDailyId, new { htmlAttributes = new { @class = "form-control" } })
+                                <td>
+                                    @Html.EditorFor(e => Model.SalesProductDespList[i].SalesSource, new { htmlAttributes = new { @class = "form-control" } })
+                                </td>
+                                <td>
+                                    @Html.EditorFor(e => Model.SalesProductDespList[i].SalesProduct, new { htmlAttributes = new { @class = "form-control" } })
+                                </td>
+                                <td>
+                                    @Html.EditorFor(e => Model.SalesProductDespList[i].SalesCount, new { htmlAttributes = new { @class = "form-control" } })
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                }
+            </div>
+        </div>
+
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => Model.SalesProductPercentList, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <a href="#" class="glyphicon glyphicon-plus" onclick="AddParam(@Model.Id, '产品结构')"></a>
+                @if (Model.SalesProductPercentList != null && Model.SalesProductPercentList.Count > 0)
+                {
+                    <table class="table">
+                        <tr>
+                            <th>产品</th>
+                            <th>占比</th>
+                        </tr>
+                        @for (int i = 0; i < Model.SalesProductPercentList.Count; i++)
+                    {
+                            <tr>
+                                @Html.HiddenFor(e => Model.SalesProductPercentList[i].Id, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(e => Model.SalesProductPercentList[i].CompanySalesDailyId, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(e => Model.SalesProductPercentList[i].ParamName, new { htmlAttributes = new { @class = "form-control" } })
+                                <td>
+                                    @Html.EditorFor(e => Model.SalesProductPercentList[i].SubParamItem, new { htmlAttributes = new { @class = "form-control" } })
+                                </td>
+                                <td>
+                                    @Html.EditorFor(e => Model.SalesProductPercentList[i].ItemAmount, new { htmlAttributes = new { @class = "form-control" } })
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                }
+            </div>
+        </div>
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => Model.SalesProfitList, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <a href="#" class="glyphicon glyphicon-plus" onclick="AddParam(@Model.Id, '营收信息')"></a>
+                @if (Model.SalesProfitList != null && Model.SalesProfitList.Count > 0)
+                {
+                    <table class="table">
+                        <tr>
+                            <th>营收项</th>
+                            <th>利润</th>
+                        </tr>
+                        @for (int i = 0; i < Model.SalesProfitList.Count; i++)
+                    {
+                            <tr>
+                                @Html.HiddenFor(e => Model.SalesProfitList[i].Id, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(e => Model.SalesProfitList[i].CompanySalesDailyId, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(e => Model.SalesProfitList[i].ParamName, new { htmlAttributes = new { @class = "form-control" } })
+                                <td>
+                                    @Html.EditorFor(e => Model.SalesProfitList[i].SubParamItem, new { htmlAttributes = new { @class = "form-control" } })
+                                </td>
+                                <td>
+                                    @Html.EditorFor(e => Model.SalesProfitList[i].ItemAmount, new { htmlAttributes = new { @class = "form-control" } })
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                }
+            </div>
+        </div>
+
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => Model.SalesFundList, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <a href="#" class="glyphicon glyphicon-plus" onclick="AddSalesFund(@Model.Id)"></a>
+                @if (Model.SalesFundList != null && Model.SalesFundList.Count > 0)
+                {
+                    <table class="table">
+                        <tr>
+                            <th>渠道</th>
+                            <th>押款</th>
+                            <th>流动资金</th>
+                            <th>资金缺口</th>
+                        </tr>
+                        @for (int i = 0; i < Model.SalesFundList.Count; i++)
+                    {
+                            <tr>
+                                @Html.HiddenFor(e => Model.SalesFundList[i].Id, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(e => Model.SalesFundList[i].CompanySalesDailyId, new { htmlAttributes = new { @class = "form-control" } })
+                                <td>
+                                    @Html.EditorFor(e => Model.SalesFundList[i].SalesSource, new { htmlAttributes = new { @class = "form-control" } })
+                                </td>
+                                <td>
+                                    @Html.EditorFor(e => Model.SalesFundList[i].FreezeFund, new { htmlAttributes = new { @class = "form-control" } })
+                                </td>
+                                <td>
+                                    @Html.EditorFor(e => Model.SalesFundList[i].WorkingFund, new { htmlAttributes = new { @class = "form-control" } })
+                                </td>
+                                <td>
+                                    @Html.EditorFor(e => Model.SalesFundList[i].NeededFund, new { htmlAttributes = new { @class = "form-control" } })
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                }
             </div>
         </div>
 
@@ -91,3 +261,59 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
+<div class="modal" id="modalDiv" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+                <h3 class="modal-title"></h3>
+            </div>
+            <div class="modal-body" id="modalBodyDiv">
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    $(".datetimepicker").datetimepicker({
+        format: "YYYY-MM-DD"
+    });
+
+    var AddParam = function (dailyId, paramName) {
+        var serverUrl = "@Url.Content("~/")";
+        var url = serverUrl + "CompanySalesDailyParams/AddNew?dailyId=" + dailyId + "&paramName=" + paramName;
+        $("#modalBodyDiv").load(url, function () {
+            $("#modalDiv").modal("show");
+        })
+    }
+
+    var AddSalesSource = function (dailyId) {
+        var serverUrl = "@Url.Content("~/")";
+        var url = serverUrl + "CompanySalesDailySalesSources/AddNew?dailyId=" + dailyId;
+        $("#modalBodyDiv").load(url, function () {
+            $("#modalDiv").modal("show");
+        })
+    }
+
+    var AddSalesProductDesp = function (dailyId) {
+        var serverUrl = "@Url.Content("~/")";
+        var url = serverUrl + "CompanySalesDailyProductDesps/AddNew?dailyId=" + dailyId;
+        $("#modalBodyDiv").load(url, function () {
+            $("#modalDiv").modal("show");
+        })
+    }
+
+    var AddSalesFund = function (dailyId) {
+        var serverUrl = "@Url.Content("~/")";
+        var url = serverUrl + "CompanySalesDailyFunds/AddNew?dailyId=" + dailyId;
+        $("#modalBodyDiv").load(url, function () {
+            $("#modalDiv").modal("show");
+        })
+    }
+</script>

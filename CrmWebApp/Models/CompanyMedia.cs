@@ -19,11 +19,11 @@
         public string MediaFor { get; set; }
 
         [StringLength(50)]
-        [Display(Name = "媒体名称")]
+        [Display(Name = "名称")]
         public string MediaName { get; set; }
 
         [StringLength(128)]
-        [Display(Name = "媒体网址")]
+        [Display(Name = "网址")]
         public string MediaUrl { get; set; }
     }
 }

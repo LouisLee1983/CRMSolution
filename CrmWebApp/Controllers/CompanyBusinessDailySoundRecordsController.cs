@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using CrmWebApp.Models;
+using System.IO;
 
 namespace CrmWebApp.Controllers
 {
@@ -45,9 +46,35 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyBusinessDailySoundRecords/Create
-        public ActionResult Create()
+        public ActionResult Create(int? dailyId)
         {
-            return View();
+            var model = new CompanyBusinessDailySoundRecord();
+            if (dailyId.HasValue)
+            {
+                model.CompanyBusinessDailyId = dailyId.Value;
+                model.SoundRecordName = "场地"; //取上一个记录得数据
+                model.SoundRecordUrl = "";
+            }
+
+            return PartialView("_PartialBusinessDailySoundRecordUpload", model);
+        }
+
+        private bool CreateFolderIfNeeded(string path)
+        {
+            bool result = true;
+            if (!Directory.Exists(path))
+            {
+                try
+                {
+                    Directory.CreateDirectory(path);
+                }
+                catch (Exception)
+                {
+                    /*TODO: You must process this exception.*/
+                    result = false;
+                }
+            }
+            return result;
         }
 
         // POST: CompanyBusinessDailySoundRecords/Create
@@ -55,13 +82,31 @@ namespace CrmWebApp.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,CompanyBusinessDailyId,SoundRecordName,SoundRecordUrl")] CompanyBusinessDailySoundRecord companyBusinessDailySoundRecord)
+        public ActionResult Create([Bind(Include = "Id,CompanyBusinessDailyId,SoundRecordName,SoundRecordUrl")] CompanyBusinessDailySoundRecord companyBusinessDailySoundRecord, HttpPostedFileBase imageFile)
         {
             if (ModelState.IsValid)
             {
-                db.CompanyBusinessDailySoundRecord.Add(companyBusinessDailySoundRecord);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                //上传图片先
+                string pathForSaving = Server.MapPath("~/CompanyImages/BussinessDailies/" + companyBusinessDailySoundRecord.CompanyBusinessDailyId);
+                if (this.CreateFolderIfNeeded(pathForSaving))
+                {
+                    try
+                    {
+                        string fileName = companyBusinessDailySoundRecord.CompanyBusinessDailyId + "_" + companyBusinessDailySoundRecord.SoundRecordName+ "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
+                        string fileExtension = Path.GetExtension(imageFile.FileName);
+                        imageFile.SaveAs(Path.Combine(pathForSaving, fileName + fileExtension));
+
+                        companyBusinessDailySoundRecord.SoundRecordUrl= fileName + fileExtension;   //保存图片名
+                        db.CompanyBusinessDailySoundRecord.Add(companyBusinessDailySoundRecord);
+                        db.SaveChanges();
+                    }
+                    catch (Exception ex)
+                    {
+                        ViewBag.ErrorMessage = string.Format("File upload failed: {0}", ex.Message);
+                    }
+                }
+
+                return RedirectToAction("Edit", "CompanyBusinessDailies", new { id = companyBusinessDailySoundRecord.CompanyBusinessDailyId });
             }
 
             return View(companyBusinessDailySoundRecord);

@@ -218,11 +218,13 @@
     <Compile Include="Models\CompanyMedia.cs" />
     <Compile Include="Models\CompanyMeeting.cs" />
     <Compile Include="Models\CompanyMeetingSubject.cs" />
+    <Compile Include="Models\CompanyMeetingViewModel.cs" />
     <Compile Include="Models\CompanySalesDaily.cs" />
     <Compile Include="Models\CompanySalesDailyFund.cs" />
     <Compile Include="Models\CompanySalesDailyParam.cs" />
     <Compile Include="Models\CompanySalesDailyProductDesp.cs" />
     <Compile Include="Models\CompanySalesDailySalesSource.cs" />
+    <Compile Include="Models\CompanySalesDailyViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\OtaCompany.cs" />
@@ -552,9 +554,21 @@
     <Content Include="Views\Shared\_PartialBusinessParamEditor.cshtml" />
     <Content Include="Views\Shared\_PartialBusinessParamListView.cshtml" />
     <Content Include="Views\Shared\_PartialCertificateUpload.cshtml" />
+    <Content Include="Views\Shared\_PartialBusinessDailyPhotoUpload.cshtml" />
+    <Content Include="Views\Shared\_PartialBusinessDailySoundRecordUpload.cshtml" />
+    <Content Include="Views\Shared\_PartialCompanySalesDailyView.cshtml" />
+    <Content Include="Views\Shared\_PartialAddDailySalesSource.cshtml" />
+    <Content Include="Views\Shared\_PartialAddDailySalesProductDesp.cshtml" />
+    <Content Include="Views\Shared\_PartialAddSalesDailyFund.cshtml" />
+    <Content Include="Views\Shared\_PartialAddDailySalesParam.cshtml" />
+    <Content Include="Views\Shared\_PartialAddMeetingSubject.cshtml" />
+    <Content Include="Views\Shared\_PartialCompanyMeetingView.cshtml" />
+    <Content Include="Views\Shared\_PartialAddCompanyMedia.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="CompanyImages\BussinessDailies\" />
     <Folder Include="CompanyImages\Certificates\" />
+    <Folder Include="CompanyImages\Meetings\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

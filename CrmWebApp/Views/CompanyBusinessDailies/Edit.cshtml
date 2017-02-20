@@ -167,13 +167,13 @@
         <div class="form-group">
             @Html.LabelFor(model => model.PhotoList, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <a href="#" class="glyphicon glyphicon-plus" onclick=""></a>
+                <a href="#" class="glyphicon glyphicon-plus" onclick="AddPhoto(@Model.Id)"></a>
                 <hr />
                 @if (Model.PhotoList != null && Model.PhotoList.Count > 0)
                 {
                     for (int i = 0; i < Model.PhotoList.Count; i++)
                     {
-                        var imageUrl = @Url.Content("~/CompanyImages/BusinessDaily/" + Model.PhotoList[i].CompanyBusinessDailyId + "/" + Model.PhotoList[i].PhotoUrl);
+                        var imageUrl = @Url.Content("~/CompanyImages/BussinessDailies/" + Model.PhotoList[i].CompanyBusinessDailyId + "/" + Model.PhotoList[i].PhotoUrl);
                         <div class="col-md-2">
                             <a href="@imageUrl" class="thumbnail" target="_blank">
                                 <img src="@imageUrl" style="height:100px;width:100px;display: block" />
@@ -190,13 +190,13 @@
         <div class="form-group">
             @Html.LabelFor(model => model.SoundRecordList, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <a href="#" class="glyphicon glyphicon-plus" onclick=""></a>
+                <a href="#" class="glyphicon glyphicon-plus" onclick="AddAudio(@Model.Id)"></a>
                 <hr />
                 @if (Model.SoundRecordList != null && Model.SoundRecordList.Count > 0)
                 {
                     for (int i = 0; i < Model.SoundRecordList.Count; i++)
                     {
-                        var url = @Url.Content("~/CompanyImages/BusinessDaily/" + Model.PhotoList[i].CompanyBusinessDailyId + "/" + Model.SoundRecordList[i].SoundRecordName);
+                        var url = @Url.Content("~/CompanyImages/BussinessDailies/" + Model.PhotoList[i].CompanyBusinessDailyId + "/" + Model.SoundRecordList[i].SoundRecordUrl);
                         <audio controls="controls">
                             <source src="@url" type="audio/mp3" />
                         </audio>
@@ -251,4 +251,19 @@
         })
     }
 
+    var AddPhoto = function (dailyId) {
+        var serverUrl = "@Url.Content("~/")";
+        var url = serverUrl + "CompanyBusinessDailyPhotoes/Create?dailyId=" + dailyId;
+        $("#modalBodyDiv").load(url, function () {
+            $("#modalDiv").modal("show");
+        })
+    }
+
+    var AddAudio = function (dailyId) {
+        var serverUrl = "@Url.Content("~/")";
+        var url = serverUrl + "CompanyBusinessDailySoundRecords/Create?dailyId=" + dailyId;
+        $("#modalBodyDiv").load(url, function () {
+            $("#modalDiv").modal("show");
+        })
+    }
 </script>

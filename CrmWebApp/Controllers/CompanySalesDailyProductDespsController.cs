@@ -21,6 +21,28 @@ namespace CrmWebApp.Controllers
             return View(await db.CompanySalesDailyProductDesp.ToListAsync());
         }
 
+
+        public ActionResult AddNew(int dailyId)
+        {
+            var model = new CompanySalesDailyProductDesp();
+            model.CompanySalesDailyId = dailyId;
+            model.Id = 0;
+            model.SalesCount = 0;
+            model.SalesProduct = "其他";
+            model.SalesSource = "其他";
+
+            return PartialView("_PartialAddDailySalesProductDesp", model);
+        }
+
+        [HttpPost]
+        public ActionResult AddNew(CompanySalesDailyProductDesp model)
+        {
+            db.CompanySalesDailyProductDesp.Add(model);
+            db.SaveChanges();
+
+            return RedirectToAction("Edit", "CompanySalesDailies", new { id = model.CompanySalesDailyId });
+        }
+
         // GET: CompanySalesDailyProductDesps/Details/5
         public async Task<ActionResult> Details(int? id)
         {

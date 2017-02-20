@@ -26,9 +26,7 @@
         [StringLength(256)]
         [Display(Name = "解决情况")]
         public string Resolve { get; set; }
-        [Display(Name = "录入时间")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
-        public DateTime? CreateTime { get; set; }
+        
         [Display(Name = "解决日期")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime? ResolveTime { get; set; }

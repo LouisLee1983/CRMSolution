@@ -41,6 +41,6 @@
         [Column(TypeName = "date")]
         [Display(Name = "业务记录日期")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
-        public DateTime? SalesLogDate { get; set; }
+        public DateTime? SalesLogDate { get; set; }        
     }
 }
