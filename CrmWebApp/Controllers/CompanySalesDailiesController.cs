@@ -230,7 +230,7 @@ namespace CrmWebApp.Controllers
         {
             List<CompanySalesDailyProductDesp> result = new List<CompanySalesDailyProductDesp>();
             var paramDicts = from p in db.ParamDict
-                             where p.ParamName == "B2C平台"
+                             where p.ParamName == "产品销量"
                              select p;
             foreach (ParamDict paramDict in paramDicts)
             {
@@ -238,8 +238,8 @@ namespace CrmWebApp.Controllers
                 item.CompanySalesDailyId = dailyId;
                 item.Id = 0;
                 item.SalesCount = 0;
-                item.SalesProduct = "官网";
-                item.SalesSource = paramDict.SubItemName;
+                item.SalesProduct = paramDict.SubItemName;
+                item.SalesSource = "去哪儿";
 
                 result.Add(item);
             }
