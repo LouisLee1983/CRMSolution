@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using CrmWebApp.Models;
+using PagedList;
 
 namespace CrmWebApp.Controllers
 {
@@ -16,11 +17,50 @@ namespace CrmWebApp.Controllers
         private OtaCrmModel db = new OtaCrmModel();
 
         // GET: OtaCompanies
-        public async Task<ActionResult> Index()
+        public ActionResult Index(string sortOrder, string searchString, string currentFilter, int? page)
         {
             //根据user来确定公司结果
-            
-            return View(await db.OtaCompany.ToListAsync());
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.SalesUserNameSortParm = string.IsNullOrEmpty(sortOrder) ? "salesUserName_desc" : "";
+            ViewBag.CityNameSortParm = sortOrder == "cityName" ? "cityName_desc" : "cityName";
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.CurrentFilter = searchString;
+
+            var otaCompanys = from p in db.OtaCompany
+                             select p;
+
+            //搜索
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                otaCompanys = otaCompanys.Where(p => p.CompanyName.Contains(searchString) || p.BossName.Contains(searchString) || p.LegalPerson.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "salesUserName_desc":
+                    otaCompanys = otaCompanys.OrderByDescending(o => o.SalesUserName);
+                    break;
+                case "cityName_desc":
+                    otaCompanys = otaCompanys.OrderByDescending(o => o.CityName);
+                    break;
+                case "cityName":
+                    otaCompanys = otaCompanys.OrderBy(o => o.CityName);
+                    break;
+                default:
+                    otaCompanys = otaCompanys.OrderBy(o => o.CompanyName);
+                    break;
+            }
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+
+            return View(otaCompanys.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: OtaCompanies/Details/5
@@ -43,7 +83,12 @@ namespace CrmWebApp.Controllers
         // GET: OtaCompanies/Create
         public ActionResult Create()
         {
-            return View();
+            var model = new OtaCompany();
+            model.BossBackground = "机票代理人";
+            model.BossBusinessDesp = "民航";
+            model.CreateTime = DateTime.Now;
+            model.SalesUserName = User.Identity.Name;
+            return View(model);
         }
 
         // POST: OtaCompanies/Create
@@ -51,7 +96,7 @@ namespace CrmWebApp.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,CompanyName,LegalPerson,LegalPersonIdNo,LegalPersonPhone,RegisterAddress,RealAddress,OfficeNo,BossName,BossIdNo,BossBackground,BossBusinessDesp,OtherInvest,CapitalAsserts,SalesUserName,CityId,CityName")] OtaCompany otaCompany)
+        public async Task<ActionResult> Create(OtaCompany otaCompany)
         {
             if (ModelState.IsValid)
             {
@@ -83,7 +128,7 @@ namespace CrmWebApp.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,CompanyName,LegalPerson,LegalPersonIdNo,LegalPersonPhone,RegisterAddress,RealAddress,OfficeNo,BossName,BossIdNo,BossBackground,BossBusinessDesp,OtherInvest,CapitalAsserts,SalesUserName,CityId,CityName")] OtaCompany otaCompany)
+        public async Task<ActionResult> Edit(OtaCompany otaCompany)
         {
             if (ModelState.IsValid)
             {

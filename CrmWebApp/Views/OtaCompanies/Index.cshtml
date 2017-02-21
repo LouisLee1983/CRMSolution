@@ -1,7 +1,8 @@
-﻿@model IEnumerable<CrmWebApp.Models.OtaCompany>
-
+﻿@model PagedList.IPagedList <CrmWebApp.Models.OtaCompany>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" />
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "公司列表";
 }
 
 <div class="row-fluid">
@@ -20,31 +21,36 @@
 <p>
     @Html.ActionLink("新建", "Create", "OtaCompanies", new { @class = "btn btn-default" })
 </p>
+@using (Html.BeginForm("Index", "OtaCompanies", FormMethod.Get))
+{
+    <p>
+        搜索:@Html.TextBox("searchString", ViewBag.CurrentFilter as string, new { @class = "form-control", @Style = "display:inline" })
+        <input type="submit" value="查找" />
+    </p>
+}
+
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.SalesUserName)
+            @Html.ActionLink("销售", "Index", new { sortOrder = ViewBag.SalesUserNameSortParm })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CityName)
+            @Html.ActionLink("城市", "Index", new { sortOrder = ViewBag.CityNameSortParm })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CompanyName)
+            公司
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.RegisterAddress)
+            注册地
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.RealAddress)
+            办公地
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.OfficeNo)
+            法人
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.LegalPerson)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.BossName)
+            老板
         </th>
         <th></th>
     </tr>
@@ -68,9 +74,6 @@
                 @Html.DisplayFor(modelItem => item.RealAddress)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.OfficeNo)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.LegalPerson)
             </td>
             <td>
@@ -89,3 +92,6 @@
     }
 
 </table>
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
