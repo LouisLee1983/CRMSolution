@@ -1,7 +1,7 @@
-﻿@model IEnumerable<CrmWebApp.Models.CompanyMeeting>
-
+﻿@model PagedList.IPagedList<CrmWebApp.Models.CompanyMeeting>
+@using PagedList.Mvc;
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "沟通记录-"+ViewBag.CompanyName;
 }
 
 <div class="row-fluid">
@@ -29,22 +29,22 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.MeetingType)
+            方式
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.MeetDate)
+            日期
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.MeetAddress)
+            地址
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.MeetNames)
+            沟通人
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CreateUserName)
+            录入人
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CreateTime)
+            录入时间
         </th>
         <th></th>
     </tr>
@@ -79,6 +79,9 @@
     }
 
 </table>
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, companyId = ViewBag.CompanyId }))
 
 <div class="modal" id="modalDiv" tabindex="-1" data-backdrop="static">
     <div class="modal-dialog">
