@@ -1,7 +1,8 @@
-﻿@model IEnumerable<CrmWebApp.Models.CompanyBusinessDaily>
+﻿@model PagedList.IPagedList<CrmWebApp.Models.CompanyBusinessDaily>
+@using PagedList.Mvc;
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "运营情况-" + ViewBag.CompanyName;
 }
 
 <div class="row-fluid">
@@ -23,25 +24,22 @@
     </div>
 </div>
 
-<p>
-    @Html.ActionLink("新建", "Create", "CompanyBusinessDailies", new { companyId = ViewBag.CompanyId }, new { @class = "btn btn-default" })
-</p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.BussinessType)
+            类型
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ManagerName)
+            主管
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.BussinessLogDate)
+            运营日期
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CreateUserName)
+            录入人
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CreateTime)
+            录入时间
         </th>
 
         <th></th>
@@ -75,6 +73,10 @@
     }
 
 </table>
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, companyId = ViewBag.CompanyId }))
+
 
 <div class="modal" id="modalDiv" tabindex="-1" data-backdrop="static">
     <div class="modal-dialog">
@@ -90,6 +92,9 @@
         </div>
     </div>
 </div>
+
+
+
 
 <script>
 

@@ -192,9 +192,10 @@ namespace CrmWebApp.Controllers
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             CompanyCertificate companyCertificate = await db.CompanyCertificate.FindAsync(id);
+            int companyId = companyCertificate.CompanyId;
             db.CompanyCertificate.Remove(companyCertificate);
             await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index",new { companyId=companyId});
         }
 
         protected override void Dispose(bool disposing)

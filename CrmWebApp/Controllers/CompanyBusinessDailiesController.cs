@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using CrmWebApp.Models;
 using System.Data.SqlClient;
+using PagedList;
 
 namespace CrmWebApp.Controllers
 {
@@ -17,18 +18,23 @@ namespace CrmWebApp.Controllers
         private OtaCrmModel db = new OtaCrmModel();
 
         // GET: CompanyBusinessDailies
-        public async Task<ActionResult> Index(int? companyId)
+        public ActionResult Index(int? companyId, int? page)
         {
-            var model = from cbd in db.CompanyBusinessDaily
-                        select cbd;
             if (companyId.HasValue)
             {
-                model = model.Where(p => p.CompanyId == companyId.Value);
                 ViewBag.CompanyId = companyId.Value;
                 ViewBag.CompanyName = db.OtaCompany.FirstOrDefault(p => p.Id == companyId.Value).CompanyName;
-            }
 
-            return View(await model.ToListAsync());
+                var model = from cbd in db.CompanyBusinessDaily
+                            where cbd.CompanyId == companyId.Value
+                            orderby cbd.Id descending
+                            select cbd;
+                int pageSize = 10;
+                int pageNumber = (page ?? 1);
+
+                return View(model.ToPagedList(pageNumber, pageSize));
+            }
+            return View();
         }
         public ActionResult ShowViewPartial(int companyBusinessDailyId)
         {

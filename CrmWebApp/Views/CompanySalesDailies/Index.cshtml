@@ -1,7 +1,7 @@
-﻿@model IEnumerable<CrmWebApp.Models.CompanySalesDaily>
-
+﻿@model PagedList.IPagedList<CrmWebApp.Models.CompanySalesDaily>
+@using PagedList.Mvc;
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "业务情况-"+ViewBag.CompanyName;
 }
 
 <div class="row-fluid">
@@ -29,23 +29,23 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.ManagerName)
+            业务类型
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ManagerPhone)
+            业务日期
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.SalesType)
+            主管
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CreateUserName)
+            主管电话
+        </th>        
+        <th>
+            录入人
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CreateTime)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SalesLogDate)
-        </th>
+            录入时间
+        </th>        
         <th></th>
     </tr>
 
@@ -53,23 +53,23 @@
     {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.SalesType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SalesLogDate)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.ManagerName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ManagerPhone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SalesType)
-            </td>
+            </td>            
             <td>
                 @Html.DisplayFor(modelItem => item.CreateUserName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreateTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SalesLogDate)
-            </td>
+            </td>            
             <td>
                 <a href="#" class="btn btn-default" data-toggle="modal" data-target="#modalDiv" onclick="ShowModalDiv('@item.Id')">查看</a>
                 @Html.ActionLink("修改", "Edit", new { id = item.Id }, new { @class = "btn btn-default" })
@@ -79,6 +79,9 @@
     }
 
 </table>
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, companyId = ViewBag.CompanyId }))
 
 <div class="modal" id="modalDiv" tabindex="-1" data-backdrop="static">
     <div class="modal-dialog">
