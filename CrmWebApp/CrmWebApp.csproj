@@ -196,6 +196,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OtaCompaniesController.cs" />
+    <Compile Include="Controllers\OtaSalesReportsController.cs" />
     <Compile Include="Controllers\ParamDictsController.cs" />
     <Compile Include="Controllers\SalesServeAreasController.cs" />
     <Compile Include="Controllers\SelectCityViewController.cs" />
@@ -232,6 +233,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\OtaCompany.cs" />
     <Compile Include="Models\OtaCrmModel.cs" />
+    <Compile Include="Models\OtaSalesReport.cs" />
     <Compile Include="Models\ParamDict.cs" />
     <Compile Include="Models\SalesServeArea.cs" />
     <Compile Include="Models\SelectCityViewModel.cs" />
@@ -266,9 +268,12 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\PagedList.css" />
     <Content Include="favicon.ico" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -361,6 +366,10 @@
     <Content Include="Content\bootstrap\alerts.less" />
     <Content Include="Content\bootstrap-fileinput\sass\fileinput.scss" />
     <Content Include="CompanyImages\Meetings\1\1_附件_20170220190345.xlsx" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
     <None Include="Properties\PublishProfiles\crmwebapp.config.pubxml" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -425,6 +434,12 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\summernote\plugin\summernote-ext-hello.js" />
+    <Content Include="Scripts\summernote\plugin\summernote-ext-hint.js" />
+    <Content Include="Scripts\summernote\plugin\summernote-ext-video.js" />
+    <Content Include="Scripts\summernote\summernote.css" />
+    <Content Include="Scripts\summernote\summernote.js" />
+    <Content Include="Scripts\summernote\summernote.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -587,6 +602,11 @@
     <Content Include="Views\ServeAreas\Details.cshtml" />
     <Content Include="Views\ServeAreas\Edit.cshtml" />
     <Content Include="Views\ServeAreas\Index.cshtml" />
+    <Content Include="Views\OtaSalesReports\Create.cshtml" />
+    <Content Include="Views\OtaSalesReports\Delete.cshtml" />
+    <Content Include="Views\OtaSalesReports\Details.cshtml" />
+    <Content Include="Views\OtaSalesReports\Edit.cshtml" />
+    <Content Include="Views\OtaSalesReports\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -1,0 +1,93 @@
+﻿@model CrmWebApp.Models.OtaSalesReport
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>OtaSalesReport</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StartDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EndDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SendToEmails)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SendToEmails)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReportTitle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReportTitle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReportContent)
+        </dt>
+
+        <dd>
+            <div id="summernote" class="summernote">
+            </div>
+            <div id="reportContentDiv" hidden="hidden"></div>
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreateTime)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+<script>
+    $(document).ready(function () {
+        $("#reportContentDiv").html('@Model.ReportContent');
+
+        $('#summernote').summernote({
+            height: 300
+        }).code($("#reportContentDiv").text());
+        var makrup = $('.summernote').code();
+        $('.summernote').destroy();
+    });
+</script>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/summernote")
+}

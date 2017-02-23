@@ -101,7 +101,39 @@ namespace CrmWebApp.Controllers
             model.SalesUserName = User.Identity.Name;
 
             ViewData["ChinaCityList"] = GetChinaCityList("");
+            ViewData["BusnessRangeList"] = GetBussinessTypeList("国内");
+
             return View(model);
+        }
+
+        private List<SelectListItem> GetBussinessTypeList(string defaultValue)
+        {
+            var bussinessTypes = from p in db.ParamDict
+                                 where p.ParamName == "业务类型"
+                                 select p;
+            List<SelectListItem> result = new List<SelectListItem>();
+
+            SelectListItem selectItem = new SelectListItem();
+            selectItem.Value = "";
+            selectItem.Text = "";
+            if (string.IsNullOrEmpty(defaultValue))
+            {
+                selectItem.Selected = true;
+            }
+            result.Add(selectItem);
+
+            foreach (var item in bussinessTypes)
+            {
+                SelectListItem newItem = new SelectListItem();
+                newItem.Value = item.SubItemName;
+                newItem.Text = item.SubItemName;
+                if (!string.IsNullOrEmpty(defaultValue) && defaultValue == item.SubItemName)
+                {
+                    newItem.Selected = true;
+                }
+                result.Add(newItem);
+            }
+            return result;
         }
 
         public List<SelectListItem> GetChinaCityList(string defaultValue)
@@ -164,6 +196,8 @@ namespace CrmWebApp.Controllers
                 return HttpNotFound();
             }
             ViewData["ChinaCityList"] = GetChinaCityList(otaCompany.CityName);
+            ViewData["BusnessRangeList"] = GetBussinessTypeList(otaCompany.BusnessRange);
+
             return View(otaCompany);
         }
 

@@ -24,7 +24,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -141,7 +141,7 @@
                 @Html.ValidationMessageFor(model => model.SalesUserName, "", new { @class = "text-danger" })
             </div>
         </div>
-        
+
         <div class="form-group">
             @Html.LabelFor(model => model.CityName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -153,7 +153,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.BusnessRange, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.BusnessRange, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownListFor(model => model.BusnessRange, ViewData["BusnessRangeList"] as List<SelectListItem>, new { htmlAttributes = new { @class = "form -control" } })
                 @Html.ValidationMessageFor(model => model.BusnessRange, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -161,7 +161,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.LastMeetingDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.LastMeetingDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.LastMeetingDate, new { htmlAttributes = new { @class = "form-control datetimepicker" } })
                 @Html.ValidationMessageFor(model => model.LastMeetingDate, "", new { @class = "text-danger" })
             </div>
         </div>

@@ -32,9 +32,14 @@ namespace CrmWebApp
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/bootstrap-datetimepicker.css",
-                      "~/Content/bootstrap - theme.css",
+                      "~/Content/bootstrap - theme.css",                      
                       "~/Content/bootstrap-fileinput/css/fileinput.css",
+                      "~/Content/font-awesome.css",
+                      "~/Scripts/summernote/summernote.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/summernote").Include(
+                        "~/Scripts/summernote/summernote.js"));
         }
     }
 }

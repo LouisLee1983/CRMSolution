@@ -124,10 +124,10 @@ namespace CrmWebApp.Controllers
                 db.SaveChanges();
 
                 db.CompanyMeeting.Add(companyMeeting);
-                await db.SaveChangesAsync();                
-                
+                await db.SaveChangesAsync();
+
                 return RedirectToAction("Index", new { companyId = companyMeeting.CompanyId });
-            }            
+            }
             return View(companyMeeting);
         }
 
@@ -170,15 +170,18 @@ namespace CrmWebApp.Controllers
                 companyMeeting.MeetNames = model.MeetNames;
                 await db.SaveChangesAsync();
 
-                //保存子项目
-                string sql = "Delete From CompanyMeetingSubject Where CompanyMeetingId=@CompanyMeetingId";
-                SqlParameter[] paras = new SqlParameter[] {
+                if (meetingSubjectList != null && meetingSubjectList.Count > 0)
+                {
+                    //保存子项目
+                    string sql = "Delete From CompanyMeetingSubject Where CompanyMeetingId=@CompanyMeetingId";
+                    SqlParameter[] paras = new SqlParameter[] {
                      new SqlParameter("@CompanyMeetingId",model.Id)
                     };
-                db.Database.ExecuteSqlCommand(sql, paras);
+                    db.Database.ExecuteSqlCommand(sql, paras);
 
-                db.CompanyMeetingSubject.AddRange(meetingSubjectList);
-                db.SaveChanges();
+                    db.CompanyMeetingSubject.AddRange(meetingSubjectList);
+                    db.SaveChanges();
+                }
 
                 return RedirectToAction("Index", new { companyId = model.CompanyId });
             }
