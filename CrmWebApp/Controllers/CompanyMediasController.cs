@@ -73,7 +73,7 @@ namespace CrmWebApp.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,OuterKeyId,MediaFor,MediaName,MediaUrl")] CompanyMedia companyMedia, HttpPostedFileBase imageFile)
+        public ActionResult Create(CompanyMedia companyMedia)
         {
             if (ModelState.IsValid)
             {
@@ -83,12 +83,26 @@ namespace CrmWebApp.Controllers
                 {
                     try
                     {
-                        string fileName = companyMedia.OuterKeyId + "_" + companyMedia.MediaName + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
-                        string fileExtension = Path.GetExtension(imageFile.FileName);
-                        imageFile.SaveAs(Path.Combine(pathForSaving, fileName + fileExtension));
+                        List<CompanyMedia> insertList = new List<CompanyMedia>();
+                        var imageFiles = Request.Files;
+                        for (int i = 0; i < imageFiles.Count; i++)
+                        {
+                            HttpPostedFileBase imageFile = imageFiles[i];
 
-                        companyMedia.MediaUrl = fileName + fileExtension;   //保存图片名
-                        db.CompanyMedia.Add(companyMedia);
+                            CompanyMedia insertItem = new CompanyMedia();
+                            insertItem.MediaFor = companyMedia.MediaFor;
+                            insertItem.MediaName = companyMedia.MediaName + i.ToString();
+                            insertItem.OuterKeyId = companyMedia.OuterKeyId;
+                            insertItem.MediaUrl = "";
+
+                            string fileName = insertItem.OuterKeyId + "_" + insertItem.MediaName + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
+                            string fileExtension = Path.GetExtension(imageFile.FileName);
+                            imageFile.SaveAs(Path.Combine(pathForSaving, fileName + fileExtension));
+
+                            insertItem.MediaUrl = fileName + fileExtension;   //保存图片名
+                            insertList.Add(insertItem);
+                        }
+                        db.CompanyMedia.AddRange(insertList);
                         db.SaveChanges();
                     }
                     catch (Exception ex)

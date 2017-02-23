@@ -41,16 +41,16 @@
             公司
         </th>
         <th>
-            注册地
+            业务
         </th>
         <th>
             办公地
         </th>
         <th>
-            法人
+            老板
         </th>
         <th>
-            老板
+            @Html.ActionLink("拜访日", "Index", new { sortOrder = ViewBag.LastMeetingDateSortParm })
         </th>
         <th></th>
     </tr>
@@ -68,16 +68,19 @@
                 @Html.DisplayFor(modelItem => item.CompanyName)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.BusnessRange)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.RegisterAddress)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.RealAddress)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LegalPerson)
+                @Html.DisplayFor(modelItem => item.BossName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BossName)
+                @Html.DisplayFor(modelItem => item.LastMeetingDate)
             </td>
             <td>
                 @Html.ActionLink("编辑", "Edit", new { id = item.Id }, new { @class = "btn btn-default" })

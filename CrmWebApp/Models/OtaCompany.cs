@@ -58,7 +58,7 @@
         public string BossBusinessDesp { get; set; }
 
         [StringLength(256)]
-        [Display(Name = "其他投资项目")]
+        [Display(Name = "其他投资")]
         public string OtherInvest { get; set; }
 
         [StringLength(256)]
@@ -72,6 +72,13 @@
         [StringLength(50)]
         [Display(Name = "所在城市")]
         public string CityName { get; set; }
+
+        [Display(Name ="业务")]
+        public string BusnessRange { get; set; }
+
+        [Display(Name = "拜访")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
+        public DateTime? LastMeetingDate { get; set; }
 
         [Display(Name = "录入时间")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]

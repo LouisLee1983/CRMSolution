@@ -21,7 +21,7 @@
             <label class="control-label col-md-2">图片上传</label>
             <div class="col-md-10">
                 <div>
-                    <input id="imageFile" type="file" name="imageFile" class="file-loading" accept="image/*">
+                    <input id="imageFile" type="file" multiple="multiple" name="imageFile" class="file-loading" accept="image/*">
                 </div>
             </div>
         </div>
@@ -39,9 +39,12 @@
         language: 'zh', //设置语言
         uploadUrl: '/CompanyBusinessDailySoundRecords/Create', //上传的地址
         allowedFileExtensions: ['mp3', 'wav'],//接收的文件后缀
-        showUpload: true, //是否显示上传按钮
+        showUpload: false, //是否显示上传按钮
+        showRemove: false,//是否显示删除按钮
         showCaption: false,//是否显示标题
         showPreview: true,
+        maxFileCount: 5,
+        msgFilesTooMany: "最多5",
         browseClass: "btn btn-primary", //按钮样式
         previewFileType: 'any',
         enctype: 'multipart/form-data',

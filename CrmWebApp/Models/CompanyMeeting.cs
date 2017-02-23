@@ -37,6 +37,10 @@
         [Display(Name = "拜访人")]
         public string MeetNames { get; set; }
 
+        [StringLength(512)]
+        [Display(Name = "纪要")]
+        public string MeetSummary { get; set; }
+
         [StringLength(50)]
         [Display(Name = "录入人")]
         public string CreateUserName { get; set; }

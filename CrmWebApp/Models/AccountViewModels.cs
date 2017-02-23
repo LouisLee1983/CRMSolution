@@ -65,7 +65,7 @@ namespace CrmWebApp.Models
     {
         [Required]
         [Display(Name = "用户名")]
-        [RegularExpression(@"^[a-zA-Z_0-9]+$", ErrorMessage ="用户名不能有特殊字符")]
+        [RegularExpression(@"^[a-zA-Z_0-9]+$", ErrorMessage = "用户名不能有特殊字符")]
         public string UserName { get; set; }
 
         [Required]
@@ -92,6 +92,8 @@ namespace CrmWebApp.Models
         [EmailAddress]
         public string Email { get; set; }
 
+        [Display(Name = "区域")]
+        public string ServeAreaName { get; set; }
     }
 
     public class ResetPasswordViewModel
@@ -150,6 +152,9 @@ namespace CrmWebApp.Models
         [Display(Name = "邮箱")]
         [EmailAddress]
         public string Email { get; set; }
+
+        [Display(Name = "区域")]
+        public string ServeAreaName { get; set; }
     }
 
     public class EditRoleViewModel
@@ -162,14 +167,14 @@ namespace CrmWebApp.Models
             this.Description = role.Description;
             this.ParentRole = role.ParentRole;
         }
-        [Display(Name ="ID")]
+        [Display(Name = "ID")]
         public string RoleId { get; set; }
         [Required]
-        [Display(Name ="角色名")]
+        [Display(Name = "角色名")]
         public string RoleName { get; set; }
-        [Display(Name ="描述")]
+        [Display(Name = "描述")]
         public string Description { get; set; }
-        [Display(Name ="父角色")]
+        [Display(Name = "父角色")]
         public string ParentRole { get; set; }
 
     }
@@ -220,7 +225,7 @@ namespace CrmWebApp.Models
             var allRoles = db.Roles;
             foreach (var role in allRoles)
             {
-                var rvm = new SelectRoleEditorViewModel(role);                
+                var rvm = new SelectRoleEditorViewModel(role);
                 this.RoleEditorViews.Add(rvm);
             }
             foreach (var userRole in user.Roles)

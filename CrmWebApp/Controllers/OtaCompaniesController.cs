@@ -23,6 +23,7 @@ namespace CrmWebApp.Controllers
             ViewBag.CurrentSort = sortOrder;
             ViewBag.SalesUserNameSortParm = string.IsNullOrEmpty(sortOrder) ? "salesUserName_desc" : "";
             ViewBag.CityNameSortParm = sortOrder == "cityName" ? "cityName_desc" : "cityName";
+            ViewBag.LastMeetingDateSortParm = sortOrder == "lastMeetingDate" ? "lastMeetingDate_desc" : "lastMeetingDate";
             if (searchString != null)
             {
                 page = 1;
@@ -34,12 +35,16 @@ namespace CrmWebApp.Controllers
             ViewBag.CurrentFilter = searchString;
 
             var otaCompanys = from p in db.OtaCompany
-                             select p;
+                              select p;
 
             //搜索
             if (!string.IsNullOrEmpty(searchString))
             {
-                otaCompanys = otaCompanys.Where(p => p.CompanyName.Contains(searchString) || p.BossName.Contains(searchString) || p.LegalPerson.Contains(searchString));
+                otaCompanys = otaCompanys.Where(p => p.CompanyName.Contains(searchString)
+                    || p.BossName.Contains(searchString)
+                    || p.LegalPerson.Contains(searchString)
+                    || p.CityName.Contains(searchString)
+                    || p.BusnessRange.Contains(searchString));
             }
 
             switch (sortOrder)
@@ -52,6 +57,12 @@ namespace CrmWebApp.Controllers
                     break;
                 case "cityName":
                     otaCompanys = otaCompanys.OrderBy(o => o.CityName);
+                    break;
+                case "lastMeetingDate":
+                    otaCompanys = otaCompanys.OrderBy(o => o.LastMeetingDate);
+                    break;
+                case "lastMeetingDate_desc":
+                    otaCompanys = otaCompanys.OrderByDescending(o => o.LastMeetingDate);
                     break;
                 default:
                     otaCompanys = otaCompanys.OrderBy(o => o.CompanyName);
@@ -88,7 +99,39 @@ namespace CrmWebApp.Controllers
             model.BossBusinessDesp = "民航";
             model.CreateTime = DateTime.Now;
             model.SalesUserName = User.Identity.Name;
+
+            ViewData["ChinaCityList"] = GetChinaCityList("");
             return View(model);
+        }
+
+        public List<SelectListItem> GetChinaCityList(string defaultValue)
+        {
+            List<SelectListItem> result = new List<SelectListItem>();
+
+            SelectListItem selectListItem = new SelectListItem();
+            selectListItem.Text = "";
+            selectListItem.Value = "";
+            if (string.IsNullOrEmpty(defaultValue))
+            {
+                selectListItem.Selected = true;
+            }
+            result.Add(selectListItem);
+
+            var c = from p in db.ChinaCity
+                    orderby p.ProvinceName,p.CityName
+                    select p.ProvinceName + "-" + p.CityName;
+            foreach (var item in c)
+            {
+                SelectListItem newItem = new SelectListItem();
+                newItem.Text = item.ToString();
+                newItem.Value = item.ToString();
+                if (item.ToString() == defaultValue)
+                {
+                    newItem.Selected = true;
+                }
+                result.Add(newItem);
+            }
+            return result;
         }
 
         // POST: OtaCompanies/Create
@@ -120,6 +163,7 @@ namespace CrmWebApp.Controllers
             {
                 return HttpNotFound();
             }
+            ViewData["ChinaCityList"] = GetChinaCityList(otaCompany.CityName);
             return View(otaCompany);
         }
 

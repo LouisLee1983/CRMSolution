@@ -82,7 +82,7 @@ namespace CrmWebApp.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,CompanyBusinessDailyId,SoundRecordName,SoundRecordUrl")] CompanyBusinessDailySoundRecord companyBusinessDailySoundRecord, HttpPostedFileBase imageFile)
+        public ActionResult Create(CompanyBusinessDailySoundRecord companyBusinessDailySoundRecord)
         {
             if (ModelState.IsValid)
             {
@@ -92,12 +92,23 @@ namespace CrmWebApp.Controllers
                 {
                     try
                     {
-                        string fileName = companyBusinessDailySoundRecord.CompanyBusinessDailyId + "_" + companyBusinessDailySoundRecord.SoundRecordName+ "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
-                        string fileExtension = Path.GetExtension(imageFile.FileName);
-                        imageFile.SaveAs(Path.Combine(pathForSaving, fileName + fileExtension));
+                        List<CompanyBusinessDailySoundRecord> insertList = new List<CompanyBusinessDailySoundRecord>();
+                        var imageFiles = Request.Files;
+                        for (int i = 0; i < imageFiles.Count; i++)
+                        {
+                            HttpPostedFileBase imageFile = imageFiles[i];
+                            CompanyBusinessDailySoundRecord insertItem = new CompanyBusinessDailySoundRecord();
+                            insertItem.CompanyBusinessDailyId = companyBusinessDailySoundRecord.CompanyBusinessDailyId;
+                            insertItem.SoundRecordName = companyBusinessDailySoundRecord.SoundRecordName + i.ToString();
 
-                        companyBusinessDailySoundRecord.SoundRecordUrl= fileName + fileExtension;   //保存图片名
-                        db.CompanyBusinessDailySoundRecord.Add(companyBusinessDailySoundRecord);
+                            string fileName = insertItem.CompanyBusinessDailyId + "_" + insertItem.SoundRecordName + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
+                            string fileExtension = Path.GetExtension(imageFile.FileName);
+                            imageFile.SaveAs(Path.Combine(pathForSaving, fileName + fileExtension));
+
+                            insertItem.SoundRecordUrl = fileName + fileExtension;   //保存图片名
+                            insertList.Add(insertItem);
+                        }
+                        db.CompanyBusinessDailySoundRecord.AddRange(insertList);
                         db.SaveChanges();
                     }
                     catch (Exception ex)

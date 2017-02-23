@@ -23,7 +23,7 @@
             <label class="control-label col-md-2">图片上传</label>
             <div class="col-md-10">
                 <div>
-                    <input id="imageFile" type="file" name="imageFile" class="file-loading" accept="image/*">
+                    <input id="imageFile" type="file" multiple="multiple" name="imageFile" class="file-loading">
                 </div>
             </div>
         </div>
@@ -40,9 +40,11 @@
     $("#imageFile").fileinput({
         language: 'zh', //设置语言
         uploadUrl: '/CompanyMedias/Create', //上传的地址
-        showUpload: true, //是否显示上传按钮
+        showUpload: false, //是否显示上传按钮
+        showRemove: true,
         showCaption: false,//是否显示标题
         showPreview: true,
+        maxFileCount: 5,
         browseClass: "btn btn-primary", //按钮样式
         previewFileType: 'image',
         enctype: 'multipart/form-data',

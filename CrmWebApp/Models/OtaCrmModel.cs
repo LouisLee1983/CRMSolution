@@ -30,6 +30,8 @@ namespace CrmWebApp.Models
         public virtual DbSet<S_City> S_City { get; set; }
         public virtual DbSet<S_Province> S_Province { get; set; }
         public virtual DbSet<SalesServeArea> SalesServeArea { get; set; }
+        public virtual DbSet<ChinaCity> ChinaCity { get; set; }
+        public virtual DbSet<ServeArea> ServeArea { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

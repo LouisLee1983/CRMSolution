@@ -82,7 +82,7 @@ namespace CrmWebApp.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,CompanyBusinessDailyId,PhotoUrl,PhotoName")] CompanyBusinessDailyPhoto companyBusinessDailyPhoto,HttpPostedFileBase imageFile)
+        public ActionResult Create(CompanyBusinessDailyPhoto companyBusinessDailyPhoto)
         {
             if (ModelState.IsValid)
             {
@@ -92,12 +92,24 @@ namespace CrmWebApp.Controllers
                 {
                     try
                     {
-                        string fileName = companyBusinessDailyPhoto.CompanyBusinessDailyId + "_" + companyBusinessDailyPhoto.PhotoName + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
-                        string fileExtension = Path.GetExtension(imageFile.FileName);
-                        imageFile.SaveAs(Path.Combine(pathForSaving, fileName + fileExtension));
+                        List<CompanyBusinessDailyPhoto> insertList = new List<CompanyBusinessDailyPhoto>();
+                        var imageFiles = Request.Files;
+                        for (int i = 0; i < imageFiles.Count; i++)
+                        {
+                            HttpPostedFileBase imageFile = imageFiles[i];
 
-                        companyBusinessDailyPhoto.PhotoUrl = fileName + fileExtension;   //保存图片名
-                        db.CompanyBusinessDailyPhoto.Add(companyBusinessDailyPhoto);
+                            CompanyBusinessDailyPhoto insertItem = new CompanyBusinessDailyPhoto();
+                            insertItem.CompanyBusinessDailyId = companyBusinessDailyPhoto.CompanyBusinessDailyId;
+                            insertItem.PhotoName = companyBusinessDailyPhoto.PhotoName + i.ToString();                            
+
+                            string fileName = insertItem.CompanyBusinessDailyId + "_" + insertItem.PhotoName + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
+                            string fileExtension = Path.GetExtension(imageFile.FileName);
+                            imageFile.SaveAs(Path.Combine(pathForSaving, fileName + fileExtension));
+
+                            insertItem.PhotoUrl = fileName + fileExtension;   //保存图片名
+                            insertList.Add(insertItem);
+                        }
+                        db.CompanyBusinessDailyPhoto.AddRange(insertList);
                         db.SaveChanges();
                     }
                     catch (Exception ex)

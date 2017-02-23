@@ -158,7 +158,41 @@ namespace CrmWebApp.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+            ViewData["ServeAreaList"] = GetServeAreaList("");
             return View();
+        }
+
+        public List<SelectListItem> GetServeAreaList(string defaultValue)
+        {
+            List<SelectListItem> result = new List<SelectListItem>();
+
+            SelectListItem defaultItem = new SelectListItem();
+            defaultItem.Text = "";
+            defaultItem.Value = "";
+            if (string.IsNullOrEmpty(defaultValue))
+            {
+                defaultItem.Selected = true;
+            }
+            result.Add(defaultItem);
+
+            OtaCrmModel db = new OtaCrmModel();
+            var q = from p in db.ParamDict
+                    where p.ParamName == "销售区域"
+                    select p;
+
+            foreach (var item in q)
+            {
+                SelectListItem newItem = new SelectListItem();
+                newItem.Text = item.SubItemName;
+                newItem.Value = item.SubItemName;
+                if (item.SubItemName == defaultValue)
+                {
+                    newItem.Selected = true;
+                }
+                result.Add(newItem);
+            }
+
+            return result;
         }
 
         //
@@ -189,6 +223,17 @@ namespace CrmWebApp.Controllers
                         await RoleManager.CreateAsync(role);
                     }
                     await UserManager.AddToRoleAsync(user.Id, roleName);
+
+                    //加入区域
+                    if (string.IsNullOrEmpty(model.ServeAreaName))
+                    {
+                        ServeArea serveArea = new ServeArea();
+                        serveArea.UserName = model.UserName;
+                        serveArea.ServeAreaName = model.ServeAreaName;
+                        OtaCrmModel db = new OtaCrmModel();
+                        db.ServeArea.Add(serveArea);
+                        db.SaveChanges();
+                    }
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -439,10 +484,26 @@ namespace CrmWebApp.Controllers
             foreach (var user in users)
             {
                 var u = new EditUserViewModel(user);
+                u.ServeAreaName = GetServeAreaName(user.UserName);
+
                 model.Add(u);
             }
             return View(model);
         }
+
+        public string GetServeAreaName(string userName)
+        {
+            string result = "";
+            OtaCrmModel db = new OtaCrmModel();
+            var item = db.ServeArea.FirstOrDefault(p => p.UserName == userName);
+            if (item != null)
+            {
+                result = item.ServeAreaName;
+            }
+
+            return result;
+        }
+
         [Authorize(Roles = "Admin")]
         public ActionResult EditUser(string id, ManageMessageId? Message = null)
         {
@@ -453,7 +514,13 @@ namespace CrmWebApp.Controllers
             var Db = new ApplicationDbContext();
             var user = Db.Users.First(u => u.UserName == id);
             var model = new EditUserViewModel(user);
+            //设置区域
+            model.ServeAreaName = GetServeAreaName(id);
+
             ViewBag.MessageId = Message;
+
+            ViewData["ServeAreaList"] = GetServeAreaList("");
+
             return View(model);
         }
         [HttpPost]
@@ -471,6 +538,22 @@ namespace CrmWebApp.Controllers
                 user.PhoneNumber = model.PhoneNumber;
                 Db.Entry(user).State = System.Data.Entity.EntityState.Modified;
                 await Db.SaveChangesAsync();
+
+                //保存区域
+                OtaCrmModel crmdb = new OtaCrmModel();
+                var serveArea = crmdb.ServeArea.FirstOrDefault(p => p.UserName == model.UserName);
+                if (serveArea == null)
+                {
+                    ServeArea newItem = new ServeArea();
+                    newItem.UserName = model.UserName;
+                    newItem.ServeAreaName = model.ServeAreaName;
+                    crmdb.ServeArea.Add(newItem);
+                }else
+                {
+                    serveArea.ServeAreaName = model.ServeAreaName;
+                }
+                crmdb.SaveChanges();
+
                 return RedirectToAction("UserList");
             }
             return View(model);

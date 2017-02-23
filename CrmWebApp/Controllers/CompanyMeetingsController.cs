@@ -113,15 +113,21 @@ namespace CrmWebApp.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,CompanyId,CompanyName,MeetingType,MeetDate,MeetAddress,MeetNames,CreateUserName,CreateTime")] CompanyMeeting companyMeeting)
+        public async Task<ActionResult> Create(CompanyMeeting companyMeeting)
         {
+            ViewData["MeetingTypeList"] = GetMeetingTypeList("上门拜访");
             if (ModelState.IsValid)
             {
+                //更新公司的lastupdatedate
+                var company = db.OtaCompany.FirstOrDefault(p => p.Id == companyMeeting.CompanyId);
+                company.LastMeetingDate = DateTime.Now;
+                db.SaveChanges();
+
                 db.CompanyMeeting.Add(companyMeeting);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-            ViewData["MeetingTypeList"] = GetMeetingTypeList("上门拜访");
+                await db.SaveChangesAsync();                
+                
+                return RedirectToAction("Index", new { companyId = companyMeeting.CompanyId });
+            }            
             return View(companyMeeting);
         }
 

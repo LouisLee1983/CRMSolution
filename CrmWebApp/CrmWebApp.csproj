@@ -179,6 +179,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ChinaCitiesController.cs" />
     <Compile Include="Controllers\CompanyBusinessDailiesController.cs" />
     <Compile Include="Controllers\CompanyBusinessDailyParamsController.cs" />
     <Compile Include="Controllers\CompanyBusinessDailyPhotoesController.cs" />
@@ -198,6 +199,7 @@
     <Compile Include="Controllers\ParamDictsController.cs" />
     <Compile Include="Controllers\SalesServeAreasController.cs" />
     <Compile Include="Controllers\SelectCityViewController.cs" />
+    <Compile Include="Controllers\ServeAreasController.cs" />
     <Compile Include="Controllers\S_CityController.cs" />
     <Compile Include="Controllers\S_ProvinceController.cs" />
     <Compile Include="Global.asax.cs">
@@ -209,6 +211,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ChinaCity.cs" />
     <Compile Include="Models\CompanyBusinessDaily.cs" />
     <Compile Include="Models\CompanyBusinessDailyParam.cs" />
     <Compile Include="Models\CompanyBusinessDailyPhoto.cs" />
@@ -232,6 +235,7 @@
     <Compile Include="Models\ParamDict.cs" />
     <Compile Include="Models\SalesServeArea.cs" />
     <Compile Include="Models\SelectCityViewModel.cs" />
+    <Compile Include="Models\ServeArea.cs" />
     <Compile Include="Models\S_City.cs" />
     <Compile Include="Models\S_Province.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -573,6 +577,16 @@
     <Content Include="Views\Shared\_PartialAddMeetingSubject.cshtml" />
     <Content Include="Views\Shared\_PartialCompanyMeetingView.cshtml" />
     <Content Include="Views\Shared\_PartialAddCompanyMedia.cshtml" />
+    <Content Include="Views\ChinaCities\Create.cshtml" />
+    <Content Include="Views\ChinaCities\Delete.cshtml" />
+    <Content Include="Views\ChinaCities\Details.cshtml" />
+    <Content Include="Views\ChinaCities\Edit.cshtml" />
+    <Content Include="Views\ChinaCities\Index.cshtml" />
+    <Content Include="Views\ServeAreas\Create.cshtml" />
+    <Content Include="Views\ServeAreas\Delete.cshtml" />
+    <Content Include="Views\ServeAreas\Details.cshtml" />
+    <Content Include="Views\ServeAreas\Edit.cshtml" />
+    <Content Include="Views\ServeAreas\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
