@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h3>数据统计图</h3>
+
+<div class="row-fluid">
+    <div>
+        @Html.Action("GetCompanyCountChart")
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/highcharts")
+}

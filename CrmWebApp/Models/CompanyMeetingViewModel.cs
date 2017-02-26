@@ -66,6 +66,7 @@ namespace CrmWebApp.Models
             this.MeetDate = item.MeetDate;
             this.MeetingType = item.MeetingType;
             this.MeetNames = item.MeetNames;
+            this.MeetSummary = item.MeetSummary;
             
             this.MeetingSubjectList = meetingSubjects;
             this.MediaList = mediaList;

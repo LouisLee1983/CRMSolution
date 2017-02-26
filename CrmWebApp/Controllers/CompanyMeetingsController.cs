@@ -84,6 +84,7 @@ namespace CrmWebApp.Controllers
                 model.MeetAddress = ""; //取上一个记录得数据
                 model.MeetingType = ""; //取上一个记录得数据
                 model.MeetNames = ""; //取上一个记录得数据
+                model.MeetSummary = "";
             }
             ViewData["MeetingTypeList"] = GetMeetingTypeList("上门拜访");
             return View(model);
@@ -126,7 +127,7 @@ namespace CrmWebApp.Controllers
                 db.CompanyMeeting.Add(companyMeeting);
                 await db.SaveChangesAsync();
 
-                return RedirectToAction("Index", new { companyId = companyMeeting.CompanyId });
+                return RedirectToAction("Edit", new { Id = companyMeeting.Id });
             }
             return View(companyMeeting);
         }

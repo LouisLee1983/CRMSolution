@@ -57,9 +57,19 @@
                 @Html.ActionLink("编辑", "Edit", new { id = item.ID }, new { @class = "btn btn-default" })
                 @Html.ActionLink("详情", "Details", new { id = item.ID }, new { @class = "btn btn-default" })
                 @Html.ActionLink("删除", "Delete", new { id = item.ID }, new { @class = "btn btn-default" })
-                @Html.ActionLink("发送", "SendEmail", new { id = item.ID }, new { @class = "btn btn-default" })
+                <a href="#" class="btn btn-default" onclick="SendEmail('@item.ID')">发送</a>
             </td>
         </tr>
     }
 
 </table>
+
+<script>
+    var SendEmail = function (modelParam) {
+        var serverUrl = "@Url.Content("~/")";
+        var url = serverUrl + "OtaSalesReports/SendEmail?id=" + modelParam;
+        $.get(url, function (data, status) {
+            alert("发送成功.");
+        });
+    }
+</script>
