@@ -288,13 +288,13 @@ namespace CrmWebApp.Controllers
                 // 发送包含此链接的电子邮件
                 string code = UserManager.GeneratePasswordResetToken(user.Id);
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                string mailBody = "请通过单击 <a href=\"" + callbackUrl + "\">此处</a>来重置你的密码";
+                string mailBody = "请通过单击 " + callbackUrl + " 来重置你的密码";
                 
                 string mailTitle = "重置密码";
                 //直接调用发送方法
                 #region 发送邮件
                 //填写电子邮件地址，和显示名称
-                System.Net.Mail.MailAddress from = new System.Net.Mail.MailAddress("425451886@qq.com", "jinyuan.li");
+                System.Net.Mail.MailAddress from = new System.Net.Mail.MailAddress("425451886@qq.com", "jinyuanli");
                 //填写邮件的收件人地址和名称
                 System.Net.Mail.MailAddress to = new System.Net.Mail.MailAddress(user.Email, user.TrueName);
                 //设置好发送地址，和接收地址，接收地址可以是多个
