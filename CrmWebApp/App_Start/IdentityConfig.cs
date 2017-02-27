@@ -11,6 +11,10 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using CrmWebApp.Models;
+using System.Configuration;
+using System.Diagnostics;
+using System.Net.Mail;
+using System.Text;
 
 namespace CrmWebApp
 {
@@ -19,7 +23,163 @@ namespace CrmWebApp
         public Task SendAsync(IdentityMessage message)
         {
             // 在此处插入电子邮件服务可发送电子邮件。
+            //<mail RequireValid="true" SmtpServer="smtp.exmail.qq.com" SmtpPort="25" EmailUserName="你的名字" 
+            //EmailAddress ="xxx@xx.xxx" EmailPwd="xxx" EnableSSL="false" EnablePwdCheck="false" />
+            MailConfig mailConfig = new MailConfig();
+            mailConfig.EnableSSL = true;
+            mailConfig.RequireValid = true;
+            mailConfig.SmtpServer = "smtp.qq.com";
+            mailConfig.SmtpPort = 25;
+            mailConfig.EmailAddress = "425451886@qq.com";
+            mailConfig.EmailPwd = "cpkehayuptjibgbc";
+            mailConfig.EmailUserName = "jinyuan.li";
+            mailConfig.EnablePwdCheck = false;
+
+            if (mailConfig.RequireValid)
+            {
+                // 设置邮件内容  
+                var mail = new MailMessage(
+                    new MailAddress(mailConfig.EmailAddress, mailConfig.EmailUserName),
+                    new MailAddress(message.Destination)
+                    );
+                mail.Subject = message.Subject;
+                mail.Body = message.Body;
+                mail.IsBodyHtml = true;
+                mail.BodyEncoding = Encoding.GetEncoding(936);    //邮件正文的编码， 设置不正确， 接收者会收到乱码
+                // 设置SMTP服务器  
+                var smtp = new SmtpClient(mailConfig.SmtpServer, mailConfig.SmtpPort);
+                smtp.UseDefaultCredentials = false;
+                smtp.Credentials = new System.Net.NetworkCredential(mailConfig.EmailAddress, mailConfig.EmailPwd);
+                smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+
+                smtp.SendMailAsync(mail);
+            }
+
             return Task.FromResult(0);
+        }
+    }
+
+    public class MailConfig : ConfigurationSection
+    {
+        /// <summary>  
+        /// 注册时是否需要验证邮箱  
+        /// </summary>  
+        [ConfigurationProperty("RequireValid", DefaultValue = "false", IsRequired = true)]
+        public bool RequireValid
+        {
+            get
+            {
+                return (bool)this["RequireValid"];
+            }
+            set
+            {
+                this["RequireValid"] = value;
+            }
+        }
+        /// <summary>  
+        /// SMTP服务器  
+        /// </summary>  
+        [ConfigurationProperty("SmtpServer", IsRequired = true)]
+        public string SmtpServer
+        {
+            get
+            {
+                return (string)this["SmtpServer"];
+            }
+            set
+            {
+                this["SmtpServer"] = value;
+            }
+        }
+        /// <summary>  
+        /// 默认端口25（设为-1让系统自动设置）  
+        /// </summary>  
+        [ConfigurationProperty("SmtpPort", DefaultValue = "25", IsRequired = true)]
+        public int SmtpPort
+        {
+            get
+            {
+                return (int)this["SmtpPort"];
+            }
+            set
+            {
+                this["SmtpPort"] = value;
+            }
+        }
+        /// <summary>  
+        /// 地址  
+        /// </summary>  
+        [ConfigurationProperty("EmailAddress", IsRequired = true)]
+        public string EmailAddress
+        {
+            get
+            {
+                return (string)this["EmailAddress"];
+            }
+            set
+            {
+                this["EmailAddress"] = value;
+            }
+        }
+        /// <summary>  
+        /// 账号  
+        /// </summary>  
+        [ConfigurationProperty("EmailUserName", IsRequired = true)]
+        public string EmailUserName
+        {
+            get
+            {
+                return (string)this["EmailUserName"];
+            }
+            set
+            {
+                this["EmailUserName"] = value;
+            }
+        }
+        /// <summary>  
+        /// 密码  
+        /// </summary>  
+        [ConfigurationProperty("EmailPwd", IsRequired = true)]
+        public string EmailPwd
+        {
+            get
+            {
+                return (string)this["EmailPwd"];
+            }
+            set
+            {
+                this["EmailPwd"] = value;
+            }
+        }
+        /// <summary>  
+        /// 是否使用SSL连接  
+        /// </summary>  
+        [ConfigurationProperty("EnableSSL", DefaultValue = "false", IsRequired = false)]
+        public bool EnableSSL
+        {
+            get
+            {
+                return (bool)this["EnableSSL"];
+            }
+            set
+            {
+                this["EnableSSL"] = value;
+            }
+        }
+        /// <summary>  
+        ///   
+        /// </summary>  
+        [ConfigurationProperty("EnablePwdCheck", DefaultValue = "false", IsRequired = false)]
+        public bool EnablePwdCheck
+        {
+            get
+            {
+                return (bool)this["EnablePwdCheck"];
+            }
+            set
+            {
+                this["EnablePwdCheck"] = value;
+            }
         }
     }
 
@@ -40,7 +200,7 @@ namespace CrmWebApp
         {
         }
 
-        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) 
+        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
             var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
             // 配置用户名的验证逻辑
@@ -77,19 +237,19 @@ namespace CrmWebApp
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
-                manager.UserTokenProvider = 
+                manager.UserTokenProvider =
                     new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
             }
             return manager;
         }
     }
 
-    public class ApplicationRoleManager:RoleManager<ApplicationRole>
+    public class ApplicationRoleManager : RoleManager<ApplicationRole>
     {
-        public ApplicationRoleManager(IRoleStore<ApplicationRole, string> roleStore):base(roleStore)
+        public ApplicationRoleManager(IRoleStore<ApplicationRole, string> roleStore) : base(roleStore)
         {
         }
-        public static ApplicationRoleManager Create(IdentityFactoryOptions<ApplicationRoleManager> options,IOwinContext context)
+        public static ApplicationRoleManager Create(IdentityFactoryOptions<ApplicationRoleManager> options, IOwinContext context)
         {
             return new ApplicationRoleManager(new RoleStore<ApplicationRole>(context.Get<ApplicationDbContext>()));
         }
@@ -132,10 +292,10 @@ namespace CrmWebApp
         }
 
 
-        public bool CreateRole(string name, string description = "",string parentRole = "")
+        public bool CreateRole(string name, string description = "", string parentRole = "")
         {
             // Swap ApplicationRole for IdentityRole:
-            var idResult = _roleManager.Create(new ApplicationRole(name, description,parentRole));
+            var idResult = _roleManager.Create(new ApplicationRole(name, description, parentRole));
             return idResult.Succeeded;
         }
 

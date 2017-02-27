@@ -11,6 +11,8 @@ using Microsoft.Owin.Security;
 using CrmWebApp.Models;
 using System.Collections.Generic;
 using static CrmWebApp.Controllers.ManageController;
+using System.Net.Mail;
+using System.Text;
 
 namespace CrmWebApp.Controllers
 {
@@ -219,7 +221,7 @@ namespace CrmWebApp.Controllers
                     var roleName = "Guest";
                     if (RoleManager.RoleExists(roleName) == false)
                     {
-                        var role = new ApplicationRole(roleName, "访客","");
+                        var role = new ApplicationRole(roleName, "访客", "");
                         await RoleManager.CreateAsync(role);
                     }
                     await UserManager.AddToRoleAsync(user.Id, roleName);
@@ -270,12 +272,13 @@ namespace CrmWebApp.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        public ActionResult ForgotPassword(ForgotPasswordViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = await UserManager.FindByNameAsync(model.UserName);
-                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+                var user = UserManager.FindByName(model.UserName);
+                // || !(await UserManager.IsEmailConfirmedAsync(user.Id))
+                if (user == null)
                 {
                     // 请不要显示该用户不存在或者未经确认
                     return View("ForgotPasswordConfirmation");
@@ -283,10 +286,44 @@ namespace CrmWebApp.Controllers
 
                 // 有关如何启用帐户确认和密码重置的详细信息，请访问 http://go.microsoft.com/fwlink/?LinkID=320771
                 // 发送包含此链接的电子邮件
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "重置密码", "请通过单击 <a href=\"" + callbackUrl + "\">此处</a>来重置你的密码");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                string code = UserManager.GeneratePasswordResetToken(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                string mailBody = "请通过单击 <a href=\"" + callbackUrl + "\">此处</a>来重置你的密码";
+                
+                string mailTitle = "重置密码";
+                //直接调用发送方法
+                #region 发送邮件
+                //填写电子邮件地址，和显示名称
+                System.Net.Mail.MailAddress from = new System.Net.Mail.MailAddress("425451886@qq.com", "jinyuan.li");
+                //填写邮件的收件人地址和名称
+                System.Net.Mail.MailAddress to = new System.Net.Mail.MailAddress(user.Email, user.TrueName);
+                //设置好发送地址，和接收地址，接收地址可以是多个
+
+                System.Net.Mail.MailMessage mail = new System.Net.Mail.MailMessage();
+                mail.Priority = MailPriority.Normal;
+                mail.From = from;
+                mail.To.Add(to);
+                mail.Subject = mailTitle;
+                mail.SubjectEncoding = Encoding.GetEncoding(936); //这里非常重要，如果你的邮件标题包含中文，这里一定要指定，否则对方收到的极有可能是乱码。  
+                mail.Body = mailBody;
+                mail.IsBodyHtml = true;//设置显示htmls
+                mail.BodyEncoding = Encoding.GetEncoding(936);    //邮件正文的编码， 设置不正确， 接收者会收到乱码  
+                                                                  //设置好发送邮件服务地址
+                System.Net.Mail.SmtpClient client = new System.Net.Mail.SmtpClient();
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.Host = "smtp.qq.com"; //这里发邮件用的是126，所以为"smtp.126.com"
+                client.Port = 25;
+                client.EnableSsl = true;
+                client.UseDefaultCredentials = true;
+
+                //填写服务器地址相关的用户名和密码信息
+                client.Credentials = new System.Net.NetworkCredential("425451886@qq.com", "cpkehayuptjibgbc");
+                //发送邮件
+                client.Send(mail);
+
+                #endregion
+                //await UserManager.SendEmailAsync(user.Id, "重置密码", "请通过单击 <a href=\"" + callbackUrl + "\">此处</a>来重置你的密码");
+                return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
             // 如果我们进行到这一步时某个地方出错，则重新显示表单
@@ -548,7 +585,8 @@ namespace CrmWebApp.Controllers
                     newItem.UserName = model.UserName;
                     newItem.ServeAreaName = model.ServeAreaName;
                     crmdb.ServeArea.Add(newItem);
-                }else
+                }
+                else
                 {
                     serveArea.ServeAreaName = model.ServeAreaName;
                 }
@@ -636,7 +674,8 @@ namespace CrmWebApp.Controllers
             {
                 var role = new ApplicationRole(model.RoleName, model.Description, model.ParentRole);
                 var result = await RoleManager.CreateAsync(role);
-                if (result.Succeeded) {
+                if (result.Succeeded)
+                {
                     ViewBag.Message = model.RoleName + ",新增成功.";
                 }
                 AddErrors(result);
@@ -689,7 +728,7 @@ namespace CrmWebApp.Controllers
         public ActionResult DeleteRole(string id = null)
         {
             var Db = new ApplicationDbContext();
-            var item = Db.Roles.First(r => r.Id== id);
+            var item = Db.Roles.First(r => r.Id == id);
             var model = new EditRoleViewModel(item);
             return View(model);
         }

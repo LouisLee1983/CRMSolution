@@ -10,6 +10,7 @@ namespace CrmWebApp.Controllers
     public class ChartsController : Controller
     {
         // GET: Charts
+        [Authorize(Roles = "SalesDirector,OtaSales")]
         public ActionResult Index()
         {
             return View();
