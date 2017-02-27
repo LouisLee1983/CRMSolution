@@ -4,10 +4,24 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<div class="row-fluid">
+    <div class="span12">
+        <ul class="breadcrumb">
+            <li>
+                <a href="~/Home/Index">主页</a> <span class="divider"></span>
+            </li>
+            <li>
+                <a href="~/OtaSalesReports/Index">周报</a> <span class="divider"></span>
+            </li>
+            <li class="active">
+                <a href="#">列表</a> <span class="divider"></span>
+            </li>
+        </ul>
+    </div>
+</div>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("生成", "Create")
 </p>
 <table class="table">
     <tr>

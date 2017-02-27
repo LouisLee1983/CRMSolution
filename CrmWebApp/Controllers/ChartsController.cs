@@ -15,20 +15,48 @@ namespace CrmWebApp.Controllers
             return View();
         }
 
+        public PartialViewResult GetMeetCountChart()
+        {
+            SimpleChartModel chartModel = new SimpleChartModel();
+            chartModel.ContainerId = "meetChart";
+            chartModel.Title = "沟通频率";
+            chartModel.YName = "次数";
+            chartModel.ValueSuffix = "次";
+            //读取meeting表，按照时间为上一周
+            DateTime startWeek = DateTime.Now.AddDays(1 - Convert.ToInt32(DateTime.Now.DayOfWeek.ToString("d")));
+            startWeek = startWeek.AddDays(-7);
+            DateTime endWeek = startWeek.AddDays(6);
+            chartModel.YTitle = startWeek.ToString("yyyyMMdd") + "-" + endWeek.ToString("yyyyMMdd");
+
+            OtaCrmModel db = new OtaCrmModel();
+            var ss = from i in db.CompanyMeeting
+                     where i.MeetDate >= startWeek && i.MeetDate <= endWeek
+                     group i by i.CreateUserName
+                         into g
+                     select new { count = g.Count(), userName = g.Key };
+            foreach (var item in ss)
+            {
+                chartModel.XList.Add(item.userName);
+                chartModel.YSeriesList.Add(item.count);
+            }
+            DotNet.Highcharts.Highcharts chart = GetChart(chartModel);
+            return PartialView("_PartialChartView", chart);
+        }
+
         public PartialViewResult GetCompanyCountChart()
         {
             SimpleChartModel chartModel = new SimpleChartModel();
+            chartModel.ContainerId = "companyCountChart";
             chartModel.Title = "客户数量";
-            chartModel.XTitle = "销售";
             chartModel.YName = "数量";
-            chartModel.YTitle = "客户数";
+            chartModel.YTitle = DateTime.Today.ToString("yyyy-MM-dd");
             chartModel.ValueSuffix = "个";
             //读取公司的表，group by 销售名
             OtaCrmModel db = new OtaCrmModel();
             var ss = from i in db.OtaCompany
                      group i by i.SalesUserName
                          into g
-                     select new { count = g.Count(), userName = g.Key };            
+                     select new { count = g.Count(), userName = g.Key };
             foreach (var item in ss)
             {
                 chartModel.XList.Add(item.userName);
@@ -40,7 +68,7 @@ namespace CrmWebApp.Controllers
 
         public DotNet.Highcharts.Highcharts GetChart(SimpleChartModel chartModel)
         {
-            DotNet.Highcharts.Highcharts chart = new DotNet.Highcharts.Highcharts("chart");
+            DotNet.Highcharts.Highcharts chart = new DotNet.Highcharts.Highcharts(chartModel.ContainerId);
 
             //初始化
             DotNet.Highcharts.Options.Chart chartOption = new DotNet.Highcharts.Options.Chart();
@@ -80,7 +108,7 @@ namespace CrmWebApp.Controllers
             chart.SetYAxis(ys);
 
             //设置表现值
-            DotNet.Highcharts.Options.Series ss = new DotNet.Highcharts.Options.Series();            
+            DotNet.Highcharts.Options.Series ss = new DotNet.Highcharts.Options.Series();
             ss.Data = new DotNet.Highcharts.Helpers.Data(chartModel.YSeriesList.ToArray());
             ss.Name = chartModel.YName;
             chart.SetSeries(ss);

@@ -7,6 +7,7 @@ namespace CrmWebApp.Models
 {
     public class SimpleChartModel
     {
+        public string ContainerId { get; set; }
         //饼图pia，线图line，区域图area
         public DotNet.Highcharts.Enums.ChartTypes ChartType { get; set; }
         //宽度
