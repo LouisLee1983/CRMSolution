@@ -1,0 +1,171 @@
+﻿@model IEnumerable<CrmWebApp.Models.AgentGradeOperation>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.agentDomain)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.agentName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.promotion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.agentManager)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.totalTicketNum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.totalTicket)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.passRate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.less60minRate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.orderAlterRate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.voluntaryRate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.involuntaryRate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.complainRate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.qapassRate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.phoneAnswerRate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.messageTimeoutRate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.qualification)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.whiteList)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.totalScore)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.statDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.statMonth)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.grade)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CurDateTicketCount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreateTime)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.agentDomain)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.agentName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.promotion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.agentManager)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.totalTicketNum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.totalTicket)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.passRate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.less60minRate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.orderAlterRate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.voluntaryRate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.involuntaryRate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.complainRate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.qapassRate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.phoneAnswerRate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.messageTimeoutRate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.qualification)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.whiteList)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.totalScore)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.statDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.statMonth)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.grade)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CurDateTicketCount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreateTime)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+        </td>
+    </tr>
+}
+
+</table>

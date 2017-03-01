@@ -26,10 +26,8 @@ namespace CrmWebApp.Models
         public string XTitle { get; set; }
         //纵坐标标题
         public string YTitle { get; set; }
-        //纵坐标值
-        public List<object> YSeriesList { get; set; }
-        //纵坐标名称
-        public string YName { get; set; }
+        
+        public List<YSeries> SeriesList { get; set; }
         
         public SimpleChartModel()
         {
@@ -42,8 +40,15 @@ namespace CrmWebApp.Models
             this.XList = new List<string>();
             this.XTitle = "";
             this.YTitle = "";
-            this.YSeriesList = new List<object>();
-            this.YName = "";
+            this.SeriesList = new List<YSeries>();
         }
+    }
+
+    public class YSeries
+    {
+        //纵坐标名称
+        public string YName { get; set; }
+        //纵坐标值
+        public List<object> YSeriesList { get; set; }
     }
 }

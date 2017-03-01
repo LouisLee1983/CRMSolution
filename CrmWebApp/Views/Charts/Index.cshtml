@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Index";
 }
 
@@ -12,6 +11,9 @@
     <hr />
     <div>
         @Html.Action("GetMeetCountChart")
+    </div>
+    <div>
+        @Html.Action("GetCompanyTicketCountChart",new { companyName = "重庆市联丰航空服务有限公司" })
     </div>
 </div>
 

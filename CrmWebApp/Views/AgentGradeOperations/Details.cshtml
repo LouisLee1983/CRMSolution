@@ -1,0 +1,210 @@
+﻿@model CrmWebApp.Models.AgentGradeOperation
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>AgentGradeOperation</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.agentDomain)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.agentDomain)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.agentName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.agentName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.promotion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.promotion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.agentManager)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.agentManager)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.totalTicketNum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.totalTicketNum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.totalTicket)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.totalTicket)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.passRate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.passRate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.less60minRate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.less60minRate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.orderAlterRate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.orderAlterRate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.voluntaryRate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.voluntaryRate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.involuntaryRate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.involuntaryRate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.complainRate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.complainRate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.qapassRate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.qapassRate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.phoneAnswerRate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.phoneAnswerRate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.messageTimeoutRate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.messageTimeoutRate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.qualification)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.qualification)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.whiteList)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.whiteList)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.totalScore)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.totalScore)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.statDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.statDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.statMonth)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.statMonth)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.grade)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.grade)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CurDateTicketCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CurDateTicketCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreateTime)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

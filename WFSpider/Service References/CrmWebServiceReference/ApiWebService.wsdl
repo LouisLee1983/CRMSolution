@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="HelloWorld">
+        <s:complexType />
+      </s:element>
+      <s:element name="HelloWorldResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="HelloWorldResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="InsertAgentGradeOprations">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="itemList" type="tns:ArrayOfAgentGradeOperation" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfAgentGradeOperation">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="AgentGradeOperation" nillable="true" type="tns:AgentGradeOperation" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="AgentGradeOperation">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="id" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="agentDomain" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="agentName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="promotion" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="agentManager" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="totalTicketNum" nillable="true" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="totalTicket" nillable="true" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="passRate" nillable="true" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="less60minRate" nillable="true" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="orderAlterRate" nillable="true" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="voluntaryRate" nillable="true" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="involuntaryRate" nillable="true" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="complainRate" nillable="true" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="qapassRate" nillable="true" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="phoneAnswerRate" nillable="true" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="messageTimeoutRate" nillable="true" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="qualification" nillable="true" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="whiteList" nillable="true" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="totalScore" nillable="true" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="status" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="statDate" nillable="true" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="statMonth" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="grade" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="CurDateTicketCount" nillable="true" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="CreateTime" nillable="true" type="s:dateTime" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="InsertAgentGradeOprationsResponse">
+        <s:complexType />
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="HelloWorldSoapIn">
+    <wsdl:part name="parameters" element="tns:HelloWorld" />
+  </wsdl:message>
+  <wsdl:message name="HelloWorldSoapOut">
+    <wsdl:part name="parameters" element="tns:HelloWorldResponse" />
+  </wsdl:message>
+  <wsdl:message name="InsertAgentGradeOprationsSoapIn">
+    <wsdl:part name="parameters" element="tns:InsertAgentGradeOprations" />
+  </wsdl:message>
+  <wsdl:message name="InsertAgentGradeOprationsSoapOut">
+    <wsdl:part name="parameters" element="tns:InsertAgentGradeOprationsResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ApiWebServiceSoap">
+    <wsdl:operation name="HelloWorld">
+      <wsdl:input message="tns:HelloWorldSoapIn" />
+      <wsdl:output message="tns:HelloWorldSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertAgentGradeOprations">
+      <wsdl:input message="tns:InsertAgentGradeOprationsSoapIn" />
+      <wsdl:output message="tns:InsertAgentGradeOprationsSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ApiWebServiceSoap" type="tns:ApiWebServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="HelloWorld">
+      <soap:operation soapAction="http://tempuri.org/HelloWorld" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertAgentGradeOprations">
+      <soap:operation soapAction="http://tempuri.org/InsertAgentGradeOprations" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ApiWebServiceSoap12" type="tns:ApiWebServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="HelloWorld">
+      <soap12:operation soapAction="http://tempuri.org/HelloWorld" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertAgentGradeOprations">
+      <soap12:operation soapAction="http://tempuri.org/InsertAgentGradeOprations" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ApiWebService">
+    <wsdl:port name="ApiWebServiceSoap" binding="tns:ApiWebServiceSoap">
+      <soap:address location="http://localhost:2145/ApiWebService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ApiWebServiceSoap12" binding="tns:ApiWebServiceSoap12">
+      <soap12:address location="http://localhost:2145/ApiWebService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

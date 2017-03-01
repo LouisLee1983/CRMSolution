@@ -16,12 +16,86 @@ namespace CrmWebApp.Controllers
             return View();
         }
 
+        public PartialViewResult GetCompanyTicketCountChart(string companyName)
+        {
+            //调用30天的数据
+            DateTime startDate = DateTime.Today.AddMonths(-1);
+            OtaCrmModel db = new OtaCrmModel();
+            var a = from b in db.AgentGradeOperation
+                    where b.agentName == companyName && b.statDate >= startDate
+                    orderby b.statDate, b.agentDomain
+                    select b;
+
+            SimpleChartModel chartModel = new SimpleChartModel();
+            chartModel.ChartType = DotNet.Highcharts.Enums.ChartTypes.Line;
+            chartModel.Width = 600;
+            chartModel.ContainerId = "companyTicketChart";
+            chartModel.Title = "票量";
+
+            chartModel.SeriesList = new List<YSeries>();
+
+            //分开域名，
+            Dictionary<string, int> agoTicketCountDict = new Dictionary<string, int>();
+            List<string> domainList = new List<string>();
+            foreach (AgentGradeOperation item in a)
+            {
+                if (!domainList.Contains(item.agentDomain))
+                {
+                    domainList.Add(item.agentDomain);
+                }
+                string key = item.agentDomain + item.statDate.ToString("yyyyMMdd");
+                if (!agoTicketCountDict.ContainsKey(key))
+                {
+                    agoTicketCountDict.Add(key, item.totalTicketNum.Value);
+                }
+            }
+
+            TimeSpan ts = DateTime.Today - startDate;
+            for (int i = 0; i < ts.Days; i++)
+            {
+                DateTime curDate = startDate.AddDays(i);
+                string xValue = curDate.ToString("yyyyMMdd");
+                chartModel.XList.Add(xValue);
+            }
+            //每个域名按天统计数据，加入series
+            foreach (string agentDomain in domainList)
+            {
+                YSeries series = new YSeries();
+                series.YSeriesList = new List<object>();
+                series.YName = agentDomain;
+                for (int i = 0; i < ts.Days; i++)
+                {
+                    DateTime curDate = startDate.AddDays(i);
+                    string xValue = curDate.ToString("yyyyMMdd");
+                    string key = agentDomain + xValue;
+                    int ticketCount = 0;
+                    if (agoTicketCountDict.ContainsKey(key))
+                    {
+                        ticketCount = agoTicketCountDict[key];
+                    }
+                    series.YSeriesList.Add(ticketCount);
+                }
+                chartModel.SeriesList.Add(series);
+            }
+
+            chartModel.ValueSuffix = "张";
+
+            DotNet.Highcharts.Highcharts chart = GetChart(chartModel);
+            return PartialView("_PartialChartView", chart);
+        }
+
         public PartialViewResult GetMeetCountChart()
         {
             SimpleChartModel chartModel = new SimpleChartModel();
             chartModel.ContainerId = "meetChart";
             chartModel.Title = "沟通频率";
-            chartModel.YName = "次数";
+
+            chartModel.SeriesList = new List<YSeries>();
+
+            YSeries series = new YSeries();
+            series.YSeriesList = new List<object>();
+            series.YName = "次数";
+
             chartModel.ValueSuffix = "次";
             //读取meeting表，按照时间为上一周
             DateTime startWeek = DateTime.Now.AddDays(1 - Convert.ToInt32(DateTime.Now.DayOfWeek.ToString("d")));
@@ -38,8 +112,10 @@ namespace CrmWebApp.Controllers
             foreach (var item in ss)
             {
                 chartModel.XList.Add(item.userName);
-                chartModel.YSeriesList.Add(item.count);
+                series.YSeriesList.Add(item.count);
             }
+            chartModel.SeriesList.Add(series);
+
             DotNet.Highcharts.Highcharts chart = GetChart(chartModel);
             return PartialView("_PartialChartView", chart);
         }
@@ -49,7 +125,12 @@ namespace CrmWebApp.Controllers
             SimpleChartModel chartModel = new SimpleChartModel();
             chartModel.ContainerId = "companyCountChart";
             chartModel.Title = "客户数量";
-            chartModel.YName = "数量";
+            chartModel.SeriesList = new List<YSeries>();
+
+            YSeries series = new YSeries();
+            series.YSeriesList = new List<object>();
+            series.YName = "数量";
+
             chartModel.YTitle = DateTime.Today.ToString("yyyy-MM-dd");
             chartModel.ValueSuffix = "个";
             //读取公司的表，group by 销售名
@@ -61,8 +142,10 @@ namespace CrmWebApp.Controllers
             foreach (var item in ss)
             {
                 chartModel.XList.Add(item.userName);
-                chartModel.YSeriesList.Add(item.count);
+                series.YSeriesList.Add(item.count);
             }
+            chartModel.SeriesList.Add(series);
+
             DotNet.Highcharts.Highcharts chart = GetChart(chartModel);
             return PartialView("_PartialChartView", chart);
         }
@@ -109,10 +192,15 @@ namespace CrmWebApp.Controllers
             chart.SetYAxis(ys);
 
             //设置表现值
-            DotNet.Highcharts.Options.Series ss = new DotNet.Highcharts.Options.Series();
-            ss.Data = new DotNet.Highcharts.Helpers.Data(chartModel.YSeriesList.ToArray());
-            ss.Name = chartModel.YName;
-            chart.SetSeries(ss);
+            List<DotNet.Highcharts.Options.Series> ssList = new List<DotNet.Highcharts.Options.Series>();
+            foreach (YSeries yserires in chartModel.SeriesList)
+            {
+                DotNet.Highcharts.Options.Series ss = new DotNet.Highcharts.Options.Series();
+                ss.Data = new DotNet.Highcharts.Helpers.Data(yserires.YSeriesList.ToArray());
+                ss.Name = yserires.YName;
+                ssList.Add(ss);
+            }
+            chart.SetSeries(ssList.ToArray());
 
             return chart;
         }

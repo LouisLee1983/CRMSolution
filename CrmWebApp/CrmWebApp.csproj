@@ -177,12 +177,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiWebService.asmx.cs">
+      <DependentUpon>ApiWebService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AgentGradeOperationsController.cs" />
     <Compile Include="Controllers\ChartsController.cs" />
     <Compile Include="Controllers\ChinaCitiesController.cs" />
     <Compile Include="Controllers\CompanyBusinessDailiesController.cs" />
@@ -217,6 +222,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\AgentGradeOperation.cs" />
     <Compile Include="Models\ChartModels.cs" />
     <Compile Include="Models\ChinaCity.cs" />
     <Compile Include="Models\CompanyBusinessDaily.cs" />
@@ -250,6 +256,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ApiWebService.asmx" />
     <Content Include="App_Data\aspnet-CrmWebApp-20170204054837.mdf" />
     <Content Include="App_Data\aspnet-CrmWebApp-20170204054837_log.ldf">
       <DependentUpon>aspnet-CrmWebApp-20170204054837.mdf</DependentUpon>
@@ -648,6 +655,11 @@
     <Content Include="Views\OtaSalesReports\Index.cshtml" />
     <Content Include="Views\Shared\_PartialChartView.cshtml" />
     <Content Include="Views\Charts\Index.cshtml" />
+    <Content Include="Views\AgentGradeOperations\Create.cshtml" />
+    <Content Include="Views\AgentGradeOperations\Delete.cshtml" />
+    <Content Include="Views\AgentGradeOperations\Details.cshtml" />
+    <Content Include="Views\AgentGradeOperations\Edit.cshtml" />
+    <Content Include="Views\AgentGradeOperations\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
