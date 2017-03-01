@@ -290,7 +290,7 @@ namespace WFSpider
             CreateFolderIfNeeded(filePath);
             DeleteAllFile(filePath);    //清空旧的
             JavaScriptSerializer jss = new JavaScriptSerializer();
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 3; i++)
             {
                 DateTime startDate = curMonth.AddMonths(-i);
                 DateTime endDate = startDate.AddMonths(1).AddDays(-1);
