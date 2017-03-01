@@ -74,7 +74,7 @@
 
         [Column(TypeName = "date")]
         [Display(Name ="日期")]
-        public DateTime statDate { get; set; }
+        public DateTime? statDate { get; set; }
 
         [Display(Name ="月份")]
         public string statMonth { get; set; }

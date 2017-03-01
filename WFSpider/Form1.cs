@@ -156,9 +156,21 @@ namespace WFSpider
                 }
                 if (agentDetailList.Count > 0)
                 {
+                    //需要分批存储
                     List<AgentGradeOperation> agoList = GetAgentGradeOperations(agentDetailList, perDayTicketDict);
+
                     CrmWebServiceReference.ApiWebServiceSoapClient ws = new ApiWebServiceSoapClient();
-                    ws.InsertAgentGradeOprations(agoList.ToArray());
+                    for (int i = 0; i < agoList.Count; i += 1000)
+                    {
+                        int len = 1000;
+                        if (i + len > agoList.Count)
+                        {
+                            len = agoList.Count - i;
+                        }
+                        ws.InsertAgentGradeOprations(agoList.GetRange(i, len).ToArray());
+                        textBoxResult.AppendText(agoList.Count + ":" + i.ToString() + "\r\n");
+                    }
+
                     textBoxResult.Text = "保存成功：" + agoList.Count;
                 }
             }
@@ -285,7 +297,6 @@ namespace WFSpider
             string domain = "checking.corp.qunar.com";
             List<Cookie> cookieList = GetDomainCookies(domain, textBoxCookie.Text);
             int limit = 50;
-            int pageIndex = 1;
             string filePath = System.AppDomain.CurrentDomain.BaseDirectory + "AgentGradeOprationJson";
             CreateFolderIfNeeded(filePath);
             DeleteAllFile(filePath);    //清空旧的
@@ -301,6 +312,7 @@ namespace WFSpider
                 TimeSpan ts = endDate - startDate;
                 for (int j = 0; j <= ts.Days; j++)
                 {
+                    int pageIndex = 1;
                     DateTime curDate = startDate.AddDays(j);
                     //获取第一页，然后获取到totalcount，然后再翻页
                     string firstDayJson = GetDayAgentGradeOprationJson(cookieList.ToArray(), curDate, limit, pageIndex);
@@ -316,6 +328,7 @@ namespace WFSpider
                         fileName = curDate.ToString("yyyyMMdd") + "_" + curPageIndex + ".txt";
                         WriteFile(json, Path.Combine(filePath, fileName), false);
                     }
+                    textBoxResult.AppendText(fileName + ":" + totalPage + "\r\n");
                 }
             }
         }

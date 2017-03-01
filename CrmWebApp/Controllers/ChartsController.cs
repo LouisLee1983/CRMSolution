@@ -43,10 +43,10 @@ namespace CrmWebApp.Controllers
                 {
                     domainList.Add(item.agentDomain);
                 }
-                string key = item.agentDomain + item.statDate.ToString("yyyyMMdd");
+                string key = item.agentDomain + item.statDate.Value.ToString("yyyyMMdd");
                 if (!agoTicketCountDict.ContainsKey(key))
                 {
-                    agoTicketCountDict.Add(key, item.totalTicketNum.Value);
+                    agoTicketCountDict.Add(key, item.CurDateTicketCount.Value);
                 }
             }
 
@@ -54,7 +54,7 @@ namespace CrmWebApp.Controllers
             for (int i = 0; i < ts.Days; i++)
             {
                 DateTime curDate = startDate.AddDays(i);
-                string xValue = curDate.ToString("yyyyMMdd");
+                string xValue = curDate.ToString("MMdd");
                 chartModel.XList.Add(xValue);
             }
             //每个域名按天统计数据，加入series

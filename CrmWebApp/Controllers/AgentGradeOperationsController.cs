@@ -16,9 +16,67 @@ namespace CrmWebApp.Controllers
         private OtaCrmModel db = new OtaCrmModel();
 
         // GET: AgentGradeOperations
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(int? companyId)
         {
-            return View(await db.AgentGradeOperation.ToListAsync());
+            var result = new List<AgentGradeOperation>();
+            if (companyId != null && companyId > 0)
+            {
+                OtaCompany c = db.OtaCompany.First(p => p.Id == companyId);
+                var model = from p in db.AgentGradeOperation
+                            where p.agentName == c.CompanyName
+                            select p;
+                return View(await model.ToListAsync());
+            }
+            return View(result);
+        }
+
+        public void ImportCompany()
+        {
+            var cityList = (from cc in db.ChinaCity select cc).ToList();
+
+            var exsitNames = (from c in db.OtaCompany select c.CompanyName).Distinct();
+            List<string> exsitNameList = exsitNames.ToList();
+
+            var q = (from p in db.AgentGradeOperation
+                     select p.agentName).Distinct();
+            foreach (string companyName in q)
+            {
+                if (string.IsNullOrEmpty(companyName) || exsitNameList.Contains(companyName))
+                {
+                    continue;
+                }
+                OtaCompany newItem = new OtaCompany();
+                newItem.BossBackground = "";
+                newItem.BossBusinessDesp = "";
+                newItem.BossIdNo = "";
+                newItem.CompanyName = companyName;
+                newItem.CreateTime = DateTime.Now;
+                newItem.BossName = "";
+                newItem.BusnessRange = "";
+                newItem.CapitalAsserts = "";
+                newItem.CityName = "";
+
+                foreach (var city in cityList)
+                {
+                    if (companyName.Contains(city.CityName.Replace("市", "")))
+                    {
+                        newItem.CityName = city.ProvinceName + "-" + city.CityName;
+                        break;
+                    }
+                }
+
+                newItem.LegalPerson = "ww";
+                newItem.LegalPersonIdNo = "";
+                newItem.LegalPersonPhone = "";
+                newItem.OfficeNo = "";
+                newItem.OtherInvest = "";
+                newItem.RealAddress = "";
+                newItem.RegisterAddress = "";
+                newItem.SalesUserName = "ljy";
+
+                db.OtaCompany.Add(newItem);
+            }
+            db.SaveChanges();
         }
 
         // GET: AgentGradeOperations/Details/5
