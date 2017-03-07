@@ -285,9 +285,10 @@ namespace CrmWebApp.Controllers
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             CompanyBusinessDaily companyBusinessDaily = await db.CompanyBusinessDaily.FindAsync(id);
+            int companyId = companyBusinessDaily.CompanyId;
             db.CompanyBusinessDaily.Remove(companyBusinessDaily);
             await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { companyId = companyId, page = 1 });
         }
 
         protected override void Dispose(bool disposing)
