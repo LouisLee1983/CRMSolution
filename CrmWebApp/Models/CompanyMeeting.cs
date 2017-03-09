@@ -37,7 +37,7 @@
         [Display(Name = "拜访人")]
         public string MeetNames { get; set; }
 
-        [StringLength(512)]
+        [StringLength(1024)]
         [Display(Name = "纪要")]
         public string MeetSummary { get; set; }
 
