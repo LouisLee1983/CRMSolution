@@ -14,10 +14,13 @@
                 <a href="~/OtaCompanies/Index">公司</a> <span class="divider"></span>
             </li>
             <li>
-                <a href="#">新增运营信息</a> <span class="divider"></span>
+                <a href="~/OtaCompanies/Details?id=@Model.CompanyId">@Model.CompanyName</a><span class="divider"></span>
             </li>
-            <li class="active">
-                <a href="#">@Model.CompanyName</a> <span class="divider"></span>
+            <li>
+                <a href="~/CompanyBusinessDailies/Index?companyId=@Model.CompanyId">运营</a> <span class="divider"></span>
+            </li>
+            <li>
+                <a href="#">新增</a> <span class="divider"></span>
             </li>
         </ul>
     </div>
@@ -30,7 +33,7 @@
     <div class="form-horizontal">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model=>model.Id)
+        @Html.HiddenFor(model => model.Id)
         @Html.HiddenFor(model => model.CompanyId)
         @Html.HiddenFor(model => model.CompanyName)
         <div class="form-group">
@@ -48,7 +51,7 @@
                 @Html.ValidationMessageFor(model => model.ManagerName, "", new { @class = "text-danger" })
             </div>
         </div>
-        
+
         <div class="form-group">
             @Html.LabelFor(model => model.BussinessLogDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">

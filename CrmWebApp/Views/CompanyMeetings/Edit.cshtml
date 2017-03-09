@@ -14,13 +14,13 @@
                 <a href="~/OtaCompanies/Index">公司</a> <span class="divider"></span>
             </li>
             <li>
-                <a href="~/CompanyMeetings/Index?companyId=@Model.CompanyId">拜访记录</a> <span class="divider"></span>
+                <a href="~/OtaCompanies/Details?id=@Model.CompanyId">@Model.CompanyName</a><span class="divider"></span>
             </li>
             <li>
-                <a href="#">编辑</a> <span class="divider"></span>
+                <a href="~/CompanyMeetings/Index?companyId=@Model.CompanyId">拜访</a> <span class="divider"></span>
             </li>
             <li class="active">
-                <a href="#">@Model.CompanyName</a> <span class="divider"></span>
+                <a href="#">编辑</a> <span class="divider"></span>
             </li>
         </ul>
     </div>
@@ -102,15 +102,17 @@
                 {
                     <table class="table">
                         @for (int i = 0; i < Model.MeetingSubjectList.Count; i++)
-                    {
-                            <tr>
+                        {
+                            var trid = "MeetingSubject" + "tr" + i.ToString();
+                            <tr id="@trid">
                                 @Html.HiddenFor(e => Model.MeetingSubjectList[i].Id, new { htmlAttributes = new { @class = "form-control" } })
                                 @Html.HiddenFor(e => Model.MeetingSubjectList[i].CompanyMeetingId, new { htmlAttributes = new { @class = "form-control" } })
                                 <td>
-                                    @Html.EditorFor(e => Model.MeetingSubjectList[i].Subject, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.EditorFor(e => Model.MeetingSubjectList[i].Subject, new { htmlAttributes = new { @class = "form-control",id=trid+"SubItem" } })
                                     @Html.TextAreaFor(e => Model.MeetingSubjectList[i].Problem, 5, 40, new { @class = "form-control" })
                                     @Html.TextAreaFor(e => Model.MeetingSubjectList[i].Resolve, 5, 40, new { @class = "form-control" })
                                     @Html.EditorFor(e => Model.MeetingSubjectList[i].ResolveTime, new { htmlAttributes = new { @class = "form-control datetimepicker" } })
+                                    <span class="glyphicon glyphicon-remove" onclick="DelSubItem('@trid')"></span>
                                 </td>
                             </tr>
                         }
@@ -184,5 +186,10 @@
         $("#modalBodyDiv").load(url, function () {
             $("#modalDiv").modal("show");
         })
+    }
+
+    var DelSubItem = function (trid) {
+        $("#" + trid).find("#" + trid + "SubItem").attr("value", "");
+        $("#" + trid).hide();
     }
 </script>

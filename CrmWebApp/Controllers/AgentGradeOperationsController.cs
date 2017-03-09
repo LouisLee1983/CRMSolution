@@ -16,6 +16,7 @@ namespace CrmWebApp.Controllers
         private OtaCrmModel db = new OtaCrmModel();
 
         // GET: AgentGradeOperations
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Index(int? companyId)
         {
             var result = new List<AgentGradeOperation>();
@@ -25,11 +26,13 @@ namespace CrmWebApp.Controllers
                 var model = from p in db.AgentGradeOperation
                             where p.agentName == c.CompanyName
                             select p;
+                ViewBag.CompanyName = c.CompanyName;
+                ViewBag.CompanyId = c.Id;
                 return View(await model.ToListAsync());
             }
             return View(result);
         }
-
+        [Authorize(Roles = "Admin")]
         public void ImportCompany()
         {
             var cityList = (from cc in db.ChinaCity select cc).ToList();
@@ -80,7 +83,8 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: AgentGradeOperations/Details/5
-        public async Task<ActionResult> Details(int? id)
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
+        public async Task<ActionResult> Details(int? id,int? companyId)
         {
             if (id == null)
             {
@@ -91,10 +95,12 @@ namespace CrmWebApp.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.CompanyId = companyId;
             return View(agentGradeOperation);
         }
 
         // GET: AgentGradeOperations/Create
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult Create()
         {
             return View();
@@ -104,6 +110,7 @@ namespace CrmWebApp.Controllers
         // 为了防止“过多发布”攻击，请启用要绑定到的特定属性，有关 
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "id,agentDomain,agentName,promotion,agentManager,totalTicketNum,totalTicket,passRate,less60minRate,orderAlterRate,voluntaryRate,involuntaryRate,complainRate,qapassRate,phoneAnswerRate,messageTimeoutRate,qualification,whiteList,totalScore,status,statDate,statMonth,grade,CurDateTicketCount,CreateTime")] AgentGradeOperation agentGradeOperation)
         {
@@ -118,6 +125,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: AgentGradeOperations/Edit/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -136,6 +144,7 @@ namespace CrmWebApp.Controllers
         // 为了防止“过多发布”攻击，请启用要绑定到的特定属性，有关 
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "id,agentDomain,agentName,promotion,agentManager,totalTicketNum,totalTicket,passRate,less60minRate,orderAlterRate,voluntaryRate,involuntaryRate,complainRate,qapassRate,phoneAnswerRate,messageTimeoutRate,qualification,whiteList,totalScore,status,statDate,statMonth,grade,CurDateTicketCount,CreateTime")] AgentGradeOperation agentGradeOperation)
         {
@@ -149,6 +158,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: AgentGradeOperations/Delete/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -164,6 +174,7 @@ namespace CrmWebApp.Controllers
         }
 
         // POST: AgentGradeOperations/Delete/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)

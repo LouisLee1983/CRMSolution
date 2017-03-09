@@ -4,11 +4,29 @@
     ViewBag.Title = "Delete";
 }
 
-<h2>Delete</h2>
+<div class="row-fluid">
+    <div class="span12">
+        <ul class="breadcrumb">
+            <li>
+                <a href="~/Home/Index">主页</a> <span class="divider"></span>
+            </li>
+            <li>
+                <a href="~/OtaCompanies/Index">公司</a> <span class="divider"></span>
+            </li>
+            <li>
+                <a href="~/OtaCompanies/Details?id=@Model.CompanyId">@Model.CompanyName</a><span class="divider"></span>
+            </li>
+            <li>
+                <a href="~/CompanySalesDailies/Index?companyId=@Model.CompanyId">业务</a> <span class="divider"></span>
+            </li>
+            <li>
+                <a href="#">删除</a> <span class="divider"></span>
+            </li>
+        </ul>
+    </div>
+</div>
 
-<h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>CompanySalesDaily</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -77,12 +95,13 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            @Html.ActionLink("返回列表", "Index", new { companyId = Model.CompanyId })
         </div>
     }
 </div>

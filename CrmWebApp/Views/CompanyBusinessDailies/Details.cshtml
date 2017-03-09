@@ -3,75 +3,78 @@
 @{
     ViewBag.Title = "Details";
 }
+<div class="row-fluid">
+    <div class="span12">
+        <ul class="breadcrumb">
+            <li>
+                <a href="~/Home/Index">主页</a> <span class="divider"></span>
+            </li>
+            <li>
+                <a href="~/OtaCompanies/Index">公司</a> <span class="divider"></span>
+            </li>
+            <li class="active">
+                <a href="~/OtaCompanies/Details?id=@Model.CompanyId">@Model.CompanyName</a><span class="divider"></span>
+            </li>
+            <li>
+                <a href="~/CompanyBusinessDailies/Index?companyId=@Model.CompanyId">运营</a> <span class="divider"></span>
+            </li>
+            <li>
+                <a href="#">详情</a> <span class="divider"></span>
+            </li>
+        </ul>
+    </div>
+</div>
 
 <div class="container-fluid">
-    <div class="row-fluid">
-        <div class="span12">
-            <ul class="breadcrumb">
-                <li>
-                    <a href="#">@Model.DailyItem.CompanyName</a> <span class="divider"></span>
-                </li>
-                <li>
-                    <a href="#">运营</a> <span class="divider"></span>
-                </li>
-                <li>
-                    <a href="#">@Model.DailyItem.BussinessType</a> <span class="divider"></span>
-                </li>
-                <li class="active">
-                    @Model.DailyItem.BussinessLogDate.Value.ToString("yyyy-MM-dd")
-                </li>
-            </ul>
-        </div>
-    </div>
     <div class="row-fluid">
         <hr />
         <table>
             <tr>
                 <td>
-                    <h4>@Html.DisplayNameFor(model => model.DailyItem.CompanyName)</h4>
+                    <h4>@Html.DisplayNameFor(model => model.CompanyName)</h4>
                 </td>
                 <td>
-                    @Html.DisplayFor(model => model.DailyItem.CompanyName)
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h4>@Html.DisplayNameFor(model => model.DailyItem.BussinessType)</h4>
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.DailyItem.BussinessType)
+                    @Html.DisplayFor(model => model.CompanyName)
                 </td>
             </tr>
             <tr>
                 <td>
-                    <h4>@Html.DisplayNameFor(model => model.DailyItem.ManagerName)</h4>
+                    <h4>@Html.DisplayNameFor(model => model.BussinessType)</h4>
                 </td>
                 <td>
-                    @Html.DisplayFor(model => model.DailyItem.ManagerName)
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h4>@Html.DisplayNameFor(model => model.DailyItem.CreateUserName)</h4>
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.DailyItem.CreateUserName)
+                    @Html.DisplayFor(model => model.BussinessType)
                 </td>
             </tr>
             <tr>
                 <td>
-                    <h4>@Html.DisplayNameFor(model => model.DailyItem.CreateTime)</h4>
+                    <h4>@Html.DisplayNameFor(model => model.ManagerName)</h4>
                 </td>
                 <td>
-                    @Html.DisplayFor(model => model.DailyItem.CreateTime)
+                    @Html.DisplayFor(model => model.ManagerName)
                 </td>
             </tr>
             <tr>
                 <td>
-                    <h4>@Html.DisplayNameFor(model => model.DailyItem.BussinessLogDate)</h4>
+                    <h4>@Html.DisplayNameFor(model => model.CreateUserName)</h4>
                 </td>
                 <td>
-                    @Html.DisplayFor(model => model.DailyItem.BussinessLogDate)
+                    @Html.DisplayFor(model => model.CreateUserName)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4>@Html.DisplayNameFor(model => model.CreateTime)</h4>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CreateTime)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4>@Html.DisplayNameFor(model => model.BussinessLogDate)</h4>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.BussinessLogDate)
                 </td>
             </tr>
             <tr>
@@ -117,6 +120,6 @@
     </div>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.DailyItem.Id }) |
-    @Html.ActionLink("Back to List", "Index", new { companyId = Model.DailyItem.CompanyId })
+    @Html.ActionLink("编辑", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("返回列表", "Index", new { companyId = Model.CompanyId })
 </p>

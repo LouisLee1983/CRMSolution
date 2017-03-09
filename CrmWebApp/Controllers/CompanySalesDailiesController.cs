@@ -18,6 +18,7 @@ namespace CrmWebApp.Controllers
         private OtaCrmModel db = new OtaCrmModel();
 
         // GET: CompanySalesDailies
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult Index(int? companyId, int? page)
         {
             if (companyId.HasValue)
@@ -62,6 +63,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanySalesDailies/Details/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -77,6 +79,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanySalesDailies/Create
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult Create(int? companyId)
         {
             var model = new CompanySalesDaily();
@@ -123,6 +126,7 @@ namespace CrmWebApp.Controllers
         // 为了防止“过多发布”攻击，请启用要绑定到的特定属性，有关 
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "Id,CompanyId,CompanyName,ManagerName,ManagerPhone,SalesType,CreateUserName,CreateTime,SalesLogDate")] CompanySalesDaily companySalesDaily)
         {
@@ -137,6 +141,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanySalesDailies/Edit/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -278,6 +283,7 @@ namespace CrmWebApp.Controllers
         // 为了防止“过多发布”攻击，请启用要绑定到的特定属性，有关 
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "Id,CompanyId,CompanyName,ManagerName,ManagerPhone,SalesType,CreateUserName,CreateTime,SalesLogDate")] CompanySalesDaily model,
             List<CompanySalesDailySalesSource> salesSourceList, List<CompanySalesDailyProductDesp> salesProductDespList, List<CompanySalesDailyParam> salesProductPercentList,
@@ -313,8 +319,14 @@ namespace CrmWebApp.Controllers
                      new SqlParameter("@CompanySalesDailyId",dailyId)
                     };
             db.Database.ExecuteSqlCommand(sql, paras);
-
-            db.CompanySalesDailyParam.AddRange(items);
+            foreach (CompanySalesDailyParam item in items)
+            {
+                if (!string.IsNullOrEmpty(item.SubParamItem))
+                {
+                    db.CompanySalesDailyParam.Add(item);
+                }
+            }
+            
             db.SaveChanges();
         }
 
@@ -326,7 +338,14 @@ namespace CrmWebApp.Controllers
                     };
             db.Database.ExecuteSqlCommand(sql, paras);
 
-            db.CompanySalesDailyFund.AddRange(items);
+            foreach (CompanySalesDailyFund item in items)
+            {
+                if (!string.IsNullOrEmpty(item.SalesSource))
+                {
+                    db.CompanySalesDailyFund.Add(item);
+                }
+            }
+            
             db.SaveChanges();
         }
 
@@ -338,7 +357,14 @@ namespace CrmWebApp.Controllers
                     };
             db.Database.ExecuteSqlCommand(sql, paras);
 
-            db.CompanySalesDailyProductDesp.AddRange(items);
+            foreach (CompanySalesDailyProductDesp item in items)
+            {
+                if (!string.IsNullOrEmpty(item.SalesSource))
+                {
+                    db.CompanySalesDailyProductDesp.Add(item);
+                }
+            }
+            
             db.SaveChanges();
         }
 
@@ -350,11 +376,19 @@ namespace CrmWebApp.Controllers
                     };            
             db.Database.ExecuteSqlCommand(sql, paras);
 
-            db.CompanySalesDailySalesSource.AddRange(items);
+            foreach (CompanySalesDailySalesSource item in items)
+            {
+                if (!string.IsNullOrEmpty(item.SaleSource))
+                {
+                    db.CompanySalesDailySalesSource.Add(item);
+                }
+            }
+            
             db.SaveChanges();
         }
 
         // GET: CompanySalesDailies/Delete/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -371,6 +405,7 @@ namespace CrmWebApp.Controllers
 
         // POST: CompanySalesDailies/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {

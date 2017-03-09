@@ -17,6 +17,7 @@ namespace CrmWebApp.Controllers
         private OtaCrmModel db = new OtaCrmModel();
 
         // GET: CompanyCertificates
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Index(int? companyId)
         {
             var model = from cbd in db.CompanyCertificate
@@ -32,6 +33,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyCertificates/Details/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -47,6 +49,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyCertificates/Create
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult Create(int? companyId)
         {
             var model = new CompanyCertificate();
@@ -110,6 +113,7 @@ namespace CrmWebApp.Controllers
         // 为了防止“过多发布”攻击，请启用要绑定到的特定属性，有关 
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult Create([Bind(Include = "Id,CompanyId,CertificateName,CompanyName,PictureUrl,CreateTime,CreateUserName")] CompanyCertificate companyCertificate, HttpPostedFileBase imageFile)
         {
             if (ModelState.IsValid)
@@ -141,6 +145,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyCertificates/Edit/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -159,6 +164,7 @@ namespace CrmWebApp.Controllers
         // 为了防止“过多发布”攻击，请启用要绑定到的特定属性，有关 
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "Id,CompanyId,CertificateName,CompanyName,PictureUrl,CreateTime,CreateUserName")] CompanyCertificate companyCertificate)
         {
@@ -172,6 +178,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyCertificates/Delete/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -188,6 +195,7 @@ namespace CrmWebApp.Controllers
 
         // POST: CompanyCertificates/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {

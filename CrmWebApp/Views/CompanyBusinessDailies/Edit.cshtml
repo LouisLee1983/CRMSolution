@@ -14,10 +14,13 @@
                 <a href="~/OtaCompanies/Index">公司</a> <span class="divider"></span>
             </li>
             <li>
-                <a href="#">运营信息编辑</a> <span class="divider"></span>
+                <a href="~/OtaCompanies/Details?id=@Model.CompanyId">@Model.CompanyName</a><span class="divider"></span>
             </li>
-            <li class="active">
-                <a href="#">@Model.CompanyName</a> <span class="divider"></span>
+            <li>
+                <a href="~/CompanyBusinessDailies/Index?companyId=@Model.CompanyId">运营</a> <span class="divider"></span>
+            </li>
+            <li>
+                <a href="#">编辑</a> <span class="divider"></span>
             </li>
         </ul>
     </div>
@@ -77,19 +80,23 @@
         <div class="form-group">
             @Html.LabelFor(model => model.EmployeeList, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <a href="#" class="glyphicon glyphicon-plus" onclick="ShowModal(@Model.Id , '员工数量')"></a>
+                <span class="glyphicon glyphicon-plus" onclick="ShowModal(@Model.Id , '员工数量')"></span>
                 <table class="table">
                     @for (int i = 0; i < Model.EmployeeList.Count; i++)
                     {
-                        <tr>
+                        var trId = "trEmployee" + i.ToString();
+                        <tr id="@trId">
                             @Html.HiddenFor(e => Model.EmployeeList[i].Id, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.HiddenFor(e => Model.EmployeeList[i].CompanyBusinessDailyId, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.HiddenFor(e => Model.EmployeeList[i].ParamName, new { htmlAttributes = new { @class = "form-control" } })
                             <td>
-                                @Html.EditorFor(e => Model.EmployeeList[i].SubParamItem, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.EditorFor(e => Model.EmployeeList[i].SubParamItem, new { htmlAttributes = new { @class = "form-control",id= "SubParamItem"+trId } })
                             </td>
                             <td>
                                 @Html.EditorFor(e => Model.EmployeeList[i].ItemAmount, new { htmlAttributes = new { @class = "form-control" } })
+                            </td>
+                            <td>
+                                <span onclick="DelSubParamItem('@trId')" class="glyphicon glyphicon-remove"></span>
                             </td>
                         </tr>
                     }
@@ -100,19 +107,23 @@
         <div class="form-group">
             @Html.LabelFor(model => model.BusinessAmountList, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <a href="#" class="glyphicon glyphicon-plus" onclick="ShowModal(@Model.Id , '业务结构')"></a>
+                <span class="glyphicon glyphicon-plus" onclick="ShowModal(@Model.Id , '业务结构')"></span>
                 <table class="table">
                     @for (int i = 0; i < Model.BusinessAmountList.Count; i++)
                     {
-                        <tr>
+                        var trId = "trBusinessAmount" + i.ToString();
+                        <tr id="@trId">
                             @Html.HiddenFor(e => Model.BusinessAmountList[i].Id, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.HiddenFor(e => Model.BusinessAmountList[i].CompanyBusinessDailyId, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.HiddenFor(e => Model.BusinessAmountList[i].ParamName, new { htmlAttributes = new { @class = "form-control" } })
                             <td>
-                                @Html.EditorFor(e => Model.BusinessAmountList[i].SubParamItem, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.EditorFor(e => Model.BusinessAmountList[i].SubParamItem, new { htmlAttributes = new { @class = "form-control", id = "SubParamItem" + trId } })
                             </td>
                             <td>
                                 @Html.EditorFor(e => Model.BusinessAmountList[i].ItemAmount, new { htmlAttributes = new { @class = "form-control" } })
+                            </td>
+                            <td>
+                                <span onclick="DelSubParamItem('@trId')" class="glyphicon glyphicon-remove"></span>
                             </td>
                         </tr>
                     }
@@ -123,19 +134,23 @@
         <div class="form-group">
             @Html.LabelFor(model => model.NewBusinessList, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <a href="#" class="glyphicon glyphicon-plus" onclick="ShowModal(@Model.Id , '新业务量')"></a>
+                <span class="glyphicon glyphicon-plus" onclick="ShowModal(@Model.Id , '新业务量')"></span>
                 <table class="table">
                     @for (int i = 0; i < Model.NewBusinessList.Count; i++)
                     {
-                        <tr>
+                        var trId = "trNewBusiness" + i.ToString();
+                        <tr id="@trId">
                             @Html.HiddenFor(e => Model.NewBusinessList[i].Id, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.HiddenFor(e => Model.NewBusinessList[i].CompanyBusinessDailyId, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.HiddenFor(e => Model.NewBusinessList[i].ParamName, new { htmlAttributes = new { @class = "form-control" } })
                             <td>
-                                @Html.EditorFor(e => Model.NewBusinessList[i].SubParamItem, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.EditorFor(e => Model.NewBusinessList[i].SubParamItem, new { htmlAttributes = new { @class = "form-control", id = "SubParamItem" + trId } })
                             </td>
                             <td>
                                 @Html.EditorFor(e => Model.NewBusinessList[i].ItemAmount, new { htmlAttributes = new { @class = "form-control" } })
+                            </td>
+                            <td>
+                                <span onclick="DelSubParamItem('@trId')" class="glyphicon glyphicon-remove"></span>
                             </td>
                         </tr>
                     }
@@ -146,19 +161,23 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ItSystemList, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <a href="#" class="glyphicon glyphicon-plus" onclick="ShowModal(@Model.Id , '软件系统')"></a>
+                <span class="glyphicon glyphicon-plus" onclick="ShowModal(@Model.Id , '软件系统')"></span>
                 <table class="table">
                     @for (int i = 0; i < Model.ItSystemList.Count; i++)
                     {
-                        <tr>
+                        var trId = "trItSystem" + i.ToString();
+                        <tr id="@trId">
                             @Html.HiddenFor(e => Model.ItSystemList[i].Id, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.HiddenFor(e => Model.ItSystemList[i].CompanyBusinessDailyId, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.HiddenFor(e => Model.ItSystemList[i].ParamName, new { htmlAttributes = new { @class = "form-control" } })
                             <td>
-                                @Html.EditorFor(e => Model.ItSystemList[i].SubParamItem, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.EditorFor(e => Model.ItSystemList[i].SubParamItem, new { htmlAttributes = new { @class = "form-control", id = "SubParamItem" + trId } })
                             </td>
                             <td>
                                 @Html.EditorFor(e => Model.ItSystemList[i].ItemAmount, new { htmlAttributes = new { @class = "form-control" } })
+                            </td>
+                            <td>
+                                <span onclick="DelSubParamItem('@trId')" class="glyphicon glyphicon-remove"></span>
                             </td>
                         </tr>
                     }
@@ -169,7 +188,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.PhotoList, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <a href="#" class="glyphicon glyphicon-plus" onclick="AddPhoto(@Model.Id)"></a>
+                <span class="glyphicon glyphicon-plus" onclick="AddPhoto(@Model.Id)"></span>
                 <hr />
                 @if (Model.PhotoList != null && Model.PhotoList.Count > 0)
                 {
@@ -192,7 +211,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.SoundRecordList, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <a href="#" class="glyphicon glyphicon-plus" onclick="AddAudio(@Model.Id)"></a>
+                <span class="glyphicon glyphicon-plus" onclick="AddAudio(@Model.Id)"></span>
                 <hr />
                 @if (Model.SoundRecordList != null && Model.SoundRecordList.Count > 0)
                 {
@@ -267,5 +286,10 @@
         $("#modalBodyDiv").load(url, function () {
             $("#modalDiv").modal("show");
         })
+    }
+
+    var DelSubParamItem = function (trid) {
+        $("#"+trid).find("#SubParamItem"+trid).attr("value","");
+        $("#"+trid).hide();
     }
 </script>

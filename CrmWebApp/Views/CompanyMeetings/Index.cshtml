@@ -1,7 +1,7 @@
 ﻿@model PagedList.IPagedList<CrmWebApp.Models.CompanyMeeting>
 @using PagedList.Mvc;
 @{
-    ViewBag.Title = "沟通记录-"+ViewBag.CompanyName;
+    ViewBag.Title = "沟通记录-" + ViewBag.CompanyName;
 }
 
 <div class="row-fluid">
@@ -14,17 +14,17 @@
                 <a href="~/OtaCompanies/Index">公司</a> <span class="divider"></span>
             </li>
             <li>
-                <a href="#">拜访记录</a> <span class="divider"></span>
+                <a href="~/OtaCompanies/Details?id=@ViewBag.CompanyId">@ViewBag.CompanyName</a><span class="divider"></span>
             </li>
             <li class="active">
-                <a href="#">@ViewBag.CompanyName</a> <span class="divider"></span>
+                <a href="#">拜访</a> <span class="divider"></span>
             </li>
         </ul>
     </div>
 </div>
 
 <p>
-    @Html.ActionLink("新建", "Create","CompanyMeetings", new { companyId = ViewBag.CompanyId },new {@class="btn btn-default" })
+    @Html.ActionLink("新建", "Create", "CompanyMeetings", new { companyId = ViewBag.CompanyId }, new { @class = "btn btn-default" })
 </p>
 <table class="table">
     <tr>
@@ -71,9 +71,9 @@
                 @Html.DisplayFor(modelItem => item.CreateTime)
             </td>
             <td>
-                <a href="#" class="btn btn-default" data-toggle="modal" data-target="#modalDiv" onclick="ShowModalDiv('@item.Id')">查看</a> 
-                @Html.ActionLink("编辑", "Edit", new { id = item.Id }, new { @class = "btn btn-default" })                
-                @Html.ActionLink("删除", "Delete", new { id = item.Id }, new { onclick = "return confirm('确定要删除?')", @class = "btn btn-default" })
+                <a href="#" class="btn btn-default" data-toggle="modal" data-target="#modalDiv" onclick="ShowModalDiv('@item.Id')">查看</a>
+                @Html.ActionLink("编辑", "Edit", new { id = item.Id }, new { @class = "btn btn-default" })
+                @Html.ActionLink("删除", "Delete", new { id = item.Id }, new { @class = "btn btn-default" })
             </td>
         </tr>
     }

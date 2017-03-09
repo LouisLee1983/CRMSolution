@@ -16,6 +16,7 @@ namespace CrmWebApp.Controllers
     {
         private OtaCrmModel db = new OtaCrmModel();
 
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         // GET: OtaCompanies
         public ActionResult Index(string sortOrder, string searchString, string currentFilter, int? page)
         {
@@ -74,6 +75,7 @@ namespace CrmWebApp.Controllers
             return View(otaCompanys.ToPagedList(pageNumber, pageSize));
         }
 
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         // GET: OtaCompanies/Details/5
         public async Task<ActionResult> Details(int? id)
         {
@@ -170,6 +172,7 @@ namespace CrmWebApp.Controllers
         // 为了防止“过多发布”攻击，请启用要绑定到的特定属性，有关 
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(OtaCompany otaCompany)
         {
@@ -183,6 +186,7 @@ namespace CrmWebApp.Controllers
             return View(otaCompany);
         }
 
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         // GET: OtaCompanies/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
@@ -205,6 +209,7 @@ namespace CrmWebApp.Controllers
         // 为了防止“过多发布”攻击，请启用要绑定到的特定属性，有关 
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(OtaCompany otaCompany)
         {
@@ -217,6 +222,7 @@ namespace CrmWebApp.Controllers
             return View(otaCompany);
         }
 
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         // GET: OtaCompanies/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
@@ -232,8 +238,10 @@ namespace CrmWebApp.Controllers
             return View(otaCompany);
         }
 
+
         // POST: OtaCompanies/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {

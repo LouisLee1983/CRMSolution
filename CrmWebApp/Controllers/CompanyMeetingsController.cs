@@ -18,6 +18,7 @@ namespace CrmWebApp.Controllers
         private OtaCrmModel db = new OtaCrmModel();
 
         // GET: CompanyMeetings
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult Index(int? companyId, int? page)
         {
             if (companyId.HasValue)
@@ -52,6 +53,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyMeetings/Details/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -67,6 +69,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyMeetings/Create
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult Create(int? companyId)
         {
             var model = new CompanyMeeting();
@@ -113,6 +116,7 @@ namespace CrmWebApp.Controllers
         // 为了防止“过多发布”攻击，请启用要绑定到的特定属性，有关 
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(CompanyMeeting companyMeeting)
         {
@@ -133,6 +137,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyMeetings/Edit/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -159,38 +164,42 @@ namespace CrmWebApp.Controllers
         // 为了防止“过多发布”攻击，请启用要绑定到的特定属性，有关 
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(CompanyMeetingViewModel model, List<CompanyMeetingSubject> meetingSubjectList)
         {
-            if (ModelState.IsValid)
-            {
-                CompanyMeeting companyMeeting = db.CompanyMeeting.FirstOrDefault(p => p.Id == model.Id);
-                companyMeeting.MeetAddress = model.MeetAddress;
-                companyMeeting.MeetDate = model.MeetDate;
-                companyMeeting.MeetingType = model.MeetingType;
-                companyMeeting.MeetNames = model.MeetNames;
-                await db.SaveChangesAsync();
+            CompanyMeeting companyMeeting = db.CompanyMeeting.FirstOrDefault(p => p.Id == model.Id);
+            companyMeeting.MeetAddress = model.MeetAddress;
+            companyMeeting.MeetDate = model.MeetDate;
+            companyMeeting.MeetingType = model.MeetingType;
+            companyMeeting.MeetNames = model.MeetNames;
+            companyMeeting.MeetSummary = model.MeetSummary;
+            await db.SaveChangesAsync();
 
-                if (meetingSubjectList != null && meetingSubjectList.Count > 0)
-                {
-                    //保存子项目
-                    string sql = "Delete From CompanyMeetingSubject Where CompanyMeetingId=@CompanyMeetingId";
-                    SqlParameter[] paras = new SqlParameter[] {
+            if (meetingSubjectList != null && meetingSubjectList.Count > 0)
+            {
+                //保存子项目
+                string sql = "Delete From CompanyMeetingSubject Where CompanyMeetingId=@CompanyMeetingId";
+                SqlParameter[] paras = new SqlParameter[] {
                      new SqlParameter("@CompanyMeetingId",model.Id)
                     };
-                    db.Database.ExecuteSqlCommand(sql, paras);
-
-                    db.CompanyMeetingSubject.AddRange(meetingSubjectList);
-                    db.SaveChanges();
+                db.Database.ExecuteSqlCommand(sql, paras);
+                foreach (CompanyMeetingSubject item in meetingSubjectList)
+                {
+                    if (!string.IsNullOrEmpty(item.Subject))
+                    {
+                        db.CompanyMeetingSubject.Add(item);
+                    }
                 }
 
-                return RedirectToAction("Index", new { companyId = model.CompanyId });
+                db.SaveChanges();
             }
-            ViewData["MeetingTypeList"] = GetMeetingTypeList("上门拜访");
-            return View(model);
+
+            return RedirectToAction("Index", new { companyId = model.CompanyId });
         }
 
         // GET: CompanyMeetings/Delete/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -207,6 +216,7 @@ namespace CrmWebApp.Controllers
 
         // POST: CompanyMeetings/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {

@@ -4,10 +4,27 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<div class="row-fluid">
+    <div class="span12">
+        <ul class="breadcrumb">
+            <li>
+                <a href="~/Home/Index">主页</a> <span class="divider"></span>
+            </li>
+            <li>
+                <a href="~/OtaCompanies/Index">公司</a> <span class="divider"></span>
+            </li>
+            <li class="active">
+                <a href="~/OtaCompanies/Details?id=@ViewBag.CompanyId">@Model.agentName</a> <span class="divider"></span>
+            </li>
+            <li>
+                <a href="#">评分</a> <span class="divider"></span>
+            </li>
+
+        </ul>
+    </div>
+</div>
 
 <div>
-    <h4>AgentGradeOperation</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -205,6 +222,5 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("返回列表", "Index", new { companyId = ViewBag.CompanyId })
 </p>

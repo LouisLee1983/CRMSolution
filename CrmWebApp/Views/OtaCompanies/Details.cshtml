@@ -14,13 +14,28 @@
                 <a href="~/OtaCompanies/Index">公司</a> <span class="divider"></span>
             </li>
             <li class="active">
-                <a href="#">浏览</a> <span class="divider"></span>
+                <a href="#">@Model.CompanyName</a> <span class="divider"></span>
             </li>
         </ul>
     </div>
 </div>
+<p>
+    @Html.ActionLink("评分", "Index", "AgentGradeOperations", new { companyId = Model.Id }, new { @class = "btn btn-default" })
 
+    @Html.ActionLink("编辑", "Edit", new { id = Model.Id }, new { @class = "btn btn-default" })
+
+    @Html.ActionLink("删除", "Delete", new { id = Model.Id }, new { @class = "btn btn-default" })
+
+    <a class="btn btn-default" href="~/CompanyCertificates/Index?companyId=@Model.Id">资质</a>
+
+    <a class="btn btn-default" href="~/CompanyBusinessDailies/Index?companyId=@Model.Id">运营</a>
+
+    <a class="btn btn-default" href="~/CompanySalesDailies/Index?companyId=@Model.Id">业务</a>
+
+    <a class="btn btn-default" href="~/CompanyMeetings/Index?companyId=@Model.Id">拜访</a>
+</p>
 <div>
+
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -167,18 +182,13 @@
             @Html.DisplayFor(model => model.CreateTime)
         </dd>
 
-        <dt>
-            资质
-        </dt>
-
-        <dd>
-            @Html.Partial("_PartialCompanyCertificateListView", ViewData["CompanyCertificateList"])
-        </dd>
-        <dt>票量</dt>
-        <dd>
-            @Html.Action("GetCompanyTicketCountChart", "Charts", new { companyName = Model.CompanyName })
-        </dd>
     </dl>
+</div>
+<div>
+    @Html.Partial("_PartialCompanyCertificateListView", ViewData["CompanyCertificateList"])
+</div>
+<div>
+    @Html.Action("GetCompanyTicketCountChart", "Charts", new { companyName = Model.CompanyName })
 </div>
 <p>
     @Html.ActionLink("编辑", "Edit", new { id = Model.Id }) |

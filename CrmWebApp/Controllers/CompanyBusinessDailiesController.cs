@@ -18,6 +18,7 @@ namespace CrmWebApp.Controllers
         private OtaCrmModel db = new OtaCrmModel();
 
         // GET: CompanyBusinessDailies
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult Index(int? companyId, int? page)
         {
             if (companyId.HasValue)
@@ -36,6 +37,7 @@ namespace CrmWebApp.Controllers
             }
             return View();
         }
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult ShowViewPartial(int companyBusinessDailyId)
         {
             CompanyBusinessDaily dailyItem = db.CompanyBusinessDaily.FirstOrDefault(p => p.Id == companyBusinessDailyId);
@@ -53,6 +55,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyBusinessDailies/Details/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -74,10 +77,13 @@ namespace CrmWebApp.Controllers
                             where p.CompanyBusinessDailyId == id.Value
                             select p;
             var model = new CompanyBusinessDailyViewModel(companyBusinessDaily, paramList.ToList(), photoList.ToList(), soundList.ToList());
+            ViewBag.CompanyId = companyBusinessDaily.CompanyId;
+            ViewBag.CompanyName = companyBusinessDaily.CompanyName;
             return View(model);
         }
 
         // GET: CompanyBusinessDailies/Create
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult Create(int? companyId)
         {
             var model = new CompanyBusinessDaily();
@@ -124,6 +130,7 @@ namespace CrmWebApp.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Create([Bind(Include = "Id,CompanyId,CompanyName,BussinessType,ManagerName,CreateUserName,CreateTime,BussinessLogDate")] CompanyBusinessDaily companyBusinessDaily)
         {
             if (ModelState.IsValid)
@@ -137,6 +144,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyBusinessDailies/Edit/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -207,6 +215,7 @@ namespace CrmWebApp.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Edit(CompanyBusinessDailyViewModel model, List<CompanyBusinessDailyParam> employeeList, List<CompanyBusinessDailyParam> businessAmountList,
             List<CompanyBusinessDailyParam> newBusinessList, List<CompanyBusinessDailyParam> itSystemList)
         {
@@ -223,19 +232,31 @@ namespace CrmWebApp.Controllers
             //有id的更新，id=0的新增
             foreach (CompanyBusinessDailyParam paramItem in employeeList)
             {
-                db.CompanyBusinessDailyParam.Add(paramItem);
+                if (!string.IsNullOrEmpty(paramItem.SubParamItem))
+                {
+                    db.CompanyBusinessDailyParam.Add(paramItem);
+                }
             }
             foreach (CompanyBusinessDailyParam paramItem in businessAmountList)
             {
-                db.CompanyBusinessDailyParam.Add(paramItem);
+                if (!string.IsNullOrEmpty(paramItem.SubParamItem))
+                {
+                    db.CompanyBusinessDailyParam.Add(paramItem);
+                }
             }
             foreach (CompanyBusinessDailyParam paramItem in newBusinessList)
             {
-                db.CompanyBusinessDailyParam.Add(paramItem);
+                if (!string.IsNullOrEmpty(paramItem.SubParamItem))
+                {
+                    db.CompanyBusinessDailyParam.Add(paramItem);
+                }
             }
             foreach (CompanyBusinessDailyParam paramItem in itSystemList)
             {
-                db.CompanyBusinessDailyParam.Add(paramItem);
+                if (!string.IsNullOrEmpty(paramItem.SubParamItem))
+                {
+                    db.CompanyBusinessDailyParam.Add(paramItem);
+                }
             }
             await db.SaveChangesAsync();
 
@@ -256,6 +277,7 @@ namespace CrmWebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult AddBusinessDailyParam(CompanyBusinessDailyParam model)
         {
             db.CompanyBusinessDailyParam.Add(model);
@@ -265,6 +287,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyBusinessDailies/Delete/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -281,6 +304,7 @@ namespace CrmWebApp.Controllers
 
         // POST: CompanyBusinessDailies/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {

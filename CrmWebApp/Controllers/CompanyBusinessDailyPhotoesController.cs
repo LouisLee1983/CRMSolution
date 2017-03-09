@@ -17,6 +17,7 @@ namespace CrmWebApp.Controllers
         private OtaCrmModel db = new OtaCrmModel();
 
         // GET: CompanyBusinessDailyPhotoes
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Index(int? dailyId)
         {
             var model = from cbd in db.CompanyBusinessDailyPhoto
@@ -46,6 +47,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyBusinessDailyPhotoes/Create
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult Create(int? dailyId)
         {
             var model = new CompanyBusinessDailyPhoto();
@@ -82,6 +84,7 @@ namespace CrmWebApp.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult Create(CompanyBusinessDailyPhoto companyBusinessDailyPhoto)
         {
             if (ModelState.IsValid)
@@ -125,6 +128,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyBusinessDailyPhotoes/Edit/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -144,6 +148,7 @@ namespace CrmWebApp.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Edit([Bind(Include = "Id,CompanyBusinessDailyId,PhotoUrl,PhotoName")] CompanyBusinessDailyPhoto companyBusinessDailyPhoto)
         {
             if (ModelState.IsValid)
@@ -156,6 +161,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyBusinessDailyPhotoes/Delete/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -171,6 +177,7 @@ namespace CrmWebApp.Controllers
         }
 
         // POST: CompanyBusinessDailyPhotoes/Delete/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)

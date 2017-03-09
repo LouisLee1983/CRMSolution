@@ -18,12 +18,14 @@ namespace CrmWebApp.Controllers
         private OtaCrmModel db = new OtaCrmModel();
 
         // GET: OtaSalesReports
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Index()
         {
             return View(await db.OtaSalesReport.ToListAsync());
         }
 
         // GET: OtaSalesReports/Details/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -39,6 +41,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: OtaSalesReports/Create
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult Create()
         {
             var model = new OtaSalesReport();
@@ -68,6 +71,7 @@ namespace CrmWebApp.Controllers
         // 为了防止“过多发布”攻击，请启用要绑定到的特定属性，有关 
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(OtaSalesReport otaSalesReport)
         {
@@ -83,6 +87,7 @@ namespace CrmWebApp.Controllers
             return View(otaSalesReport);
         }
 
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public string GenerateReport(DateTime startDate, DateTime endDate)
         {
             StringBuilder sb = new StringBuilder();
@@ -120,6 +125,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: OtaSalesReports/Edit/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -134,6 +140,7 @@ namespace CrmWebApp.Controllers
             return View(otaSalesReport);
         }
 
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult SendEmail(int? id)
         {
             if (id == null)
@@ -184,6 +191,7 @@ namespace CrmWebApp.Controllers
         // 为了防止“过多发布”攻击，请启用要绑定到的特定属性，有关 
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateInput(false)]
         public async Task<ActionResult> Edit(OtaSalesReport otaSalesReport)
         {
@@ -197,6 +205,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: OtaSalesReports/Delete/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -213,6 +222,7 @@ namespace CrmWebApp.Controllers
 
         // POST: OtaSalesReports/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {

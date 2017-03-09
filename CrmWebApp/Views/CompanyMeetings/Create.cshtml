@@ -14,13 +14,13 @@
                 <a href="~/OtaCompanies/Index">公司</a> <span class="divider"></span>
             </li>
             <li>
-                <a href="~/CompanyMeetings/Index?companyId=@Model.CompanyId">拜访记录</a> <span class="divider"></span>
+                <a href="~/OtaCompanies/Details?id=@Model.CompanyId">@Model.CompanyName</a><span class="divider"></span>
             </li>
             <li>
-                <a href="#">新建</a> <span class="divider"></span>
+                <a href="~/CompanyMeetings/Index?companyId=@Model.CompanyId">拜访</a> <span class="divider"></span>
             </li>
             <li class="active">
-                <a href="#">@Model.CompanyName</a> <span class="divider"></span>
+                <a href="#">新建</a> <span class="divider"></span>
             </li>
         </ul>
     </div>
