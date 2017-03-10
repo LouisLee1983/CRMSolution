@@ -10,6 +10,8 @@ using System.Web.Mvc;
 using CrmWebApp.Models;
 using System.Text;
 using System.Net.Mail;
+using System.Drawing;
+using System.IO;
 
 namespace CrmWebApp.Controllers
 {
@@ -90,7 +92,22 @@ namespace CrmWebApp.Controllers
         [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public string GenerateReport(DateTime startDate, DateTime endDate)
         {
+            //加入图片，把图片变成一堆编码
+            var path = "~/CompanyImages/Reports/student.jpg";
+            var imgpath = Server.MapPath(path);
+            Bitmap bmp = new Bitmap(imgpath);
+            MemoryStream ms = new MemoryStream();
+            bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+            byte[] arr = new byte[ms.Length];
+            ms.Position = 0;
+            ms.Read(arr, 0, (int)ms.Length);
+            ms.Close();
+            String strbaser64 = Convert.ToBase64String(arr);
+            //把编码嵌入img元素，加入邮件主题
+            string imgHtml = "<DIV><IMG src=\"data:image/jpg;base64," + strbaser64 + "\"></IMG></DIV>";
+
             StringBuilder sb = new StringBuilder();
+            sb.Append(imgHtml);
             var meetings = from p in db.CompanyMeeting
                            where p.CreateUserName == User.Identity.Name && p.MeetDate >= startDate && p.MeetDate <= endDate
                            select p;

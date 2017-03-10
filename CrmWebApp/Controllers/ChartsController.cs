@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 
 namespace CrmWebApp.Controllers
@@ -20,6 +21,24 @@ namespace CrmWebApp.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+        public string SaveChartImage()
+        {
+            System.Web.Helpers.Chart chart = new System.Web.Helpers.Chart(width: 600, height: 400, theme: ChartTheme.Green, themePath: null);
+            chart.AddTitle(text: "客户数量", name: "chat1");
+            chart.AddSeries(name: "学生成绩"
+                , xValue: new[] { "Peter", "Andrew", "Julie", "Mary", "张1" }
+                , yValues: new[] { "2", "6", "4", "5", "3" }
+                , chartType: "Column"
+                , axisLabel: ""
+                , legend: ""
+                , markerStep: 3);
+
+            var path = "~/CompanyImages/Reports/student.jpg";
+            var imgpath = Server.MapPath(path);
+            chart.Save(path: imgpath, format: "jpeg");
+            return path;
         }
 
         //HighCharts 导出图片 svg
@@ -177,6 +196,7 @@ namespace CrmWebApp.Controllers
             chartModel.ValueSuffix = "张";
 
             DotNet.Highcharts.Highcharts chart = GetChart(chartModel);
+
             return PartialView("_PartialChartView", chart);
         }
         [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]

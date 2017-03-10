@@ -396,7 +396,6 @@
     <None Include="Properties\PublishProfiles\crmwebapp.config.pubxml" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\CompanyCertificate\create.js" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\fileinput.js" />
     <Content Include="Scripts\fileinput.min.js" />
@@ -416,7 +415,6 @@
     <Content Include="Scripts\Highcharts-4.0.1\js\modules\drilldown.js" />
     <Content Include="Scripts\Highcharts-4.0.1\js\modules\drilldown.src.js" />
     <Content Include="Scripts\Highcharts-4.0.1\js\modules\exporting.js" />
-    <Content Include="Scripts\Highcharts-4.0.1\js\modules\exportingcrm.js" />
     <Content Include="Scripts\Highcharts-4.0.1\js\modules\exporting.src.js" />
     <Content Include="Scripts\Highcharts-4.0.1\js\modules\funnel.js" />
     <Content Include="Scripts\Highcharts-4.0.1\js\modules\funnel.src.js" />
@@ -481,6 +479,7 @@
     <Content Include="Scripts\moment-with-locales.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\myjs.js" />
     <Content Include="Scripts\plugins\canvas-to-blob.js" />
     <Content Include="Scripts\plugins\canvas-to-blob.min.js" />
     <Content Include="Scripts\plugins\purify.js" />

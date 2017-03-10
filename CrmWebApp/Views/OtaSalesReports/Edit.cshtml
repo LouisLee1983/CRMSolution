@@ -9,7 +9,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>OtaSalesReport</h4>
         <hr />
@@ -59,7 +59,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ReportContent, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextAreaFor(model => model.ReportContent, new {  @class = "form-control" ,@id= "summernote" })
+                @Html.TextAreaFor(model => model.ReportContent, new { @class = "form-control", @id = "summernote" })
                 <div hidden="hidden" id="reportContentDiv"></div>
             </div>
         </div>
@@ -85,13 +85,7 @@
 </div>
 
 <script>
-    $(document).ready(function () {
-        $("#reportContentDiv").html('@Model.ReportContent');
-
-        $('#summernote').summernote({
-            height: 400
-        }).code($("#reportContentDiv").text());
-    });
+    $("#reportContentDiv").html('@Model.ReportContent');
 </script>
 
 @section Scripts {

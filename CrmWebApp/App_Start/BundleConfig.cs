@@ -39,11 +39,12 @@ namespace CrmWebApp
                       "~/Content/site.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/summernote").Include(
-                        "~/Scripts/summernote/summernote.js"));
+                        "~/Scripts/summernote/summernote.js",
+                        "~/Scripts/myjs.js"
+                        ));
 
             bundles.Add(new ScriptBundle("~/bundles/highcharts").Include(
-                        "~/Scripts/Highcharts-4.0.1/js/highcharts-all.js",
-                        "~/Scripts/Highcharts-4.0.1/js/modules/exportingcrm.js"
+                        "~/Scripts/Highcharts-4.0.1/js/highcharts-all.js"
                         ));
         }
     }

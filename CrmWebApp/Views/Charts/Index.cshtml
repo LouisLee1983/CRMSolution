@@ -6,6 +6,12 @@
 
 <div class="row-fluid">
     <div>
+        @{
+            var url = Html.Action("SaveChartImage");
+            <img src="@Href(url.ToString())" />
+        }            
+    </div>
+    <div>
         @Html.Action("GetCompanyCountChart")
     </div>
     <hr />
@@ -13,7 +19,7 @@
         @Html.Action("GetMeetCountChart")
     </div>
     <div>
-        @Html.Action("GetCompanyTicketCountChart",new { companyName = "重庆市联丰航空服务有限公司" })
+        @Html.Action("GetCompanyTicketCountChart", new { companyName = "重庆市联丰航空服务有限公司" })
     </div>
 </div>
 
