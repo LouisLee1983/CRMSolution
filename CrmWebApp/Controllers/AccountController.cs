@@ -13,6 +13,8 @@ using System.Collections.Generic;
 using static CrmWebApp.Controllers.ManageController;
 using System.Net.Mail;
 using System.Text;
+using System.Net;
+using System.IO;
 
 namespace CrmWebApp.Controllers
 {
@@ -67,6 +69,86 @@ namespace CrmWebApp.Controllers
             {
                 _roleManager = value;
             }
+        }
+
+        // GET: /Account/Login
+        [AllowAnonymous]
+        public ActionResult QunarLogin(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
+        }
+
+        public string GetQunarSMS(string mobileNum)
+        {
+            //            type 申请的 发送类型，这里使用qunar_xx
+            //date 发送时 间，为null则立即发送，定时发送则使用 yyyy/ MM / dd HH: mm: ss格式
+            //     prenums   国家区号 比如  86   多个用,分隔 与 所传 mobiles 一一对应
+            //  mobiles 发 送的手机号码数组，发送到多个手机请使用,分隔
+            //  message 发 送消息的内容，长度请确保在60个字符以内，否则将拆分多条发送，计费多倍
+            //  groupid 可 为null，发送的消息类型名，建议输入，可供统计使用。如：酒店团购
+            //  //由欧阳泉于2014年3月7日添加 支持国际短信（目前支持244个国家或地区），不传递该参数时只支持国内， 
+            //  inter    国际手机号 传字符串 true
+            ////关于手机号有效性及归属地的判断 详见http://wiki.corp.qunar.com/pages/viewpage.action?pageId=52070424
+            //            编码格式：UTF - 8
+            //返回结果：String 型, 为0则发送成功
+            string url = "http://sms1.f.cn1.qunar.com/mon/req";
+            string postData = "type=qunar_xx&date=&prenums=86&mobiles=" + mobileNum + "&message=1234&groupid=otacrm&inter=false";
+            string result = PostDataToUrl(postData, url);
+            return result;
+        }
+
+        public string PostDataToUrl(string data, string url)
+        {
+            byte[] bytesToPost = Encoding.UTF8.GetBytes(data);
+            #region 创建httpWebRequest对象
+            WebRequest webRequest = WebRequest.Create(url);
+            HttpWebRequest httpRequest = webRequest as HttpWebRequest;
+            if (httpRequest == null)
+            {
+                throw new ApplicationException(string.Format("Invalid url string: {0}", url));
+            }
+            #endregion
+
+            #region 填充httpWebRequest的基本信息
+            httpRequest.ContentType = "application/x-www-form-urlencoded";
+            httpRequest.Method = "POST";
+            httpRequest.Referer = url;              //来源地址,避免有些站是防盗链的
+            httpRequest.AllowAutoRedirect = true;  //这里不允许再继续跳转.否则取不到了
+            #endregion
+
+            #region 填充要post的内容
+            httpRequest.ContentLength = data.Length;
+            Stream requestStream = httpRequest.GetRequestStream();
+            requestStream.Write(bytesToPost, 0, bytesToPost.Length);
+            requestStream.Close();
+            #endregion
+
+            #region 发送post请求到服务器并读取服务器返回信息
+            Stream responseStream;
+            try
+            {
+                WebResponse response = httpRequest.GetResponse();
+                responseStream = response.GetResponseStream();
+            }
+            catch (Exception e)
+            {
+                // log error
+                Console.WriteLine(string.Format("POST操作发生异常：{0}", e.Message));
+                throw e;
+            }
+            #endregion
+
+            #region 读取服务器返回信息
+            string stringResponse = string.Empty;
+            using (StreamReader responseReader =
+                new StreamReader(responseStream, Encoding.GetEncoding("UTF-8")))
+            {
+                stringResponse = responseReader.ReadToEnd();
+            }
+            responseStream.Close();
+            #endregion
+            return stringResponse;
         }
 
         //
@@ -289,7 +371,7 @@ namespace CrmWebApp.Controllers
                 string code = UserManager.GeneratePasswordResetToken(user.Id);
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                 string mailBody = "请通过单击 " + callbackUrl + " 来重置你的密码";
-                
+
                 string mailTitle = "重置密码";
                 //直接调用发送方法
                 #region 发送邮件

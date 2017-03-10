@@ -670,6 +670,7 @@
     <Content Include="Views\AgentGradeOperations\Details.cshtml" />
     <Content Include="Views\AgentGradeOperations\Edit.cshtml" />
     <Content Include="Views\AgentGradeOperations\Index.cshtml" />
+    <Content Include="Views\Account\QunarLogin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CompanyImages\Reports\" />

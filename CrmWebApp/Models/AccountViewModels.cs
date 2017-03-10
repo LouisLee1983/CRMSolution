@@ -46,6 +46,20 @@ namespace CrmWebApp.Models
         public string UserName { get; set; }
     }
 
+    public class QunarLoginViewModel
+    {
+        [Required]
+        [Display(Name = "手机号")]
+        public string MobileNum { get; set; }
+
+        [Required]
+        [Display(Name = "验证码")]
+        public string Password { get; set; }
+
+        [Display(Name = "记住我?")]
+        public bool RememberMe { get; set; }
+    }
+
     public class LoginViewModel
     {
         [Required]
