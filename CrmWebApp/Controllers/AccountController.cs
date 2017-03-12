@@ -79,7 +79,8 @@ namespace CrmWebApp.Controllers
             return View();
         }
 
-        public string GetQunarSMS(string mobileNum)
+        [AllowAnonymous]
+        public ActionResult GetQunarSMS(string mobileNum)
         {
             //            type 申请的 发送类型，这里使用qunar_xx
             //date 发送时 间，为null则立即发送，定时发送则使用 yyyy/ MM / dd HH: mm: ss格式
@@ -92,10 +93,79 @@ namespace CrmWebApp.Controllers
             ////关于手机号有效性及归属地的判断 详见http://wiki.corp.qunar.com/pages/viewpage.action?pageId=52070424
             //            编码格式：UTF - 8
             //返回结果：String 型, 为0则发送成功
+            //    public final static int OK = 0;//成功
+            //public final static int ERR_TYPE = 101;// 主账户不存在
+            //public final static int ERR_MESSAGE = 102;//发送短信内容为空
+            //public final static int ERR_MOBILE = 103; // 号码错误
+            //public final static int ERR_SERVICE_URL = 104;//配置短信网关地址错误
+            //public final static int ERR_INTER_SUPPORT = 107; //该主账户不支持国际短信
+            //public final static int ERR_FORBIDDEN_REQUEST = 201;//IP不在白名单中
+            //public final static int ERR_RESPONSE = 202;//http response解析错误
+            //public final static int ERR_BLACKLIST = 302;//号码在黑名单中
+            //public final static int ERR_UNKNOWN = 401;//调用者本地错误
+            //public final static int ERR_MAINACCOUNT_NOTACTIVE = 600;// 主账户未激活
+            //public final static int ERR_SUBACCOUNT_NOTAVAILABLE = 601;// 没有可用的子账户
+            //public final static int ERR_LOW_BALANCE = 602;// 余额不足
+            //public final static int ERR_MMS_BIG = 603;// 彩信内容过大
+            //public final static int ERR_CONTEXT_PHONE = 604;// 相同号码、内容已经发送
             string url = "http://sms1.f.cn1.qunar.com/mon/req";
             string postData = "type=qunar_xx&date=&prenums=86&mobiles=" + mobileNum + "&message=1234&groupid=otacrm&inter=false";
-            string result = PostDataToUrl(postData, url);
-            return result;
+            string response = PostDataToUrl(postData, url);
+
+            string result = "";
+            switch (response)
+            {
+                case "0":
+                    result = "成功";
+                    break;
+                case "101":
+                    result = "主账户不存在";
+                    break;
+                case "102":
+                    result = "发送短信内容为空";
+                    break;
+                case "103":
+                    result = "号码错误";
+                    break;
+                case "104":
+                    result = "配置短信网关地址错误";
+                    break;
+                case "107":
+                    result = "该主账户不支持国际短信";
+                    break;
+                case "201":
+                    result = "IP不在白名单中";
+                    break;
+                case "202":
+                    result = "http response解析错误";
+                    break;
+                case "302":
+                    result = "号码在黑名单中";
+                    break;
+                case "401":
+                    result = "调用者本地错误";
+                    break;
+                case "600":
+                    result = "主账户未激活";
+                    break;
+                case "601":
+                    result = "没有可用的子账户";
+                    break;
+                case "602":
+                    result = "余额不足";
+                    break;
+                case "603":
+                    result = "彩信内容过大";
+                    break;
+                case "604":
+                    result = "相同号码、内容已经发送";
+                    break;
+                default:
+                    result = response;
+                    break;
+            }
+
+            return Content(result);
         }
 
         public string PostDataToUrl(string data, string url)

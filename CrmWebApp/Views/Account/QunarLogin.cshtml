@@ -4,63 +4,76 @@
     ViewBag.Title = "Qunar手机登录";
 }
 
-<div class="row">
-    <div class="col-md-8">
-        <section id="loginForm">
-            @using (Html.BeginForm("QunarLogin", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-                <h4>登录</h4>
-                <hr />
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(m => m.MobileNum, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(m => m.MobileNum, new { @class = "form-control",id= "MobileNumInput" })
-                        <a href="#" onclick="SendSMS()" class="btn btn-default">发送短信</a>
-                        @Html.ValidationMessageFor(m => m.MobileNum, "请填写qunar员工手机号", new { @class = "text-danger", id = "msg" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <div class="checkbox">
-                            @Html.CheckBoxFor(m => m.RememberMe)
-                            @Html.LabelFor(m => m.RememberMe)
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="登录" class="btn btn-default" />
-                    </div>
-                </div>
-                <p>
-                    @Html.ActionLink("注册为新用户", "Register")
-                </p>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-md-8">
+            <h4>登录</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                <p>
-                    @Html.ActionLink("忘记了密码?", "ForgotPassword")
-                </p>
-            }
-        </section>
+            <div class="form-group">
+                @Html.LabelFor(m => m.MobileNum, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.MobileNum, new { @class = "form-control", id = "MobileNumInput" })
+                    <span class="btn btn-default" onclick="sendmsg()">发送</span>
+                    <div id="msg"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <div class="checkbox">
+                        @Html.CheckBoxFor(m => m.RememberMe)
+                        @Html.LabelFor(m => m.RememberMe)
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="登录" class="btn btn-default" />
+                </div>
+            </div>
+            <p>
+                @Html.ActionLink("注册为新用户", "Register")
+            </p>
+
+            <p>
+                @Html.ActionLink("忘记了密码?", "ForgotPassword")
+            </p>
+
+        </div>
     </div>
+}
 
-</div>
 <script>
-    var SendSMS = function () {
+    var sendmsg = function () {
         var mobile = $("#MobileNumInput").val();
         var serverUrl = "@Url.Content("~/")";
-        var url = serverUrl + "Account/GetQunarSMS?mobileNum=" + mobile;
-        $.get(url, function (data, status) {
-            $("#msg").text = data;
+        var mvcurl = serverUrl + "Account/GetQunarSMS?mobileNum=" + mobile;
+        $.get(mvcurl, function (response) {
+            $("#msg").html(response);
         });
+        //$.ajax({
+        //    type: "GET",//这里是http类型
+        //    contentType: "application/json",//这里设置发往服务端的数据类型
+        //    url: mvcurl,//大家都应该很清楚了
+        //    data: "mobileNum=" + mobile,//回传一个参数
+        //    dataType: "json",//传回来的数据类型
+        //    success: function (response) {
+        //        $("#msg").html("发送成功:" + response);
+        //    },
+        //    error: function (response) {
+        //        $("#msg").html("失败:" + response);
+        //    }
+        //});
     }
 </script>
 
