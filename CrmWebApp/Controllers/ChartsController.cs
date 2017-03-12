@@ -23,9 +23,12 @@ namespace CrmWebApp.Controllers
             return View();
         }
 
+        //个人销售需要看的报表：客户数量，销量，
+        //总监看的数据：各个销售的客户数量，各个销售的票量，各个销售的拜访次数
+
         public string SaveChartImage()
         {
-            System.Web.Helpers.Chart chart = new System.Web.Helpers.Chart(width: 600, height: 400, theme: ChartTheme.Green, themePath: null);
+            System.Web.Helpers.Chart chart = new System.Web.Helpers.Chart(width: 400, height: 400, theme: ChartTheme.Green, themePath: null);
             chart.AddTitle(text: "客户数量", name: "chat1");
             chart.AddSeries(name: "学生成绩"
                 , xValue: new[] { "Peter", "Andrew", "Julie", "Mary", "张1" }

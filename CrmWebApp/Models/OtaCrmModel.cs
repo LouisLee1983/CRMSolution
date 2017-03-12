@@ -34,6 +34,8 @@ namespace CrmWebApp.Models
         public virtual DbSet<ServeArea> ServeArea { get; set; }
         public virtual DbSet<OtaSalesReport> OtaSalesReport { get; set; }
         public virtual DbSet<AgentGradeOperation> AgentGradeOperation { get; set; }
+        public virtual DbSet<MobilePassword> MobilePassword { get; set; }
+        public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

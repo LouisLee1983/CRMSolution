@@ -12,6 +12,7 @@ using System.Text;
 using System.Net.Mail;
 using System.Drawing;
 using System.IO;
+using System.Net.Mime;
 
 namespace CrmWebApp.Controllers
 {
@@ -88,23 +89,31 @@ namespace CrmWebApp.Controllers
 
             return View(otaSalesReport);
         }
-
+        
         [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public string GenerateReport(DateTime startDate, DateTime endDate)
         {
-            //加入图片，把图片变成一堆编码
+            string htmlBody = "<html><body><h1>Picture</h1><br><img src=\"cid:filename\"></body></html>";
+            AlternateView avHtml = AlternateView.CreateAlternateViewFromString
+               (htmlBody, null, MediaTypeNames.Text.Html);
+
             var path = "~/CompanyImages/Reports/student.jpg";
             var imgpath = Server.MapPath(path);
-            Bitmap bmp = new Bitmap(imgpath);
-            MemoryStream ms = new MemoryStream();
-            bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
-            byte[] arr = new byte[ms.Length];
-            ms.Position = 0;
-            ms.Read(arr, 0, (int)ms.Length);
-            ms.Close();
-            String strbaser64 = Convert.ToBase64String(arr);
-            //把编码嵌入img元素，加入邮件主题
-            string imgHtml = "<DIV><IMG src=\"data:image/jpg;base64," + strbaser64 + "\"></IMG></DIV>";
+            LinkedResource inline = new LinkedResource(imgpath, MediaTypeNames.Image.Jpeg);
+            inline.ContentId = Guid.NewGuid().ToString();
+            avHtml.LinkedResources.Add(inline);
+
+            MailMessage mail = new MailMessage();
+            mail.AlternateViews.Add(avHtml);
+
+            Attachment att = new Attachment(imgpath);
+            att.ContentDisposition.Inline = true;
+            
+            string imgHtml = String.Format(@"<img src=""cid:{0}"" />", inline.ContentId);
+
+            mail.IsBodyHtml = true;
+            mail.Attachments.Add(att);
+
 
             StringBuilder sb = new StringBuilder();
             sb.Append(imgHtml);
@@ -183,10 +192,25 @@ namespace CrmWebApp.Controllers
             mail.To.Add(to);
             mail.Subject = otaSalesReport.ReportTitle;
             mail.SubjectEncoding = Encoding.GetEncoding(936); //这里非常重要，如果你的邮件标题包含中文，这里一定要指定，否则对方收到的极有可能是乱码。  
-            mail.Body = otaSalesReport.ReportContent;
             mail.IsBodyHtml = true;//设置显示htmls
             mail.BodyEncoding = Encoding.GetEncoding(936);    //邮件正文的编码， 设置不正确， 接收者会收到乱码  
-                                                              //设置好发送邮件服务地址
+
+            string Themessage = @"<html><body><img src=cid:myImageID>" + otaSalesReport.ReportContent + "</body></html>";
+            //create Alrternative HTML view
+            AlternateView htmlView = AlternateView.CreateAlternateViewFromString(Themessage, null, "text/html");
+
+            //Add Image
+            var path = "~/CompanyImages/Reports/student.jpg";
+            var imgpath = Server.MapPath(path);
+            LinkedResource theEmailImage = new LinkedResource(imgpath, MediaTypeNames.Image.Jpeg);
+            theEmailImage.ContentId = "myImageID";
+
+            //Add the Image to the Alternate view
+            htmlView.LinkedResources.Add(theEmailImage);
+
+            //Add view to the Email Message
+            mail.AlternateViews.Add(htmlView);
+            //设置好发送邮件服务地址
             System.Net.Mail.SmtpClient client = new System.Net.Mail.SmtpClient();
             client.DeliveryMethod = SmtpDeliveryMethod.Network;
             client.Host = "smtp.qq.com"; //这里发邮件用的是126，所以为"smtp.126.com"

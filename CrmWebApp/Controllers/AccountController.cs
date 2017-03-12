@@ -79,6 +79,101 @@ namespace CrmWebApp.Controllers
             return View();
         }
 
+        public string GetRandomPassword(int len)
+        {
+            char[] constant = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+
+            System.Text.StringBuilder newRandom = new System.Text.StringBuilder(10);
+            Random rd = new Random();
+            for (int i = 0; i < len; i++)
+            {
+                newRandom.Append(constant[rd.Next(10)]);
+            }
+            return newRandom.ToString();
+        }
+
+        public string GetAndSaveMobilePassword(string mobileNum)
+        {
+            string password = GetRandomPassword(4);
+            OtaCrmModel db = new OtaCrmModel();
+            MobilePassword item = new MobilePassword();
+            item.CreateTime = DateTime.Now;
+            item.MobileNum = mobileNum;
+            item.Password = password;
+            db.MobilePassword.Add(item);
+            db.SaveChanges();
+
+            return password;
+        }
+
+        public bool IsMobilePasswordValid(string mobileNum,string password)
+        {
+            bool result = false;
+            //取最近的，5分钟有效的密码
+            DateTime lastCreateTime = DateTime.Now.AddMinutes(-5);
+            OtaCrmModel db = new OtaCrmModel();
+            var q = (from p in db.MobilePassword
+                    where p.MobileNum == mobileNum && p.CreateTime > lastCreateTime
+                    orderby p.CreateTime descending
+                    select p.Password).FirstOrDefault();
+            if (!string.IsNullOrEmpty(q))
+            {
+                result = password == q;
+            }
+            return result;
+        }
+
+        public string FindUserNameByMobileNum(string mobileNum)
+        {
+            OtaCrmModel db = new OtaCrmModel();
+            var q = (from p in db.AspNetUsers
+                     where p.PhoneNumber == mobileNum
+                     select p.UserName).FirstOrDefault();
+            return q;
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> QunarLogin(QunarLoginViewModel model, string returnUrl)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            //通过验证验证码是否正确
+            if (IsMobilePasswordValid(model.MobileNum, model.Password))
+            {
+                string userName = FindUserNameByMobileNum(model.MobileNum);
+                if (!string.IsNullOrEmpty(userName))
+                {
+                    //然后从后台取出用户名和密码进行验证
+                    ApplicationUser user = await UserManager.FindByNameAsync(userName);
+                    if (user == null)
+                    {
+                        ModelState.AddModelError("", "Invalid name or password.");
+                    }
+                    else
+                    {
+                        //获得用户的标识,所有的标识都实现IIdentity接口,这个是基于声明的标识,声明后面再讲,只要知道他与授权有关
+                        ClaimsIdentity ident = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
+                        AuthenticationManager.SignOut();
+                        AuthenticationManager.SignIn(new AuthenticationProperties
+                        {
+                            IsPersistent = model.RememberMe
+                        }, ident);
+                        if (returnUrl == null)
+                        {
+                            return RedirectToAction("Index", "Home");
+                        }
+                        return Redirect(returnUrl);
+                    }
+                }
+            }           
+
+            return View();
+        }
+
         [AllowAnonymous]
         public ActionResult GetQunarSMS(string mobileNum)
         {
@@ -108,8 +203,10 @@ namespace CrmWebApp.Controllers
             //public final static int ERR_LOW_BALANCE = 602;// 余额不足
             //public final static int ERR_MMS_BIG = 603;// 彩信内容过大
             //public final static int ERR_CONTEXT_PHONE = 604;// 相同号码、内容已经发送
+            
+            string password = GetAndSaveMobilePassword(mobileNum);  //保存到数据库，然后验证的时候取最近的一条
             string url = "http://sms1.f.cn1.qunar.com/mon/req";
-            string postData = "type=qunar_xx&date=&prenums=86&mobiles=" + mobileNum + "&message=1234&groupid=otacrm&inter=false";
+            string postData = "type=qunar_jp&date=&prenums=86&mobiles=" + mobileNum + "&message="+password+"OtaCrmPassword&groupid=otacrm&inter=false";
             string response = PostDataToUrl(postData, url);
 
             string result = "";

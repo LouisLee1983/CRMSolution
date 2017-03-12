@@ -231,6 +231,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AgentGradeOperation.cs" />
+    <Compile Include="Models\AspNetUsers.cs" />
     <Compile Include="Models\ChartModels.cs" />
     <Compile Include="Models\ChinaCity.cs" />
     <Compile Include="Models\CompanyBusinessDaily.cs" />
@@ -251,6 +252,7 @@
     <Compile Include="Models\CompanySalesDailyViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MobilePassword.cs" />
     <Compile Include="Models\OtaCompany.cs" />
     <Compile Include="Models\OtaCrmModel.cs" />
     <Compile Include="Models\OtaSalesReport.cs" />
