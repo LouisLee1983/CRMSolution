@@ -62,7 +62,7 @@ namespace CrmWebApp.Controllers
             return PartialView("_PartialBusinessDailyPhotoUpload", model);
         }
 
-        private bool CreateFolderIfNeeded(string path)
+        public bool CreateFolderIfNeeded(string path)
         {
             bool result = true;
             if (!Directory.Exists(path))

@@ -98,11 +98,15 @@
 </div>
 
 <script>
-    $("#reportContentDiv").html('@Model.ReportContent');
+    $('#summernote').summernote({
+        height: 300
+    }).code($("#reportContentDiv").text());
 
     $(".datetimepicker").datetimepicker({
         format: "YYYY-MM-DD"
     });
+
+    $("#reportContentDiv").html('@Model.ReportContent');
 </script>
 
 @section Scripts {

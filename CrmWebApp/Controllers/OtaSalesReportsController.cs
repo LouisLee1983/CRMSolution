@@ -13,6 +13,7 @@ using System.Net.Mail;
 using System.Drawing;
 using System.IO;
 using System.Net.Mime;
+using System.Web.Helpers;
 
 namespace CrmWebApp.Controllers
 {
@@ -76,77 +77,116 @@ namespace CrmWebApp.Controllers
         [HttpPost]
         [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(OtaSalesReport otaSalesReport)
+        public ActionResult Create(OtaSalesReport otaSalesReport)
         {
             if (ModelState.IsValid)
             {
                 //自动根据时间读取拜访记录生成周报,有html的格式
                 otaSalesReport.ReportContent = GenerateReport(otaSalesReport.StartDate.Value, otaSalesReport.EndDate.Value);
                 db.OtaSalesReport.Add(otaSalesReport);
-                await db.SaveChangesAsync();
+                db.SaveChanges();
+                //生成周报的时候，要同时生成相应的报表统计图表存放到对应的id的文件夹里面
+                SavePersonCompanyTicketChart(otaSalesReport.UserName, otaSalesReport.ID, otaSalesReport.StartDate.Value, otaSalesReport.EndDate.Value);
+
                 return RedirectToAction("Edit", new { id = otaSalesReport.ID });
             }
 
             return View(otaSalesReport);
         }
-        
+
+        public string SavePersonCompanyTicketChart(string userName, int reportId, DateTime startDate, DateTime endDate)
+        {
+            //读取两周的数据,自己客户的票量,按照日期展示曲线图
+            OtaCrmModel db = new OtaCrmModel();
+            var companyNames = from c in db.OtaCompany
+                               where c.SalesUserName == userName
+                               select c.CompanyName;
+
+            var q = from p in db.AgentGradeOperation
+                    where p.statDate.Value >= startDate && p.statDate.Value <= endDate && companyNames.Contains(p.agentName)
+                    group p by p.statDate
+                         into g
+                    orderby g.Key
+                    select new { ticketSum = g.Sum(b => b.CurDateTicketCount.Value), ticketDay = g.Key };
+
+            List<string> dateList = new List<string>();
+            List<int> ticketSumList = new List<int>();
+            foreach (var item in q)
+            {
+                dateList.Add(item.ticketDay.Value.ToString("yyyyMMdd"));
+                ticketSumList.Add(item.ticketSum);
+            }
+
+            System.Web.Helpers.Chart chart = new System.Web.Helpers.Chart(width: 500, height: 300, theme: ChartTheme.Blue, themePath: null);
+            chart.AddTitle(text: userName + "客户票量统计", name: userName + "_CompanyTicketSum");
+            chart.AddSeries(name: "票量"
+                , chartType: "Column"
+                , chartArea: ""
+                , axisLabel: "张"
+                , legend: "票量合计"
+                , markerStep: 1
+                , xValue: dateList
+                , xField: "日期"
+                , yValues: ticketSumList
+                , yFields: "票量");
+
+            string filePath = Server.MapPath("~/CompanyImages/Reports/" + reportId.ToString());
+            CompanyBusinessDailyPhotoesController cbd = new CompanyBusinessDailyPhotoesController();
+            cbd.CreateFolderIfNeeded(filePath);
+            string fileName = userName + "_CompanyTicketSum_" + startDate.ToString("yyyyMMdd") + "_" + endDate.ToString("yyyyMMdd") + ".jpg";
+            chart.Save(path: Path.Combine(filePath, fileName), format: "jpeg");
+
+            return fileName;
+        }
+
         [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public string GenerateReport(DateTime startDate, DateTime endDate)
         {
-            string htmlBody = "<html><body><h1>Picture</h1><br><img src=\"cid:filename\"></body></html>";
-            AlternateView avHtml = AlternateView.CreateAlternateViewFromString
-               (htmlBody, null, MediaTypeNames.Text.Html);
-
-            var path = "~/CompanyImages/Reports/student.jpg";
-            var imgpath = Server.MapPath(path);
-            LinkedResource inline = new LinkedResource(imgpath, MediaTypeNames.Image.Jpeg);
-            inline.ContentId = Guid.NewGuid().ToString();
-            avHtml.LinkedResources.Add(inline);
-
-            MailMessage mail = new MailMessage();
-            mail.AlternateViews.Add(avHtml);
-
-            Attachment att = new Attachment(imgpath);
-            att.ContentDisposition.Inline = true;
-            
-            string imgHtml = String.Format(@"<img src=""cid:{0}"" />", inline.ContentId);
-
-            mail.IsBodyHtml = true;
-            mail.Attachments.Add(att);
-
-
             StringBuilder sb = new StringBuilder();
-            sb.Append(imgHtml);
             var meetings = from p in db.CompanyMeeting
                            where p.CreateUserName == User.Identity.Name && p.MeetDate >= startDate && p.MeetDate <= endDate
                            select p;
             List<CompanyMeeting> meetingList = meetings.ToList();
-            sb.Append("<table border='1'><tr><th>客户</th><th>日期</th><th>概况</th></tr>");
+            string tableHead = "<br><table class='table table-bordered'><tbody><tr><th>客户</th><th>拜访日期</th><th>拜访纪要</th></tr>";
+
+            sb.Append(tableHead);
+            Dictionary<int, string> meetingIdDict = new Dictionary<int, string>();
             foreach (var meeting in meetingList)
             {
+                string summary = string.IsNullOrEmpty(meeting.MeetSummary) ? "" : meeting.MeetSummary;
                 sb.Append("<tr>")
-                    .Append("<td>").Append(meeting.CompanyName).Append("</td>")
+                    .Append("<td>").Append(meeting.CompanyName.Trim()).Append("</td>")
                     .Append("<td>").Append(meeting.MeetDate.ToString("yyyy-MM-dd")).Append("</td>")
-                    .Append("<td>").Append(meeting.MeetSummary).Append("</td>")
+                    .Append("<td>").Append(summary.Replace("\r\n", "<br>").Replace("\r", "").Replace("\n", "").Trim()).Append("</td>")
                     .Append("</tr>");
-                sb.Append("<tr><td colspan='3'>");
-                //反馈问题的table
-                var meetingSubjects = from m in db.CompanyMeetingSubject
-                                      where m.CompanyMeetingId == meeting.Id
-                                      select m;
-                sb.Append("<table border='1'>");
-                foreach (var meetingsubject in meetingSubjects)
+
+                if (!meetingIdDict.ContainsKey(meeting.Id))
                 {
-                    sb.Append("<tr>")
-                        .Append("<td>").Append(meetingsubject.Subject).Append("</td>")
-                        .Append("<td>").Append(meetingsubject.Problem).Append("</td>")
-                        .Append("<td>").Append(meetingsubject.Resolve).Append("</td>")
-                        .Append("</tr>");
+                    meetingIdDict.Add(meeting.Id, meeting.CompanyName.Trim());
                 }
-                sb.Append("</table>");
-                sb.Append("</td></tr>");
             }
-            sb.Append("</table>");
+            sb.Append("</tbody></table>");
+            sb.Append("<br><br>");
+            //反馈问题的table
+            tableHead = "<table class='table table-bordered'><tbody><tr><th>问题类型</th><th>反馈客户</th><th>具体描述</th><th>解决方案</th></tr>";
+            sb.Append(tableHead);
+            var meetingSubjects = from m in db.CompanyMeetingSubject
+                                  where meetingIdDict.Keys.ToList().Contains(m.CompanyMeetingId)
+                                  orderby m.Subject, m.CompanyMeetingId
+                                  select m;
+            foreach (var meetingsubject in meetingSubjects)
+            {
+                string problem = string.IsNullOrEmpty(meetingsubject.Problem) ? "" : meetingsubject.Problem;
+                string resolve = string.IsNullOrEmpty(meetingsubject.Resolve) ? "" : meetingsubject.Resolve;
+                sb.Append("<tr>")
+                    .Append("<td>").Append(meetingsubject.Subject).Append("</td>")
+                    .Append("<td>").Append(meetingIdDict[meetingsubject.CompanyMeetingId].Trim()).Append("</td>")
+                    .Append("<td>").Append(problem.Replace("\r\n", "<br>").Replace("\r", "").Replace("\n", "").Replace("\t", "")).Append("</td>")
+                    .Append("<td>").Append(resolve.Replace("\r\n", "<br>").Replace("\r", "").Replace("\n", "").Replace("\t", "")).Append("</td>")
+                    .Append("</tr>");
+            }
+            sb.Append("</tbody></table>");
+            sb.Append("<br>");
             return sb.ToString();
         }
 
@@ -164,6 +204,21 @@ namespace CrmWebApp.Controllers
                 return HttpNotFound();
             }
             return View(otaSalesReport);
+        }
+        public string[] GetAllFileName(string filePath)
+        {
+            DirectoryInfo dir = new DirectoryInfo(filePath);
+            if (!Directory.Exists(filePath))
+            {
+                Directory.CreateDirectory(filePath);
+            }
+            FileInfo[] finfo = dir.GetFiles();
+            List<string> result = new List<string>();
+            for (int i = 0; i < finfo.Length; i++)
+            {
+                result.Add(finfo[i].Name);
+            }
+            return result.ToArray();
         }
 
         [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
@@ -195,20 +250,29 @@ namespace CrmWebApp.Controllers
             mail.IsBodyHtml = true;//设置显示htmls
             mail.BodyEncoding = Encoding.GetEncoding(936);    //邮件正文的编码， 设置不正确， 接收者会收到乱码  
 
-            string Themessage = @"<html><body><img src=cid:myImageID>" + otaSalesReport.ReportContent + "</body></html>";
-            //create Alrternative HTML view
-            AlternateView htmlView = AlternateView.CreateAlternateViewFromString(Themessage, null, "text/html");
+            string htmlHead = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=gb2312'><style>body {font-size: 9pt;}table {border: 1px;padding: 0;border-collapse: collapse;border: none;}th {border: solid windowtext 1.0pt;background: #BFBFBF;padding: 3px;font-size: 10pt;font-weight: bold;margin:8px;}td {border: solid windowtext 1.0pt;border-top: none;font-size: 10pt;padding: 8px;}</style></head><body><div>";
+            string htmlEnd = "</div></body></html>";
 
-            //Add Image
-            var path = "~/CompanyImages/Reports/student.jpg";
+            string Themessage = htmlHead;
+            //Add Image，多张图片需要循环
+            var path = "~/CompanyImages/Reports/" + id.ToString();
             var imgpath = Server.MapPath(path);
-            LinkedResource theEmailImage = new LinkedResource(imgpath, MediaTypeNames.Image.Jpeg);
-            theEmailImage.ContentId = "myImageID";
+            string[] imgFiles = GetAllFileName(imgpath);
+            foreach (string imgFile in imgFiles)
+            {
+                string imgHtml = "<img src='cid:" + imgFile.Replace(".jpg", "") + "' /><br><br>";
+                Themessage += imgHtml;
+            }
+            Themessage += otaSalesReport.ReportContent + htmlEnd;
 
-            //Add the Image to the Alternate view
-            htmlView.LinkedResources.Add(theEmailImage);
+            AlternateView htmlView = AlternateView.CreateAlternateViewFromString(Themessage, null, "text/html");
+            foreach (string imgFile in imgFiles)
+            {
+                LinkedResource theEmailImage = new LinkedResource(Path.Combine(imgpath, imgFile), MediaTypeNames.Image.Jpeg);
+                theEmailImage.ContentId = imgFile.Replace(".jpg", "");
+                htmlView.LinkedResources.Add(theEmailImage);
+            }
 
-            //Add view to the Email Message
             mail.AlternateViews.Add(htmlView);
             //设置好发送邮件服务地址
             System.Net.Mail.SmtpClient client = new System.Net.Mail.SmtpClient();
