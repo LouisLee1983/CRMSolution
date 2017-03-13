@@ -206,7 +206,8 @@ namespace CrmWebApp.Controllers
             
             string password = GetAndSaveMobilePassword(mobileNum);  //保存到数据库，然后验证的时候取最近的一条
             string url = "http://sms1.f.cn1.qunar.com/mon/req";
-            string postData = "type=qunar_jp&date=&prenums=86&mobiles=" + mobileNum + "&message="+password+"OtaCrmPassword&groupid=otacrm&inter=false";
+            string type = "qs_fland_sstm";
+            string postData = "type="+type+"&date=&prenums=86&mobiles=" + mobileNum + "&message="+password+"-OtaCrmPassword&groupid=otacrm&inter=false";
             string response = PostDataToUrl(postData, url);
 
             string result = "";
