@@ -14,11 +14,10 @@
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
             <div class="form-group">
-                @Html.LabelFor(m => m.MobileNum, new { @class = "col-md-2 control-label" })
+                @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
                 <div class="col-md-10">
-                    @Html.TextBoxFor(m => m.MobileNum, new { @class = "form-control", id = "MobileNumInput" })
-                    <span class="btn btn-default" onclick="sendmsg()">发送</span>
-                    <div id="msg"></div>
+                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", id = "UserNameInput" })
+                    
                 </div>
             </div>
             <div class="form-group">
@@ -28,6 +27,17 @@
                     @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                 </div>
             </div>
+            
+            <div class="form-group">
+                @Html.LabelFor(m => m.Vcode, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Vcode, new { @class = "form-control" })
+                    <input type="button" class="btn btn-default" id="btnSendMsg" onclick="sendmsg()" value="验证短信" />
+                    <div id="msg"></div>
+                    @Html.ValidationMessageFor(m => m.Vcode, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <div class="checkbox">
@@ -42,10 +52,6 @@
                 </div>
             </div>
             <p>
-                @Html.ActionLink("注册为新用户", "Register")
-            </p>
-
-            <p>
                 @Html.ActionLink("忘记了密码?", "ForgotPassword")
             </p>
 
@@ -55,25 +61,32 @@
 
 <script>
     var sendmsg = function () {
-        var mobile = $("#MobileNumInput").val();
+        $("#btnSendMsg").attr("disabled", true);    //隐藏一分钟
+        $("#msg").html("请注意查看手机信息.一分钟内只能发一次.");
+        var userName = $("#UserNameInput").val();
         var serverUrl = "@Url.Content("~/")";
-        var mvcurl = serverUrl + "Account/GetQunarSMS?mobileNum=" + mobile;
+        var mvcurl = serverUrl + "Account/GetQunarSMS?userName=" + userName;
         $.get(mvcurl, function (response) {
             $("#msg").html(response);
         });
-        //$.ajax({
-        //    type: "GET",//这里是http类型
-        //    contentType: "application/json",//这里设置发往服务端的数据类型
-        //    url: mvcurl,//大家都应该很清楚了
-        //    data: "mobileNum=" + mobile,//回传一个参数
-        //    dataType: "json",//传回来的数据类型
-        //    success: function (response) {
-        //        $("#msg").html("发送成功:" + response);
-        //    },
-        //    error: function (response) {
-        //        $("#msg").html("失败:" + response);
-        //    }
-        //});
+
+        settime();
+    }
+
+    var countdown = 60;
+    var settime = function() {
+        if (countdown == 0) {
+            $("#btnSendMsg").attr("disabled", false);
+            $("#btnSendMsg").val("验证短信");
+            countdown = 60;
+        } else {
+            $("#btnSendMsg").attr("disabled", true);
+            $("#btnSendMsg").val("重新获取(" + countdown + ")");
+            countdown--;
+        }
+        setTimeout(function () {
+            settime()
+        }, 1000)
     }
 </script>
 

@@ -94,7 +94,7 @@ namespace CrmWebApp.Controllers
 
         public string GetAndSaveMobilePassword(string mobileNum)
         {
-            string password = GetRandomPassword(4);
+            string password = GetRandomPassword(6);
             OtaCrmModel db = new OtaCrmModel();
             MobilePassword item = new MobilePassword();
             item.CreateTime = DateTime.Now;
@@ -106,16 +106,16 @@ namespace CrmWebApp.Controllers
             return password;
         }
 
-        public bool IsMobilePasswordValid(string mobileNum,string password)
+        public bool IsMobilePasswordValid(string mobileNum, string password)
         {
             bool result = false;
-            //取最近的，5分钟有效的密码
-            DateTime lastCreateTime = DateTime.Now.AddMinutes(-5);
+            //取最近的，3分钟有效的密码
+            DateTime lastCreateTime = DateTime.Now.AddMinutes(-3);
             OtaCrmModel db = new OtaCrmModel();
             var q = (from p in db.MobilePassword
-                    where p.MobileNum == mobileNum && p.CreateTime > lastCreateTime
-                    orderby p.CreateTime descending
-                    select p.Password).FirstOrDefault();
+                     where p.MobileNum == mobileNum && p.CreateTime > lastCreateTime
+                     orderby p.CreateTime descending
+                     select p.Password).FirstOrDefault();
             if (!string.IsNullOrEmpty(q))
             {
                 result = password == q;
@@ -141,41 +141,37 @@ namespace CrmWebApp.Controllers
             {
                 return View(model);
             }
-            //通过验证验证码是否正确
-            if (IsMobilePasswordValid(model.MobileNum, model.Password))
+            //通过用户名获取到手机号，然后用手机号去验证验证码
+            ApplicationUser user = await UserManager.FindByNameAsync(model.UserName);
+            string mobileNum = user.PhoneNumber;
+            //通过验证验证码是否正确,阻止用户多次登录尝试，屏蔽登录攻击。。
+            if (IsMobilePasswordValid(mobileNum, model.Vcode))
             {
-                string userName = FindUserNameByMobileNum(model.MobileNum);
-                if (!string.IsNullOrEmpty(userName))
+                var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: true);
+                switch (result)
                 {
-                    //然后从后台取出用户名和密码进行验证
-                    ApplicationUser user = await UserManager.FindByNameAsync(userName);
-                    if (user == null)
-                    {
-                        ModelState.AddModelError("", "Invalid name or password.");
-                    }
-                    else
-                    {
-                        //获得用户的标识,所有的标识都实现IIdentity接口,这个是基于声明的标识,声明后面再讲,只要知道他与授权有关
-                        ClaimsIdentity ident = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-                        AuthenticationManager.SignOut();
-                        AuthenticationManager.SignIn(new AuthenticationProperties
-                        {
-                            IsPersistent = model.RememberMe
-                        }, ident);
+                    case SignInStatus.Success:
                         if (returnUrl == null)
                         {
                             return RedirectToAction("Index", "Home");
                         }
-                        return Redirect(returnUrl);
-                    }
+                        return RedirectToLocal(returnUrl);
+                    case SignInStatus.LockedOut:
+                        return View("Lockout");
+                    case SignInStatus.RequiresVerification:
+                        return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    case SignInStatus.Failure:
+                    default:
+                        ModelState.AddModelError("", "无效的登录尝试。");
+                        return View(model);
                 }
-            }           
+            }
 
             return View();
         }
 
         [AllowAnonymous]
-        public ActionResult GetQunarSMS(string mobileNum)
+        public ActionResult GetQunarSMS(string userName)
         {
             //            type 申请的 发送类型，这里使用qunar_xx
             //date 发送时 间，为null则立即发送，定时发送则使用 yyyy/ MM / dd HH: mm: ss格式
@@ -203,64 +199,96 @@ namespace CrmWebApp.Controllers
             //public final static int ERR_LOW_BALANCE = 602;// 余额不足
             //public final static int ERR_MMS_BIG = 603;// 彩信内容过大
             //public final static int ERR_CONTEXT_PHONE = 604;// 相同号码、内容已经发送
-            
-            string password = GetAndSaveMobilePassword(mobileNum);  //保存到数据库，然后验证的时候取最近的一条
-            string url = "http://sms1.f.cn1.qunar.com/mon/req";
-            string type = "qs_fland_sstm";
-            string postData = "type="+type+"&date=&prenums=86&mobiles=" + mobileNum + "&message="+password+"-OtaCrmPassword&groupid=otacrm&inter=false";
-            string response = PostDataToUrl(postData, url);
 
+            //根据userName获取手机号
+            ApplicationUser user = UserManager.FindByName(userName);
+            string mobileNum = user.PhoneNumber;
             string result = "";
-            switch (response)
+            if (!string.IsNullOrEmpty(mobileNum))
             {
-                case "0":
-                    result = "成功";
-                    break;
-                case "101":
-                    result = "主账户不存在";
-                    break;
-                case "102":
-                    result = "发送短信内容为空";
-                    break;
-                case "103":
-                    result = "号码错误";
-                    break;
-                case "104":
-                    result = "配置短信网关地址错误";
-                    break;
-                case "107":
-                    result = "该主账户不支持国际短信";
-                    break;
-                case "201":
-                    result = "IP不在白名单中";
-                    break;
-                case "202":
-                    result = "http response解析错误";
-                    break;
-                case "302":
-                    result = "号码在黑名单中";
-                    break;
-                case "401":
-                    result = "调用者本地错误";
-                    break;
-                case "600":
-                    result = "主账户未激活";
-                    break;
-                case "601":
-                    result = "没有可用的子账户";
-                    break;
-                case "602":
-                    result = "余额不足";
-                    break;
-                case "603":
-                    result = "彩信内容过大";
-                    break;
-                case "604":
-                    result = "相同号码、内容已经发送";
-                    break;
-                default:
-                    result = response;
-                    break;
+                //限制使用的频率。1分钟只能一个验证码。不能多次发送
+                DateTime lastCreateTime = DateTime.Now.AddMinutes(-1);
+                OtaCrmModel db = new OtaCrmModel();
+                var todayCount = (from p in db.MobilePassword
+                                  where p.MobileNum == mobileNum && p.CreateTime > DateTime.Today
+                                  select p).Count();
+                if (todayCount > 30)
+                {
+                    result = "今天发送短信超过30次，已经屏蔽.";
+                }
+                else
+                {
+                    var q = (from p in db.MobilePassword
+                             where p.MobileNum == mobileNum && p.CreateTime > lastCreateTime
+                             orderby p.CreateTime descending
+                             select p.Password).FirstOrDefault();
+
+                    result = "一分钟只能发一次";
+                    if (string.IsNullOrEmpty(q))
+                    {
+                        string password = GetAndSaveMobilePassword(mobileNum);  //保存到数据库，然后验证的时候取最近的一条
+                        string url = "http://sms1.f.cn1.qunar.com/mon/req";
+                        string type = "qs_fland_sstm";
+                        string postData = "type=" + type + "&date=&prenums=86&mobiles=" + mobileNum + "&message=" + password + "-OtaCrmPassword&groupid=otacrm&inter=false";
+                        string response = PostDataToUrl(postData, url);
+
+                        switch (response)
+                        {
+                            case "0":
+                                result = "成功";
+                                break;
+                            case "101":
+                                result = "主账户不存在";
+                                break;
+                            case "102":
+                                result = "发送短信内容为空";
+                                break;
+                            case "103":
+                                result = "号码错误";
+                                break;
+                            case "104":
+                                result = "配置短信网关地址错误";
+                                break;
+                            case "107":
+                                result = "该主账户不支持国际短信";
+                                break;
+                            case "201":
+                                result = "IP不在白名单中";
+                                break;
+                            case "202":
+                                result = "http response解析错误";
+                                break;
+                            case "302":
+                                result = "号码在黑名单中";
+                                break;
+                            case "401":
+                                result = "调用者本地错误";
+                                break;
+                            case "600":
+                                result = "主账户未激活";
+                                break;
+                            case "601":
+                                result = "没有可用的子账户";
+                                break;
+                            case "602":
+                                result = "余额不足";
+                                break;
+                            case "603":
+                                result = "彩信内容过大";
+                                break;
+                            case "604":
+                                result = "相同号码、内容已经发送";
+                                break;
+                            default:
+                                result = response;
+                                break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                result = "该账户不存在手机号";
             }
 
             return Content(result);
@@ -342,7 +370,7 @@ namespace CrmWebApp.Controllers
 
             // 这不会计入到为执行帐户锁定而统计的登录失败次数中
             // 若要在多次输入错误密码的情况下触发帐户锁定，请更改为 shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: true);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -407,7 +435,7 @@ namespace CrmWebApp.Controllers
 
         //
         // GET: /Account/Register
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
         public ActionResult Register()
         {
             ViewData["ServeAreaList"] = GetServeAreaList("");
@@ -450,7 +478,7 @@ namespace CrmWebApp.Controllers
         //
         // POST: /Account/Register
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
