@@ -264,6 +264,7 @@ namespace CrmWebApp.Controllers
             return RedirectToAction("Index", new { companyId = model.CompanyId });
         }
 
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult AddBusinessDailyParam(int dailyId, string paramName)
         {
             var model = new CompanyBusinessDailyParam();

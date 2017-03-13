@@ -38,6 +38,7 @@ namespace CrmWebApp.Controllers
             return View();
         }
 
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult ShowViewPartial(int id)
         {
             CompanyMeeting dailyItem = db.CompanyMeeting.FirstOrDefault(p => p.Id == id);

@@ -16,11 +16,12 @@ namespace CrmWebApp.Controllers
         private OtaCrmModel db = new OtaCrmModel();
 
         // GET: CompanySalesDailyParams
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Index()
         {
             return View(await db.CompanySalesDailyParam.ToListAsync());
         }
-
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult AddNew(int dailyId,string paramName)
         {
             var model = new CompanySalesDailyParam();
@@ -34,6 +35,7 @@ namespace CrmWebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult AddNew(CompanySalesDailyParam model)
         {
             db.CompanySalesDailyParam.Add(model);
@@ -43,6 +45,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanySalesDailyParams/Details/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -58,6 +61,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanySalesDailyParams/Create
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult Create()
         {
             return View();
@@ -67,6 +71,7 @@ namespace CrmWebApp.Controllers
         // 为了防止“过多发布”攻击，请启用要绑定到的特定属性，有关 
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "Id,CompanySalesDailyId,ParamName,SubParamItem,ItemAmount")] CompanySalesDailyParam companySalesDailyParam)
         {
@@ -81,6 +86,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanySalesDailyParams/Edit/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -99,6 +105,7 @@ namespace CrmWebApp.Controllers
         // 为了防止“过多发布”攻击，请启用要绑定到的特定属性，有关 
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "Id,CompanySalesDailyId,ParamName,SubParamItem,ItemAmount")] CompanySalesDailyParam companySalesDailyParam)
         {
@@ -112,6 +119,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanySalesDailyParams/Delete/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -128,6 +136,7 @@ namespace CrmWebApp.Controllers
 
         // POST: CompanySalesDailyParams/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {

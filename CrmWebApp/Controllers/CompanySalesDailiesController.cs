@@ -39,6 +39,7 @@ namespace CrmWebApp.Controllers
             return View();
         }
 
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult ShowViewPartial(int id)
         {
             CompanySalesDaily dailyItem = db.CompanySalesDaily.FirstOrDefault(p => p.Id == id);
@@ -312,7 +313,7 @@ namespace CrmWebApp.Controllers
             return View(model);
         }
 
-        public void UpdateCompanySalesDailyParam(int dailyId, List<CompanySalesDailyParam> items)
+        private void UpdateCompanySalesDailyParam(int dailyId, List<CompanySalesDailyParam> items)
         {
             string sql = "Delete From CompanySalesDailyParam Where CompanySalesDailyId=@CompanySalesDailyId";
             SqlParameter[] paras = new SqlParameter[] {
@@ -330,7 +331,7 @@ namespace CrmWebApp.Controllers
             db.SaveChanges();
         }
 
-        public void UpdateCompanySalesDailyFund(int dailyId, List<CompanySalesDailyFund> items)
+        private void UpdateCompanySalesDailyFund(int dailyId, List<CompanySalesDailyFund> items)
         {
             string sql = "Delete From CompanySalesDailyFund Where CompanySalesDailyId=@CompanySalesDailyId";
             SqlParameter[] paras = new SqlParameter[] {
@@ -349,7 +350,7 @@ namespace CrmWebApp.Controllers
             db.SaveChanges();
         }
 
-        public void UpdateCompanySalesDailyProductDesp(int dailyId, List<CompanySalesDailyProductDesp> items)
+        private void UpdateCompanySalesDailyProductDesp(int dailyId, List<CompanySalesDailyProductDesp> items)
         {
             string sql = "Delete From CompanySalesDailyProductDesp Where CompanySalesDailyId=@CompanySalesDailyId";
             SqlParameter[] paras = new SqlParameter[] {
@@ -368,7 +369,7 @@ namespace CrmWebApp.Controllers
             db.SaveChanges();
         }
 
-        public void UpdateCompanySalesDailySalesSource(int dailyId, List<CompanySalesDailySalesSource> items)
+        private void UpdateCompanySalesDailySalesSource(int dailyId, List<CompanySalesDailySalesSource> items)
         {
             string sql = "Delete From CompanySalesDailySalesSource Where CompanySalesDailyId=@CompanySalesDailyId";
             SqlParameter[] paras = new SqlParameter[] {

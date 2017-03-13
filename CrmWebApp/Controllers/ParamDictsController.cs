@@ -17,7 +17,7 @@ namespace CrmWebApp.Controllers
         private OtaCrmModel db = new OtaCrmModel();
 
         // GET: ParamDicts
-        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult Index(string sortOrder, string searchString, string currentFilter, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
@@ -64,7 +64,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: ParamDicts/Details/5
-        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -80,7 +80,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: ParamDicts/Create
-        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             return View();
@@ -91,7 +91,7 @@ namespace CrmWebApp.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Create([Bind(Include = "Id,ParamName,SubItemName")] ParamDict paramDict)
         {
             if (ModelState.IsValid)
@@ -105,7 +105,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: ParamDicts/Edit/5
-        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -125,7 +125,7 @@ namespace CrmWebApp.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Edit([Bind(Include = "Id,ParamName,SubItemName")] ParamDict paramDict)
         {
             if (ModelState.IsValid)
@@ -138,7 +138,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: ParamDicts/Delete/5
-        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -155,7 +155,7 @@ namespace CrmWebApp.Controllers
 
         // POST: ParamDicts/Delete/5
         [HttpPost, ActionName("Delete")]
-        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {

@@ -11,13 +11,13 @@
     {
         [Display(Name = "资金情况ID")]
         public int Id { get; set; }
-        [Display(Name = "业务信息ID")]
+        [Display(Name = "运营记录ID")]
         public int CompanySalesDailyId { get; set; }
 
         [StringLength(50)]
-        [Display(Name = "运营记录ID")]
+        [Display(Name = "渠道")]
         public string SalesSource { get; set; }
-        [Display(Name = "冻结资金")]
+        [Display(Name = "押款")]
         public int? FreezeFund { get; set; }
 
         [Display(Name = "流动资金")]

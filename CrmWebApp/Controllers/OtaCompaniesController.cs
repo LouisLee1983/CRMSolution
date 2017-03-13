@@ -94,6 +94,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: OtaCompanies/Create
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult Create()
         {
             var model = new OtaCompany();
@@ -107,7 +108,7 @@ namespace CrmWebApp.Controllers
 
             return View(model);
         }
-
+        
         private List<SelectListItem> GetBussinessTypeList(string defaultValue)
         {
             var bussinessTypes = from p in db.ParamDict

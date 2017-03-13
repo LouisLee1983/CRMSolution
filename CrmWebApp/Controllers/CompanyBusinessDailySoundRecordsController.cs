@@ -17,6 +17,7 @@ namespace CrmWebApp.Controllers
         private OtaCrmModel db = new OtaCrmModel();
 
         // GET: CompanyBusinessDailySoundRecords
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Index(int? dailyId)
         {
             var model = from cbd in db.CompanyBusinessDailySoundRecord
@@ -31,6 +32,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyBusinessDailySoundRecords/Details/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -46,6 +48,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyBusinessDailySoundRecords/Create
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult Create(int? dailyId)
         {
             var model = new CompanyBusinessDailySoundRecord();
@@ -81,6 +84,7 @@ namespace CrmWebApp.Controllers
         // 为了防止“过多发布”攻击，请启用要绑定到的特定属性，有关 
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
         public ActionResult Create(CompanyBusinessDailySoundRecord companyBusinessDailySoundRecord)
         {
@@ -124,6 +128,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyBusinessDailySoundRecords/Edit/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -142,6 +147,7 @@ namespace CrmWebApp.Controllers
         // 为了防止“过多发布”攻击，请启用要绑定到的特定属性，有关 
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "Id,CompanyBusinessDailyId,SoundRecordName,SoundRecordUrl")] CompanyBusinessDailySoundRecord companyBusinessDailySoundRecord)
         {
@@ -155,6 +161,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyBusinessDailySoundRecords/Delete/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -171,6 +178,7 @@ namespace CrmWebApp.Controllers
 
         // POST: CompanyBusinessDailySoundRecords/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {

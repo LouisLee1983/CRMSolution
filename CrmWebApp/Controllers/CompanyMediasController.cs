@@ -17,12 +17,14 @@ namespace CrmWebApp.Controllers
         private OtaCrmModel db = new OtaCrmModel();
 
         // GET: CompanyMedias
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Index()
         {
             return View(await db.CompanyMedia.ToListAsync());
         }
 
         // GET: CompanyMedias/Details/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -38,6 +40,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyMedias/Create
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult Create(int outerId, string mediaFor)
         {
             var model = new CompanyMedia();
@@ -73,6 +76,7 @@ namespace CrmWebApp.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult Create(CompanyMedia companyMedia)
         {
             if (ModelState.IsValid)
@@ -118,6 +122,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyMedias/Edit/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -137,6 +142,7 @@ namespace CrmWebApp.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Edit([Bind(Include = "Id,OuterKeyId,MediaFor,MediaName,MediaUrl")] CompanyMedia companyMedia)
         {
             if (ModelState.IsValid)
@@ -149,6 +155,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyMedias/Delete/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -165,6 +172,7 @@ namespace CrmWebApp.Controllers
 
         // POST: CompanyMedias/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {

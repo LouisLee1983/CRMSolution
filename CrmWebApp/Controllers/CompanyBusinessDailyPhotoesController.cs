@@ -32,6 +32,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyBusinessDailyPhotoes/Details/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)

@@ -16,6 +16,7 @@ namespace CrmWebApp.Controllers
         private OtaCrmModel db = new OtaCrmModel();
 
         // GET: CompanyBusinessDailyParams
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Index(int? dailyId)
         {
             var model = from cbd in db.CompanyBusinessDailyParam
@@ -30,6 +31,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyBusinessDailyParams/Details/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,6 +47,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyBusinessDailyParams/Create
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult Create(int? dailyId)
         {
             var model = new CompanyBusinessDailyParam();
@@ -59,6 +62,7 @@ namespace CrmWebApp.Controllers
         // 为了防止“过多发布”攻击，请启用要绑定到的特定属性，有关 
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "Id,CompanyBusinessDailyId,ParamName,SubParamItem,ItemAmount")] CompanyBusinessDailyParam companyBusinessDailyParam)
         {
@@ -73,6 +77,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyBusinessDailyParams/Edit/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -91,6 +96,7 @@ namespace CrmWebApp.Controllers
         // 为了防止“过多发布”攻击，请启用要绑定到的特定属性，有关 
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "Id,CompanyBusinessDailyId,ParamName,SubParamItem,ItemAmount")] CompanyBusinessDailyParam companyBusinessDailyParam)
         {
@@ -104,6 +110,7 @@ namespace CrmWebApp.Controllers
         }
 
         // GET: CompanyBusinessDailyParams/Delete/5
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -120,6 +127,7 @@ namespace CrmWebApp.Controllers
 
         // POST: CompanyBusinessDailyParams/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
