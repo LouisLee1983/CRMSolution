@@ -249,7 +249,7 @@ namespace WFSpider
             FileInfo[] finfo = dir.GetFiles();
             for (int i = 0; i < finfo.Length; i++)
             {
-                File.Delete(filePath + finfo[i].Name);
+                File.Delete(Path.Combine(filePath, finfo[i].Name));
             }
         }
         public void WriteFile(string dataString, string filePath, bool append)
@@ -294,6 +294,14 @@ namespace WFSpider
         {
             //连取三个月数据，先执行按天的查询，最后结束的时候查一个月的统计，把jason保存到文件，然后再for循环保存
             DateTime curMonth = DateTime.Parse(DateTime.Today.ToString("yyyy-MM-01"));
+            DateTime lastDate = curMonth.AddMonths(-2);
+            string lastDateFilePath = "lastdate.txt";
+            string lastDateStr = ReadTxtFile(lastDateFilePath, true);
+            if (!string.IsNullOrEmpty(lastDateStr))
+            {
+                lastDate = DateTime.Parse(lastDateStr);
+            }
+
             string domain = "checking.corp.qunar.com";
             List<Cookie> cookieList = GetDomainCookies(domain, textBoxCookie.Text);
             int limit = 50;
@@ -301,10 +309,17 @@ namespace WFSpider
             CreateFolderIfNeeded(filePath);
             DeleteAllFile(filePath);    //清空旧的
             JavaScriptSerializer jss = new JavaScriptSerializer();
+            //从2个月前开始发扫
+            DateTime startDate = lastDate;
+            DateTime endDate = startDate.AddMonths(1).AddDays(-1);
             for (int i = 0; i < 3; i++)
             {
-                DateTime startDate = curMonth.AddMonths(-i);
-                DateTime endDate = startDate.AddMonths(1).AddDays(-1);
+                startDate = curMonth.AddMonths(i);
+                if (startDate > DateTime.Today)
+                {
+                    break;
+                }
+                endDate = startDate.AddMonths(1).AddDays(-1);
                 if (endDate > DateTime.Today)
                 {
                     endDate = DateTime.Today;
@@ -331,6 +346,8 @@ namespace WFSpider
                     textBoxResult.AppendText(fileName + ":" + totalPage + "\r\n");
                 }
             }
+            WriteFile(endDate.AddDays(1).ToString("yyyy-MM-dd"), lastDateFilePath, false);
+
         }
 
 
