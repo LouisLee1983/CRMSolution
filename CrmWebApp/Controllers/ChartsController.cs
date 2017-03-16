@@ -93,6 +93,7 @@ namespace CrmWebApp.Controllers
 
             return PartialView("_PartialChartView", chart);
         }
+
         [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public PartialViewResult GetMeetCountChart()
         {
@@ -129,6 +130,7 @@ namespace CrmWebApp.Controllers
             DotNet.Highcharts.Highcharts chart = GetChart(chartModel);
             return PartialView("_PartialChartView", chart);
         }
+
         [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public PartialViewResult GetCompanyCountChart()
         {
