@@ -73,8 +73,12 @@
         [Display(Name = "所在城市")]
         public string CityName { get; set; }
 
+        [StringLength(50)]
+        [Display(Name = "状态")]
+        public string BusinessStatus { get; set; }
+
         [Display(Name ="业务")]
-        public string BusnessRange { get; set; }
+        public string BusinessRange { get; set; }
 
         [Display(Name = "拜访")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]

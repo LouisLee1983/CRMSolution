@@ -644,7 +644,9 @@ namespace CrmWebApp.Controllers
             var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
             if (result.Succeeded)
             {
-                return RedirectToAction("ResetPasswordConfirmation", "Account");
+                //设置注销
+                AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                return RedirectToAction("QunarLogin", "Account");
             }
             AddErrors(result);
             return View();

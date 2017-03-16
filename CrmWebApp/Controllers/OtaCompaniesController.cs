@@ -45,7 +45,8 @@ namespace CrmWebApp.Controllers
                     || p.BossName.Contains(searchString)
                     || p.LegalPerson.Contains(searchString)
                     || p.CityName.Contains(searchString)
-                    || p.BusnessRange.Contains(searchString));
+                    || p.BusinessStatus.Contains(searchString)
+                    || p.BusinessRange.Contains(searchString));
             }
 
             switch (sortOrder)
@@ -104,15 +105,16 @@ namespace CrmWebApp.Controllers
             model.SalesUserName = User.Identity.Name;
 
             ViewData["ChinaCityList"] = GetChinaCityList("");
-            ViewData["BusnessRangeList"] = GetBussinessTypeList("国内");
+            ViewData["BusinessRangeList"] = GetParamDictList("业务类型","国内");
+            ViewData["BusinessStatusList"] = GetParamDictList("业务状态","在线");
 
             return View(model);
         }
         
-        private List<SelectListItem> GetBussinessTypeList(string defaultValue)
+        private List<SelectListItem> GetParamDictList(string paramName, string defaultValue)
         {
             var bussinessTypes = from p in db.ParamDict
-                                 where p.ParamName == "业务类型"
+                                 where p.ParamName == paramName
                                  select p;
             List<SelectListItem> result = new List<SelectListItem>();
 

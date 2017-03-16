@@ -50,6 +50,9 @@
             老板
         </th>
         <th>
+            状态
+        </th>
+        <th>
             @Html.ActionLink("拜访日", "Index", new { sortOrder = ViewBag.LastMeetingDateSortParm })
         </th>
         <th></th>
@@ -68,13 +71,16 @@
                 @Html.DisplayFor(modelItem => item.CompanyName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BusnessRange)
+                @Html.DisplayFor(modelItem => item.BusinessRange)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.RealAddress)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.BossName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BusinessStatus)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.LastMeetingDate)
