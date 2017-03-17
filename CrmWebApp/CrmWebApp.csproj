@@ -236,6 +236,7 @@
     <Compile Include="Models\CompanyBusinessDailySoundRecord.cs" />
     <Compile Include="Models\CompanyBusinessDailyViewModels.cs" />
     <Compile Include="Models\CompanyCertificate.cs" />
+    <Compile Include="Models\CompanyCmsData.cs" />
     <Compile Include="Models\CompanyMedia.cs" />
     <Compile Include="Models\CompanyMeeting.cs" />
     <Compile Include="Models\CompanyMeetingSubject.cs" />

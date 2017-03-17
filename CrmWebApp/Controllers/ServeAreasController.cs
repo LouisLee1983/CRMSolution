@@ -22,6 +22,18 @@ namespace CrmWebApp.Controllers
             return View(await db.ServeArea.ToListAsync());
         }
 
+        public List<string> GetMyAreaUserNames(string userName)
+        {
+            var areaName = (from p in db.ServeArea
+                           where p.UserName == userName
+                           select p.ServeAreaName).FirstOrDefault();
+
+            var userNames = from p in db.ServeArea
+                            where p.ServeAreaName == areaName
+                            select p.UserName;
+            return userNames.ToList();
+        }
+
         // GET: ServeAreas/Details/5
         [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public async Task<ActionResult> Details(int? id)

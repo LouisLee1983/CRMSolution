@@ -14,16 +14,16 @@ using WFSpider.CrmWebServiceReference;
 
 namespace WFSpider
 {
-    public partial class Form1 : Form
+    public partial class FormMain : Form
     {
-        public Form1()
+        public FormMain()
         {
             InitializeComponent();
         }
 
         private void buttonGoUrl_Click(object sender, EventArgs e)
         {
-            webBrowser1.Navigate(textBoxUrl.Text);
+            webBrowserAgentGrade.Navigate(textBoxAgentGradeUrl.Text);
         }
 
         public string GetZipWebResponseWithCookies(Cookie[] cookies, string url, string encode)
@@ -65,15 +65,15 @@ namespace WFSpider
 
         private void buttonGetCookie_Click(object sender, EventArgs e)
         {
-            textBoxCookie.Text = webBrowser1.Document.Cookie;
+            textBoxAgentGradeCookie.Text = webBrowserAgentGrade.Document.Cookie;
         }
 
         private void buttonGetResponse_Click(object sender, EventArgs e)
         {
             string url = "http://checking.corp.qunar.com/agentEvaluation/query?domain=&limit=50&pageIndex=1&fromMonth=2017-01&toMonth=2017-01&agentName=&agentManager=&type=1&_=1488264078648";
             string domain = "flight.qunar.com";
-            List<Cookie> cookieList = GetDomainCookies(domain, textBoxCookie.Text);
-            textBoxResult.Text = GetZipWebResponseWithCookies(cookieList.ToArray(), url, "UTF-8");
+            List<Cookie> cookieList = GetDomainCookies(domain, textBoxAgentGradeCookie.Text);
+            textBoxAgentGradeResult.Text = GetZipWebResponseWithCookies(cookieList.ToArray(), url, "UTF-8");
         }
 
         public List<Cookie> GetDomainCookies(string domain, string cookieStr)
@@ -103,7 +103,7 @@ namespace WFSpider
 
         private void buttonParseJson_Click(object sender, EventArgs e)
         {
-            string json = textBoxResult.Text;
+            string json = textBoxAgentGradeResult.Text;
             JavaScriptSerializer jss = new JavaScriptSerializer();
             AgentGradeOperationRoot agentGradeOperation = jss.Deserialize(json, typeof(AgentGradeOperationRoot)) as AgentGradeOperationRoot;
 
@@ -168,10 +168,10 @@ namespace WFSpider
                             len = agoList.Count - i;
                         }
                         ws.InsertAgentGradeOprations(agoList.GetRange(i, len).ToArray());
-                        textBoxResult.AppendText(agoList.Count + ":" + i.ToString() + "\r\n");
+                        textBoxAgentGradeResult.AppendText(agoList.Count + ":" + i.ToString() + "\r\n");
                     }
 
-                    textBoxResult.Text = "保存成功：" + agoList.Count;
+                    textBoxAgentGradeResult.Text = "保存成功：" + agoList.Count;
                 }
             }
         }
@@ -303,7 +303,7 @@ namespace WFSpider
             }
 
             string domain = "checking.corp.qunar.com";
-            List<Cookie> cookieList = GetDomainCookies(domain, textBoxCookie.Text);
+            List<Cookie> cookieList = GetDomainCookies(domain, textBoxAgentGradeCookie.Text);
             int limit = 50;
             string filePath = System.AppDomain.CurrentDomain.BaseDirectory + "AgentGradeOprationJson";
             CreateFolderIfNeeded(filePath);
@@ -343,7 +343,7 @@ namespace WFSpider
                         fileName = curDate.ToString("yyyyMMdd") + "_" + curPageIndex + ".txt";
                         WriteFile(json, Path.Combine(filePath, fileName), false);
                     }
-                    textBoxResult.AppendText(fileName + ":" + totalPage + "\r\n");
+                    textBoxAgentGradeResult.AppendText(fileName + ":" + totalPage + "\r\n");
                 }
             }
             WriteFile(endDate.AddDays(1).ToString("yyyy-MM-dd"), lastDateFilePath, false);
@@ -360,6 +360,38 @@ namespace WFSpider
                 + "&toDate=" + date.ToString("yyyy-MM-dd")
                 + "&agentName=&agentManager=&type=0&_=1488264362156";
             return GetZipWebResponseWithCookies(cookies, url, "UTF-8");
+        }
+
+        //*******************************cms系统
+        private void buttonGoCmsUrl_Click(object sender, EventArgs e)
+        {
+            string url = textBoxCmsUrl.Text;
+            webBrowserCms.Navigate(url);
+        }
+
+        private void buttonGetCmsCookies_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonGetCmsOnepageData_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonGenerateCmsData_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonGetAllPageCmsReponse_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonSaveCmsData_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

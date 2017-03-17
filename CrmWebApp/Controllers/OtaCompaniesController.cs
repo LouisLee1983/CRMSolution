@@ -34,10 +34,25 @@ namespace CrmWebApp.Controllers
                 searchString = currentFilter;
             }
             ViewBag.CurrentFilter = searchString;
-
+            //总监能看到所有人的，区域经理能看到本区域的，需要进行打勾，其他的销售只能看到自己的
+            User.IsInRole("SalesDirector");
+            User.IsInRole("AreaManager");
             var otaCompanys = from p in db.OtaCompany
                               select p;
-
+            if (!User.IsInRole("SalesDirector") && !User.IsInRole("Admin"))
+            {
+                if (User.IsInRole("AreaManager"))
+                {
+                    //找出本区域的所有人，并把它作为条件加入查询结果中
+                    ServeAreasController sac = new ServeAreasController();
+                    List<string> myAreaUserNameList = sac.GetMyAreaUserNames(User.Identity.Name);
+                    otaCompanys = otaCompanys.Where(p => myAreaUserNameList.Contains(p.SalesUserName));
+                }else if(User.IsInRole("OtaSales"))
+                {
+                    //销售只能看到本人的
+                    otaCompanys = otaCompanys.Where(p => p.SalesUserName == User.Identity.Name);
+                }
+            }
             //搜索
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -203,7 +218,7 @@ namespace CrmWebApp.Controllers
                 return HttpNotFound();
             }
             ViewData["ChinaCityList"] = GetChinaCityList(otaCompany.CityName);
-            ViewData["BusnessRangeList"] = GetBussinessTypeList(otaCompany.BusnessRange);
+            ViewData["BusnessRangeList"] = GetParamDictList("业务类型", otaCompany.BusinessRange);
 
             return View(otaCompany);
         }

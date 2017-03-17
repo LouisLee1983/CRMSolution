@@ -55,7 +55,7 @@ namespace CrmWebApp.Controllers
                 newItem.CompanyName = companyName;
                 newItem.CreateTime = DateTime.Now;
                 newItem.BossName = "";
-                newItem.BusnessRange = "";
+                newItem.BusinessRange = "";
                 newItem.CapitalAsserts = "";
                 newItem.CityName = "";
 
