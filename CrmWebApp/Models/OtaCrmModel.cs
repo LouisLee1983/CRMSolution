@@ -33,6 +33,7 @@ namespace CrmWebApp.Models
         public virtual DbSet<AgentGradeOperation> AgentGradeOperation { get; set; }
         public virtual DbSet<MobilePassword> MobilePassword { get; set; }
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
+        public virtual DbSet<CompanyCmsData> CompanyCmsData { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

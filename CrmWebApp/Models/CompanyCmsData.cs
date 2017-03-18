@@ -11,6 +11,7 @@
     {
         public int Id { get; set; }
 
+        [Display(Name ="原编号")]
         public int? CmsId { get; set; }
 
         [StringLength(50)]
