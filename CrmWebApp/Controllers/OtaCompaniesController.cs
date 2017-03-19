@@ -46,17 +46,28 @@ namespace CrmWebApp.Controllers
                     //找出本区域的所有人，并把它作为条件加入查询结果中
                     ServeAreasController sac = new ServeAreasController();
                     List<string> myAreaUserNameList = sac.GetMyAreaUserNames(User.Identity.Name);
-                    otaCompanys = otaCompanys.Where(p => myAreaUserNameList.Contains(p.SalesUserName));
-                }else if(User.IsInRole("OtaSales"))
+                    AccountController ac = new AccountController();
+                    List<string> realNameList = new List<string>();
+                    foreach (string userName in myAreaUserNameList)
+                    {
+                        string realName = ac.GetRealName(userName);
+                        realNameList.Add(realName);
+                    }
+                    otaCompanys = otaCompanys.Where(p => realNameList.Contains(p.SalesUserName));
+                }
+                else if (User.IsInRole("OtaSales"))
                 {
-                    //销售只能看到本人的
-                    otaCompanys = otaCompanys.Where(p => p.SalesUserName == User.Identity.Name);
+                    //销售只能看到本人的                    
+                    AccountController ac = new AccountController();
+                    string realName = ac.GetRealName(User.Identity.Name);
+                    otaCompanys = otaCompanys.Where(p => p.SalesUserName == realName);
                 }
             }
             //搜索
             if (!string.IsNullOrEmpty(searchString))
             {
                 otaCompanys = otaCompanys.Where(p => p.CompanyName.Contains(searchString)
+                    || p.SalesUserName == searchString
                     || p.BossName.Contains(searchString)
                     || p.LegalPerson.Contains(searchString)
                     || p.CityName.Contains(searchString)
@@ -117,15 +128,16 @@ namespace CrmWebApp.Controllers
             model.BossBackground = "机票代理人";
             model.BossBusinessDesp = "民航";
             model.CreateTime = DateTime.Now;
-            model.SalesUserName = User.Identity.Name;
+            string realName = new AccountController().GetRealName(User.Identity.Name);
+            model.SalesUserName = realName;
 
             ViewData["ChinaCityList"] = GetChinaCityList("");
-            ViewData["BusinessRangeList"] = GetParamDictList("业务类型","国内");
-            ViewData["BusinessStatusList"] = GetParamDictList("业务状态","在线");
+            ViewData["BusinessRangeList"] = GetParamDictList("业务类型", "国内");
+            ViewData["BusinessStatusList"] = GetParamDictList("业务状态", "在线");
 
             return View(model);
         }
-        
+
         private List<SelectListItem> GetParamDictList(string paramName, string defaultValue)
         {
             var bussinessTypes = from p in db.ParamDict
@@ -170,7 +182,7 @@ namespace CrmWebApp.Controllers
             result.Add(selectListItem);
 
             var c = from p in db.ChinaCity
-                    orderby p.ProvinceName,p.CityName
+                    orderby p.ProvinceName, p.CityName
                     select p.ProvinceName + "-" + p.CityName;
             foreach (var item in c)
             {

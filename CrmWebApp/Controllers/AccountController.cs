@@ -132,6 +132,15 @@ namespace CrmWebApp.Controllers
             return q;
         }
 
+        public string GetRealName(string userName)
+        {
+            OtaCrmModel db = new OtaCrmModel();
+            var q = (from p in db.AspNetUsers
+                     where p.UserName == userName
+                     select p.TrueName).FirstOrDefault();
+            return q;
+        }
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
