@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="86457128-ed02-40f8-bccb-f7a5e2e3b1c4" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="31aef6a8-d94e-4379-abd4-97a1a92c8d0b" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -19,11 +19,11 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:2145/ApiWebService.asmx" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://ota.crm.qunar.com/ApiWebService.asmx" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="ApiWebService.disco" MetadataType="Disco" ID="945ff885-919f-4306-b15d-9d033571b408" SourceId="1" SourceUrl="http://localhost:2145/ApiWebService.asmx?disco" />
-    <MetadataFile FileName="ApiWebService.wsdl" MetadataType="Wsdl" ID="1ae7d554-427a-4d69-b7e5-98dfe69d9a8f" SourceId="1" SourceUrl="http://localhost:2145/ApiWebService.asmx?wsdl" />
+    <MetadataFile FileName="ApiWebService.wsdl" MetadataType="Wsdl" ID="69c87a58-08bb-46e2-b464-b9079d99e7c7" SourceId="1" SourceUrl="http://ota.crm.qunar.com/ApiWebService.asmx?wsdl" />
+    <MetadataFile FileName="ApiWebService.disco" MetadataType="Disco" ID="6ad1d5ad-5687-4041-a5bc-4cba893704b2" SourceId="1" SourceUrl="http://ota.crm.qunar.com/ApiWebService.asmx?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

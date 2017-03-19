@@ -19,6 +19,15 @@ namespace CrmWebApp.Controllers
         {
             return View();
         }
+        [Authorize(Roles = "Admin")]
+        public ActionResult DelCompanyCmsData()
+        {
+            OtaCrmModel db = new OtaCrmModel();
+            string sql = "Delete From CompanyCmsData";
+            db.Database.ExecuteSqlCommand(sql, null);
+            string result = "成功删除.";
+            return Content(result);
+        }
 
         [Authorize(Roles = "Admin")]
         public ActionResult UpdateOtaCompany()

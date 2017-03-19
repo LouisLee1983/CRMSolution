@@ -8,6 +8,7 @@
     <hr />
     <div>
         <input type="button" class="btn btn-default" id="btnUpdateCompany" onclick="updatecompany()" value="更新客户资料" />
+        <input type="button" class="btn btn-default" id="btndelcompany" onclick="delcompany()" value="清空旧" />
     </div>
     <div>
         <span id="resultspan"></span>
@@ -39,5 +40,15 @@
             $("#resultspan").html(response);
         });
         $("#btnUpdateCompany").attr("disabled", false);    //隐藏一分钟
+    }
+    var delcompany = function () {
+        $("#btndelcompany").attr("disabled", true);    //隐藏一分钟
+        $("#resultspan").html("");
+        var serverUrl = "@Url.Content("~/")";
+        var mvcurl = serverUrl + "Admin/DelCompanyCmsData";
+        $.get(mvcurl, function (response) {
+            $("#resultspan").html(response);
+        });
+        $("#btndelcompany").attr("disabled", false);    //隐藏一分钟
     }
 </script>

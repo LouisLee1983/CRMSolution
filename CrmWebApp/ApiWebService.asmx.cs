@@ -43,7 +43,7 @@ namespace CrmWebApp
             }
         }
 
-        public string GetMd5Str(string str)
+        private string GetMd5Str(string str)
         {
             string result = "";
             MD5 md = MD5.Create();

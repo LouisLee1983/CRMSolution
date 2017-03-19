@@ -23,7 +23,44 @@ namespace CrmWebApp.Controllers
             return View();
         }
         //总监看的数据：各个销售的客户数量，各个销售的票量，各个销售的拜访次数
-        
+        //[Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
+        //public PartialViewResult GetSalesTicketCountChart()
+        //{
+        //    SimpleChartModel chartModel = new SimpleChartModel();
+        //    chartModel.ContainerId = "salesTicketCountChart";
+        //    chartModel.Title = "销售客户票量";
+
+        //    chartModel.SeriesList = new List<YSeries>();
+
+        //    YSeries series = new YSeries();
+        //    series.YSeriesList = new List<object>();
+        //    series.YName = "张";
+
+        //    chartModel.ValueSuffix = "张";
+        //    //统计昨天的销售票量
+        //    DateTime startWeek = DateTime.Now.AddDays(1 - Convert.ToInt32(DateTime.Now.DayOfWeek.ToString("d")));
+        //    startWeek = startWeek.AddDays(-7);
+        //    DateTime endWeek = startWeek.AddDays(6);
+        //    chartModel.YTitle = startWeek.ToString("yyyyMMdd") + "-" + endWeek.ToString("yyyyMMdd");
+
+        //    OtaCrmModel db = new OtaCrmModel();
+        //    var ss = from i in db.CompanyMeeting
+        //             where i.MeetDate >= startWeek && i.MeetDate <= endWeek
+        //             group i by i.CreateUserName
+        //                 into g
+        //             select new { count = g.Count(), userName = g.Key };
+        //    foreach (var item in ss)
+        //    {
+        //        chartModel.XList.Add(item.userName);
+        //        series.YSeriesList.Add(item.count);
+        //    }
+        //    chartModel.SeriesList.Add(series);
+
+        //    DotNet.Highcharts.Highcharts chart = GetChart(chartModel);
+        //    return PartialView("_PartialChartView", chart);
+        //}
+
+
         [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public PartialViewResult GetCompanyTicketCountChart(string companyName)
         {

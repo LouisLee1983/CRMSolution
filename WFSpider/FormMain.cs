@@ -6,19 +6,36 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
-using WFSpider.CrmWebServiceReference;
+using WFSpider.CrmWebService;
+using Winista.Text.HtmlParser;
+using Winista.Text.HtmlParser.Filters;
+using Winista.Text.HtmlParser.Util;
 
 namespace WFSpider
 {
     public partial class FormMain : Form
     {
+        private string md5hashstr = "asdfghjklzxcvbnm";
+
         public FormMain()
         {
             InitializeComponent();
+        }
+        public string GetMd5Str(string str)
+        {
+            string result = "";
+            MD5 md = MD5.Create();
+            byte[] bytes = md.ComputeHash(System.Text.Encoding.UTF8.GetBytes(str));
+            foreach (byte b in bytes)
+            {
+                result += b.ToString();
+            }
+            return result;
         }
 
         private void buttonGoUrl_Click(object sender, EventArgs e)
@@ -159,7 +176,7 @@ namespace WFSpider
                     //需要分批存储
                     List<AgentGradeOperation> agoList = GetAgentGradeOperations(agentDetailList, perDayTicketDict);
 
-                    CrmWebServiceReference.ApiWebServiceSoapClient ws = new ApiWebServiceSoapClient();
+                    CrmWebService.ApiWebServiceSoapClient ws = new ApiWebServiceSoapClient();
                     for (int i = 0; i < agoList.Count; i += 1000)
                     {
                         int len = 1000;
@@ -167,7 +184,8 @@ namespace WFSpider
                         {
                             len = agoList.Count - i;
                         }
-                        ws.InsertAgentGradeOprations(agoList.GetRange(i, len).ToArray());
+                        string md5str = GetMd5Str(DateTime.Now.ToString("yyyyMMddHHmm00") + md5hashstr);
+                        ws.InsertAgentGradeOprations(agoList.GetRange(i, len).ToArray(), md5str);
                         textBoxAgentGradeResult.AppendText(agoList.Count + ":" + i.ToString() + "\r\n");
                     }
 
@@ -367,31 +385,287 @@ namespace WFSpider
         {
             string url = textBoxCmsUrl.Text;
             webBrowserCms.Navigate(url);
+            textBoxCmsUrl.Text = "http://cms.qunar.com/cms/queryFlightCompany.do?method=listCompany&companyType=0";
         }
 
         private void buttonGetCmsCookies_Click(object sender, EventArgs e)
         {
-
+            //用新的cookie获取方式
+            Uri uri = webBrowserCms.Url;
+            string strCookie = FullWebBrowserCookie.GetCookieInternal(uri, false);
+            textBoxCmsCookies.Text = strCookie;
         }
 
         private void buttonGetCmsOnepageData_Click(object sender, EventArgs e)
         {
+            string url = "http://cms.qunar.com/cms/queryFlightCompany.do";
+            string curPage = textBoxCmsPageIndex.Text;
+            string postData = "method=listCompany&companyType=0&name=&websiteName=&phone=&currPage=" + curPage + "&pageSize=30&totalCount=11";
+            string domain = "cms.qunar.com";
+            //string postStr = "name=&websiteName=&phone=&currPage=1&pageSize=30&totalCount=11";
+            List<Cookie> cookieList = GetDomainCookies(domain, textBoxCmsCookies.Text);
+            //应该使用post获取的以后每一页，先要根据当前页面分析出总条数和总页数
 
+            textBoxCmsResult.Text = PostCmsWebResponseWithCookies(cookieList.ToArray(), url, postData, "UTF-8");
+        }
+
+        public string PostCmsWebResponseWithCookies(Cookie[] cookies, string url, string postData, string encode)
+        {
+            CookieContainer cc = new CookieContainer();
+            foreach (Cookie coItem in cookies)
+            {
+                cc.Add(coItem);
+            }
+            string result = "";
+
+            Encoding encoding = Encoding.GetEncoding(encode);
+            byte[] strParm = encoding.GetBytes(postData);
+            try
+            {
+                HttpWebRequest myReq = (HttpWebRequest)WebRequest.Create(url);
+                myReq.Timeout = 300000;
+                myReq.KeepAlive = true;
+                myReq.Method = "POST";
+                myReq.UserAgent = "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 10.0; WOW64; Trident/7.0)";
+                myReq.ContentType = "application/x-www-form-urlencoded";
+                myReq.Accept = "text/html, application/xhtml+xml, image/jxr, */*";
+                myReq.Headers.Add("Accept-Language", "zh-Hans-CN, zh-Hans; q=0.5");
+                myReq.Headers.Add("Accept-Encoding", "gzip, deflate");
+                myReq.CookieContainer = cc;
+                myReq.ContentLength = strParm.Length;
+                myReq.AllowWriteStreamBuffering = false;
+
+                Stream outStream = myReq.GetRequestStream();
+                outStream.Write(strParm, 0, strParm.Length);
+                outStream.Close();
+
+                WebResponse myResp = null;
+                myResp = myReq.GetResponse();
+
+                myResp.Headers.Add(HttpResponseHeader.Connection, "keep-alive");
+                myResp.Headers.Add(HttpResponseHeader.ContentEncoding, "gzip");
+                myResp.Headers.Add(HttpResponseHeader.ContentLanguage, "zh-Hans");
+                myResp.Headers.Add(HttpResponseHeader.ContentType, "text/html; charset=UTF-8");
+                myResp.Headers.Add(HttpResponseHeader.Server, "QWS/1.0");
+                myResp.Headers.Add(HttpResponseHeader.TransferEncoding, "chunked");
+                myResp.Headers.Add(HttpResponseHeader.Vary, "Accept-Encoding");
+
+                Stream ReceiveStream = myResp.GetResponseStream();
+
+                System.IO.Compression.GZipStream responseStream = new System.IO.Compression.GZipStream(ReceiveStream, System.IO.Compression.CompressionMode.Decompress);
+                StreamReader streamReader = new StreamReader(responseStream, encoding);
+                result = streamReader.ReadToEnd();
+
+                ReceiveStream.Close();
+                myResp.Close();
+            }
+            catch (WebException exp)
+            {
+                HttpWebResponse res = (HttpWebResponse)exp.Response;
+                StreamReader sr = new StreamReader(res.GetResponseStream(), encoding);
+                result = sr.ReadToEnd();
+            }
+            return result;
         }
 
         private void buttonGenerateCmsData_Click(object sender, EventArgs e)
         {
+            string html = textBoxCmsResult.Text;
+            int totalCount = 0;
+            List<CompanyCmsData> ccdList = GenerateCCDList(html, out totalCount);
+            textBoxCmsTotalcount.Text = totalCount.ToString();
+        }
 
+        public List<CrmWebService.CompanyCmsData> GenerateCCDList(string html, out int totalCount)
+        {
+            List<CrmWebService.CompanyCmsData> ccdList = new List<CompanyCmsData>();
+
+            mshtml.HTMLDocumentClass doc = new mshtml.HTMLDocumentClass();
+            doc.designMode = "on";
+            doc.IHTMLDocument2_write(html);
+
+            mshtml.IHTMLElement divcnt = doc.getElementById("cnt");
+            mshtml.IHTMLElementCollection childrens = (mshtml.IHTMLElementCollection)divcnt.children;
+            mshtml.IHTMLTable table = (mshtml.IHTMLTable)childrens.item(2);
+            for (int i = 1; i < table.rows.length; i++)
+            {
+                CompanyCmsData item = new CompanyCmsData();
+
+                mshtml.IHTMLTableRow row = (mshtml.IHTMLTableRow)table.rows.item(i);
+                mshtml.IHTMLElement cell = (mshtml.IHTMLElement)row.cells.item(0);
+                item.CmsId = int.Parse(cell.innerText.Trim());
+                cell = (mshtml.IHTMLElement)row.cells.item(1);
+                item.CompanyName = string.IsNullOrEmpty(cell.innerText) ? "" : cell.innerText.Trim();
+                cell = (mshtml.IHTMLElement)row.cells.item(2);
+                item.TTSStatusDesp = string.IsNullOrEmpty(cell.innerText) ? "" : cell.innerText.Trim();
+                cell = (mshtml.IHTMLElement)row.cells.item(3);
+                item.ContactPhone = string.IsNullOrEmpty(cell.innerText) ? "" : cell.innerText.Trim();
+                cell = (mshtml.IHTMLElement)row.cells.item(5);
+                item.SalesName = string.IsNullOrEmpty(cell.innerText) ? "" : cell.innerText.Trim();
+
+                ccdList.Add(item);
+            }
+            totalCount = 0;
+            mshtml.IHTMLElementCollection eles = doc.getElementsByName("totalCount");
+            if (eles != null && eles.length > 0)
+            {
+                totalCount = int.Parse(((mshtml.IHTMLElement)eles.item(0)).getAttribute("value").ToString());
+            }
+
+            return ccdList;
         }
 
         private void buttonGetAllPageCmsReponse_Click(object sender, EventArgs e)
         {
+            //计算页数，然后从第一页开始翻页
+            int totalCount = int.Parse(textBoxCmsTotalcount.Text);
+            int pageCount = (totalCount + 1) / 30;
+            List<CompanyCmsData> pagecmsList = new List<CompanyCmsData>();
+            for (int i = 1; i <= pageCount; i++)
+            {
+                string html = GetCmsPageHtml(i, totalCount);
+                int temp = 0;
+                List<CompanyCmsData> ccdList = GenerateCCDList(html, out temp);
+                pagecmsList.AddRange(ccdList);
+            }
 
+            //然后每个获取详情
+            List<CompanyCmsData> result = new List<CompanyCmsData>();
+            //每一个公司进去抓取更加详细的信息
+            for (int i = 0; i < pagecmsList.Count; i++)
+            {
+                //获取详细的html
+                string detailhtml = GetCmsDetailHtml(pagecmsList[i].CmsId.Value);
+                //把html转成对象
+                CompanyCmsData dItem = GenerateCCD(detailhtml);
+                //重新赋值对象
+                dItem.CmsId = pagecmsList[i].CmsId;
+                dItem.CompanyName = pagecmsList[i].CompanyName;
+                dItem.TTSStatusDesp = pagecmsList[i].TTSStatusDesp;
+                dItem.SalesName = pagecmsList[i].SalesName;
+                result.Add(dItem);
+            }
+
+            CrmWebService.ApiWebServiceSoapClient ws = new ApiWebServiceSoapClient();
+            string md5str = GetMd5Str(DateTime.Now.ToString("yyyyMMddHHmm00") + md5hashstr);
+            ws.InsertCompanyCms(result.ToArray(), md5str);
+        }
+
+        public string GetCmsPageHtml(int page, int totalCount)
+        {
+            string url = "http://cms.qunar.com/cms/queryFlightCompany.do";
+            string postData = "method=listCompany&companyType=0&name=&websiteName=&phone=&currPage=" + page + "&pageSize=30&totalCount=" + totalCount;
+            string domain = "cms.qunar.com";
+            //string postStr = "name=&websiteName=&phone=&currPage=1&pageSize=30&totalCount=11";
+            List<Cookie> cookieList = GetDomainCookies(domain, textBoxCmsCookies.Text);
+            //应该使用post获取的以后每一页，先要根据当前页面分析出总条数和总页数
+
+            return PostCmsWebResponseWithCookies(cookieList.ToArray(), url, postData, "UTF-8");
         }
 
         private void buttonSaveCmsData_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void buttonGetCmsDataDetail_Click(object sender, EventArgs e)
+        {
+            string id = textBoxCmsId.Text;
+            string url = "http://cms.qunar.com/cms/updateCompanyForm.do?id=" + id + "&companyType=0";
+            string domain = "cms.qunar.com";
+            List<Cookie> cookieList = GetDomainCookies(domain, textBoxCmsCookies.Text);
+            string response = GetZipWebResponseWithCookies(cookieList.ToArray(), url, "UTF-8");
+            textBoxCmsResult.Text = response;
+        }
+
+        private string GetCmsDetailHtml(int id)
+        {
+            string url = "http://cms.qunar.com/cms/updateCompanyForm.do?id=" + id + "&companyType=0";
+            string domain = "cms.qunar.com";
+            List<Cookie> cookieList = GetDomainCookies(domain, textBoxCmsCookies.Text);
+            string response = GetZipWebResponseWithCookies(cookieList.ToArray(), url, "UTF-8");
+            return response;
+        }
+
+        private void buttonGenerateCmsDetail_Click(object sender, EventArgs e)
+        {
+            string html = textBoxCmsResult.Text;
+            CompanyCmsData item = GenerateCCD(html);
+            MessageBox.Show(item.RealAddress);
+        }
+
+        public CompanyCmsData GenerateCCD(string html)
+        {
+            CompanyCmsData item = new CompanyCmsData();
+            mshtml.HTMLDocumentClass doc = new mshtml.HTMLDocumentClass();
+            doc.designMode = "on";
+            doc.IHTMLDocument2_write(html);
+
+            mshtml.IHTMLElement noteEle = doc.getElementById("note");   //公司简介
+            item.CompanyDesp = string.IsNullOrEmpty(noteEle.innerText) ? "" : noteEle.innerText.Trim();
+            mshtml.IHTMLElement ele = doc.getElementById("registeredAddress"); //注册地址
+            if (ele.getAttribute("value") != null)
+            {
+                item.RegisterAddress = string.IsNullOrEmpty(ele.getAttribute("value").ToString()) ? "" : ele.getAttribute("value").ToString();
+            }
+            ele = doc.getElementById("address"); //地址
+            if (ele.getAttribute("value") != null)
+            {
+                item.RealAddress = string.IsNullOrEmpty(ele.getAttribute("value").ToString()) ? "" : ele.getAttribute("value").ToString();
+            }
+            ele = doc.getElementById("businessLicense"); //营业执照号
+            if (ele.getAttribute("value") != null)
+            {
+                item.CompanyIdNo = string.IsNullOrEmpty(ele.getAttribute("value").ToString()) ? "" : ele.getAttribute("value").ToString();
+            }
+            ele = doc.getElementById("email"); //营业执照号
+            if (ele.getAttribute("value") != null)
+            {
+                item.CompanyEmail = string.IsNullOrEmpty(ele.getAttribute("value").ToString()) ? "" : ele.getAttribute("value").ToString();
+            }
+            ele = doc.getElementById("legalRepresentative"); //法人
+            if (ele.getAttribute("value") != null)
+            {
+                item.LegalPerson = string.IsNullOrEmpty(ele.getAttribute("value").ToString()) ? "" : ele.getAttribute("value").ToString();
+            }
+            ele = doc.getElementById("contact"); //联系人
+            if (ele.getAttribute("value") != null)
+            {
+                item.ContactPerson = string.IsNullOrEmpty(ele.getAttribute("value").ToString()) ? "" : ele.getAttribute("value").ToString();
+            }
+            ele = doc.getElementById("phone"); //电话
+            if (ele.getAttribute("value") != null)
+            {
+                item.ContactPhone = string.IsNullOrEmpty(ele.getAttribute("value").ToString()) ? "" : ele.getAttribute("value").ToString();
+            }
+            ele = doc.getElementById("accountName"); //tts的admin账号
+            if (ele.getAttribute("value") != null)
+            {
+                item.TTSAdminAccount = string.IsNullOrEmpty(ele.getAttribute("value").ToString()) ? "" : ele.getAttribute("value").ToString();
+            }
+
+            mshtml.IHTMLElementCollection eles = doc.getElementsByName("promotionNameDomestic");
+            if (eles != null && eles.length > 0)
+            {
+                ele = (mshtml.IHTMLElement)eles.item(0);
+                if (ele.getAttribute("value") != null)
+                {
+                    item.GuoneiWebName = string.IsNullOrEmpty(ele.getAttribute("value").ToString()) ? "" : ele.getAttribute("value").ToString();
+                }
+            }
+            eles = doc.getElementsByName("promotionNameInternational");
+            if (eles != null && eles.length > 0)
+            {
+                ele = (mshtml.IHTMLElement)eles.item(0);
+                if (ele.getAttribute("value") != null)
+                {
+                    item.GuojiWebName = string.IsNullOrEmpty(ele.getAttribute("value").ToString()) ? "" : ele.getAttribute("value").ToString();
+                }
+            }
+            ele = doc.getElementById("bossBackgrouds");   //公司简介
+            item.BossBackground = string.IsNullOrEmpty(ele.innerText) ? "" : ele.innerText.Trim();
+
+            return item;
         }
     }
 }
