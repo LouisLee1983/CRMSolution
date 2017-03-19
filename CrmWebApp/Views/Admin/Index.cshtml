@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<h2>管理员页面</h2>
+
+<div class="row-fluid">
+    <hr />
+    <div>
+        <input type="button" class="btn btn-default" id="btnUpdateCompany" onclick="updatecompany()" value="更新客户资料" />
+    </div>
+    <div>
+        <span id="resultspan"></span>
+    </div>
+    <hr />
+    @*@using (Html.BeginForm("ImportData", "Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        <div class="form-group">
+            <div class="col-md-10">
+                <textarea id="DataText"></textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-default" value="操作" />
+            </div>
+        </div>
+    }*@
+</div>
+
+<script>
+    var updatecompany = function () {
+        $("#btnUpdateCompany").attr("disabled", true);    //隐藏一分钟
+        $("#resultspan").html("");
+        var serverUrl = "@Url.Content("~/")";
+        var mvcurl = serverUrl + "Admin/UpdateOtaCompany";
+        $.get(mvcurl, function (response) {
+            $("#resultspan").html(response);
+        });
+        $("#btnUpdateCompany").attr("disabled", false);    //隐藏一分钟
+    }
+</script>
