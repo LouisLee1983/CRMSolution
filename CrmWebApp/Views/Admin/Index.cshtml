@@ -11,6 +11,10 @@
         <input type="button" class="btn btn-default" id="btndelcompany" onclick="delcompany()" value="清空旧" />
     </div>
     <div>
+        <textarea id="paramdata"></textarea>
+        <input type="button" class="btn btn-default" id="btnupdate" onclick="update()" value="更新客户销售" />
+    </div>
+    <div>
         <span id="resultspan"></span>
     </div>
     <hr />
@@ -31,6 +35,26 @@
 </div>
 
 <script>
+    var update = function () {
+        $("#btnupdate").attr("disabled", true);    //隐藏一分钟
+        $("#resultspan").html("");
+        var serverUrl = "@Url.Content("~/")";
+        var mvcurl = serverUrl + "Admin/Update";
+        var paramdata = $("#paramdata").val();
+        alert(paramdata);
+        $.ajax({
+            type: 'POST',
+            url: mvcurl,
+            data: {
+                paramdata: $("#paramdata").val()
+            },
+            success: function (data) {
+                $("#resultspan").html(data);
+            }
+        });
+        $("#btnupdate").attr("disabled", false);    //隐藏一分钟
+    }
+
     var updatecompany = function () {
         $("#btnUpdateCompany").attr("disabled", true);    //隐藏一分钟
         $("#resultspan").html("");

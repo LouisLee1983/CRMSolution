@@ -231,6 +231,7 @@ namespace CrmWebApp.Controllers
             }
             ViewData["ChinaCityList"] = GetChinaCityList(otaCompany.CityName);
             ViewData["BusnessRangeList"] = GetParamDictList("业务类型", otaCompany.BusinessRange);
+            ViewData["BusinessStatusList"] = GetParamDictList("业务状态", otaCompany.BusinessStatus);
 
             return View(otaCompany);
         }

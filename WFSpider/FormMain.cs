@@ -519,7 +519,8 @@ namespace WFSpider
         {
             //计算页数，然后从第一页开始翻页
             int totalCount = int.Parse(textBoxCmsTotalcount.Text);
-            int pageCount = (totalCount + 1) / 30;
+            int pageCount = totalCount / 30;
+            pageCount++;
             List<CompanyCmsData> pagecmsList = new List<CompanyCmsData>();
             for (int i = 1; i <= pageCount; i++)
             {
@@ -529,6 +530,15 @@ namespace WFSpider
                 pagecmsList.AddRange(ccdList);
             }
 
+            string compactStr = "";
+            for (int i = 0; i < pagecmsList.Count; i++)
+            {
+                compactStr += pagecmsList[i].CmsId.Value.ToString() + "^" + pagecmsList[i].CompanyName + "^" + pagecmsList[i].TTSStatusDesp + "^" + pagecmsList[i].SalesName + "\r\n";
+            }
+            WriteFile(compactStr, "cms.txt", false);
+
+
+            CrmWebService.ApiWebServiceSoapClient ws = new ApiWebServiceSoapClient();
             //然后每个获取详情
             List<CompanyCmsData> result = new List<CompanyCmsData>();
             //每一个公司进去抓取更加详细的信息
@@ -538,17 +548,36 @@ namespace WFSpider
                 string detailhtml = GetCmsDetailHtml(pagecmsList[i].CmsId.Value);
                 //把html转成对象
                 CompanyCmsData dItem = GenerateCCD(detailhtml);
-                //重新赋值对象
-                dItem.CmsId = pagecmsList[i].CmsId;
-                dItem.CompanyName = pagecmsList[i].CompanyName;
-                dItem.TTSStatusDesp = pagecmsList[i].TTSStatusDesp;
-                dItem.SalesName = pagecmsList[i].SalesName;
-                result.Add(dItem);
-            }
+                if (dItem == null || string.IsNullOrEmpty(dItem.RealAddress))
+                {
+                    textBoxCmsResult.AppendText(pagecmsList[i].CmsId.Value.ToString() + ":失败\r\n");                    
+                }
+                else
+                {
+                    //重新赋值对象
+                    dItem.CmsId = pagecmsList[i].CmsId;
+                    dItem.CompanyName = pagecmsList[i].CompanyName;
+                    dItem.TTSStatusDesp = pagecmsList[i].TTSStatusDesp;
+                    dItem.SalesName = pagecmsList[i].SalesName;
+                    result.Add(dItem);
+                    textBoxCmsResult.AppendText(pagecmsList[i].CmsId.Value.ToString() + ":成功\r\n");
+                }
 
-            CrmWebService.ApiWebServiceSoapClient ws = new ApiWebServiceSoapClient();
-            string md5str = GetMd5Str(DateTime.Now.ToString("yyyyMMddHHmm00") + md5hashstr);
-            ws.InsertCompanyCms(result.ToArray(), md5str);
+                if (result.Count > 100)
+                {
+                    string md5str = GetMd5Str(DateTime.Now.ToString("yyyyMMddHHmm00") + md5hashstr);
+                    ws.InsertCompanyCms(result.ToArray(), md5str);
+                    textBoxCmsResult.AppendText("100");
+                    result = new List<CompanyCmsData>();
+                }
+            }
+            if(result.Count > 0)
+            {
+                string md5str = GetMd5Str(DateTime.Now.ToString("yyyyMMddHHmm00") + md5hashstr);
+                ws.InsertCompanyCms(result.ToArray(), md5str);
+                textBoxCmsResult.AppendText("100");
+                result = new List<CompanyCmsData>();
+            }
         }
 
         public string GetCmsPageHtml(int page, int totalCount)
@@ -602,7 +631,14 @@ namespace WFSpider
             doc.IHTMLDocument2_write(html);
 
             mshtml.IHTMLElement noteEle = doc.getElementById("note");   //公司简介
-            item.CompanyDesp = string.IsNullOrEmpty(noteEle.innerText) ? "" : noteEle.innerText.Trim();
+            if (noteEle != null)
+            {
+                item.CompanyDesp = string.IsNullOrEmpty(noteEle.innerText) ? "" : noteEle.innerText.Trim();
+            }
+            else
+            {
+                return null;
+            }
             mshtml.IHTMLElement ele = doc.getElementById("registeredAddress"); //注册地址
             if (ele.getAttribute("value") != null)
             {

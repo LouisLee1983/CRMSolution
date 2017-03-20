@@ -19,6 +19,28 @@ namespace CrmWebApp.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult Update(string paramdata)
+        {
+            string[] fields = paramdata.Split(new char[] { '-' });
+            string OrgName = fields[0];
+            string curName = fields[1];
+            //
+            OtaCrmModel db = new OtaCrmModel();
+            var q = from p in db.OtaCompany
+                    where p.SalesUserName == OrgName
+                    select p;
+            foreach (OtaCompany item in q)
+            {
+                item.SalesUserName = curName;
+            }
+            db.SaveChangesAsync();
+
+            return Content("完成");
+        }
+
         [Authorize(Roles = "Admin")]
         public ActionResult DelCompanyCmsData()
         {
