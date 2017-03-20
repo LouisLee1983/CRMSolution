@@ -20,6 +20,130 @@ namespace CrmWebApp.Controllers
             return View();
         }
 
+
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult UpdateLegal()
+        {
+            OtaCrmModel db = new OtaCrmModel();
+
+            var companycmss = from p in db.CompanyCmsData
+                              select p;
+            Dictionary<string, string> cmsDict = new Dictionary<string, string>();
+            foreach (CompanyCmsData cmsItem in companycmss)
+            {
+                if (!cmsDict.ContainsKey(cmsItem.CompanyName))
+                {
+                    cmsDict.Add(cmsItem.CompanyName, cmsItem.LegalPerson);
+                }
+            }
+
+            db = new OtaCrmModel();
+            var q = from o in db.OtaCompany
+                    select o;
+            List<OtaCompany> otacompanys = q.ToList();
+            foreach (OtaCompany cItem in otacompanys)
+            {
+                if (string.IsNullOrEmpty(cItem.LegalPerson) || cItem.LegalPerson == "未知")
+                {
+                    if (cmsDict.ContainsKey(cItem.CompanyName))
+                    {
+                        cItem.LegalPerson = cmsDict[cItem.CompanyName];
+                    }
+                }
+
+                if (string.IsNullOrEmpty(cItem.LegalPerson) || cItem.LegalPerson == "ww")
+                {
+                    cItem.LegalPerson = "未知";
+                }
+            }
+            db.SaveChangesAsync();
+            return Content("完成");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult GetCms()
+        {
+            StringBuilder sb = new StringBuilder();
+            OtaCrmModel db = new OtaCrmModel();
+            var q = from p in db.CompanyCmsData
+                    select p;
+            List<CompanyCmsData> cList = q.ToList();
+            foreach (CompanyCmsData item in cList)
+            {
+                sb.Append(item.CompanyName).Append("\t").Append(item.LegalPerson).Append("\r\n");
+            }
+            return Content(sb.ToString());
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult GetSalesName()
+        {
+            StringBuilder sb = new StringBuilder("公司名\t法人\t销售\r\n");
+            OtaCrmModel db = new OtaCrmModel();
+            var q = from p in db.OtaCompany
+                    select p;
+            List<OtaCompany> cList = q.ToList();
+            foreach (OtaCompany item in cList)
+            {
+                sb.Append(item.CompanyName).Append("\t").Append(item.LegalPerson).Append("\t").Append(item.SalesUserName).Append("\r\n");
+            }
+            return Content(sb.ToString());
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult UpdateSalesName(string paramdata)
+        {
+            string[] lines = paramdata.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            Dictionary<string, string> companyDict = new Dictionary<string, string>();
+            foreach (string line in lines)
+            {
+                string[] fields = line.Split(new char[] { '\t' });
+                string companyName = fields[0].Trim();
+                string salesName = fields[1].Trim();
+                if (!companyDict.ContainsKey(companyName))
+                {
+                    companyDict.Add(companyName, salesName);
+                }
+            }
+            OtaCrmModel db = new OtaCrmModel();
+            var q = from p in db.OtaCompany
+                    select p;
+            List<OtaCompany> cList = q.ToList();
+            foreach (OtaCompany item in cList)
+            {
+                if (companyDict.ContainsKey(item.CompanyName))
+                {
+                    item.SalesUserName = companyDict[item.CompanyName];
+                }
+                if (!string.IsNullOrEmpty(item.BusinessStatus))
+                {
+                    //更新业务
+                    string businessRange = "";
+                    if (item.BusinessStatus.Contains("国内"))
+                    {
+                        businessRange = "国内";
+                    }
+                    if (item.BusinessStatus.Contains("国际"))
+                    {
+                        businessRange = "国际";
+                    }
+                    if (item.BusinessStatus.Contains("国内") && item.BusinessStatus.Contains("国际"))
+                    {
+                        businessRange = "国内,国际";
+                    }
+                    item.BusinessRange = businessRange;
+                }
+            }
+            db.SaveChangesAsync();
+
+            return Content("完成");
+        }
+
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public ActionResult Update(string paramdata)

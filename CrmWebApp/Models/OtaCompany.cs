@@ -77,6 +77,7 @@
         [Display(Name = "状态")]
         public string BusinessStatus { get; set; }
 
+        [StringLength(50)]
         [Display(Name ="业务")]
         public string BusinessRange { get; set; }
 

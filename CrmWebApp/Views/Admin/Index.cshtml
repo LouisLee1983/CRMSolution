@@ -11,8 +11,13 @@
         <input type="button" class="btn btn-default" id="btndelcompany" onclick="delcompany()" value="清空旧" />
     </div>
     <div>
-        <textarea id="paramdata"></textarea>
+        <textarea id="paramdata" rows="10" cols="60"></textarea>
+        <br />
         <input type="button" class="btn btn-default" id="btnupdate" onclick="update()" value="更新客户销售" />
+        <input type="button" class="btn btn-default" id="btnUpdateSalesName" onclick="updateSalesName()" value="更新销售名字" />
+        <input type="button" class="btn btn-default" id="btnGetSalesName" onclick="getSalesName()" value="导出销售名字" />
+        <input type="button" class="btn btn-default" id="btnGetCms" onclick="getCms()" value="导出CMS" />
+        <input type="button" class="btn btn-default" id="btnupdateLegal" onclick="updateLegal()" value="更新客户法人" />
     </div>
     <div>
         <span id="resultspan"></span>
@@ -35,13 +40,80 @@
 </div>
 
 <script>
+
+    var updateLegal = function () {
+        $("#btnupdateLegal").attr("disabled", true);    //隐藏一分钟
+        $("#resultspan").html("");
+        var serverUrl = "@Url.Content("~/")";
+        var mvcurl = serverUrl + "Admin/UpdateLegal";
+        $.ajax({
+            type: 'POST',
+            url: mvcurl,
+            data: null,
+            success: function (data) {
+                $("#resultspan").html(data);
+            }
+        });
+        $("#btnupdateLegal").attr("disabled", false);    //隐藏一分钟
+    }
+
+    var getCms = function () {
+        $("#btnGetCms").attr("disabled", true);    //隐藏一分钟
+        $("#resultspan").html("");
+        var serverUrl = "@Url.Content("~/")";
+        var mvcurl = serverUrl + "Admin/GetCms";
+        $.ajax({
+            type: 'POST',
+            url: mvcurl,
+            data: null,
+            success: function (data) {
+                $("#paramdata").val(data);
+            }
+        });
+        $("#btnGetCms").attr("disabled", false);    //隐藏一分钟
+    }
+
+    var getSalesName = function () {
+        $("#btnGetSalesName").attr("disabled", true);    //隐藏一分钟
+        $("#resultspan").html("");
+        var serverUrl = "@Url.Content("~/")";
+        var mvcurl = serverUrl + "Admin/GetSalesName";
+        $.ajax({
+            type: 'POST',
+            url: mvcurl,
+            data: null,
+            success: function (data) {
+                $("#paramdata").val(data);
+            }
+        });
+        $("#btnGetSalesName").attr("disabled", false);    //隐藏一分钟
+    }
+
+    var updateSalesName = function () {
+        $("#btnUpdateSalesName").attr("disabled", true);    //隐藏一分钟
+        $("#resultspan").html("");
+        var serverUrl = "@Url.Content("~/")";
+        var mvcurl = serverUrl + "Admin/UpdateSalesName";
+        var paramdata = $("#paramdata").val();
+        $.ajax({
+            type: 'POST',
+            url: mvcurl,
+            data: {
+                paramdata: $("#paramdata").val()
+            },
+            success: function (data) {
+                $("#resultspan").html(data);
+            }
+        });
+        $("#btnUpdateSalesName").attr("disabled", false);    //隐藏一分钟
+    }
+
     var update = function () {
         $("#btnupdate").attr("disabled", true);    //隐藏一分钟
         $("#resultspan").html("");
         var serverUrl = "@Url.Content("~/")";
         var mvcurl = serverUrl + "Admin/Update";
         var paramdata = $("#paramdata").val();
-        alert(paramdata);
         $.ajax({
             type: 'POST',
             url: mvcurl,
