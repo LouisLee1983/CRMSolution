@@ -6,6 +6,9 @@
 
 @using (Html.BeginForm())
 {
+    List<string> businessRangeList = ViewData["BusinessRangeList"] as List<string>;
+    List<string> businessStatusList = ViewData["BusinessStatusList"] as List<string>;
+    List<string> salesNameList = ViewData["SalesNameList"] as List<string>;
     <hr />
     <div class="form-group">
         <table class="table">
@@ -17,16 +20,28 @@
                         @Html.DisplayFor(e => Model[i].CompanyName, new { htmlAttributes = new { @class = "form-control" } })
                     </td>
                     <td>
-                        @foreach (var businessRange in ViewData["BusinessRangeList"] as List<string>)
+                        @for (int b = 0; b < businessRangeList.Count; b++)
                         {
-                            @Html.RadioButton("rb" + trId, businessRange, businessRange == Model[i].BusinessRange)
-                            <label for="@("rb"+trId)">@businessRange</label>
+                            <input type="radio" name="@("rbbr"+trId.ToString())" id="@("rbbr"+trId.ToString()+"_"+b.ToString())" value="@businessRangeList[b]" @(businessRangeList[b] == Model[i].BusinessRange ? "checked='checked'" : "") />
+                            <label for="@("rbbr"+trId.ToString())">@businessRangeList[b]</label>
                         }
                     </td>
-                    <td></td>
-                    <td></td>
                     <td>
-                        <input class="btn btn-default" id='@("btn"+trId)' value="保存" onclick="SaveEdit(@trId)" />
+                        @for (int b = 0; b < businessStatusList.Count; b++)
+                        {
+                            <input type="radio" name="@("rbbs"+trId.ToString())" id="@("rbbs"+trId.ToString()+"_"+b.ToString())" value="@businessStatusList[b]" @(businessStatusList[b] == Model[i].BusinessStatus ? "checked='checked'" : "") />
+                            <label for="@("rbbs"+trId.ToString())">@businessStatusList[b]</label>
+                        }
+                    </td>
+                    <td>
+                        @for (int b = 0; b < salesNameList.Count; b++)
+                        {
+                            <input type="radio" name="@("rbsn"+trId.ToString())" id="@("rbsn"+trId.ToString()+"_"+b.ToString())" value="@salesNameList[b]" @(salesNameList[b] == Model[i].SalesUserName ? "checked='checked'" : "") />
+                            <label for="@("rbsn"+trId.ToString())">@salesNameList[b]</label>
+                        }
+                    </td>
+                    <td>
+                        <a href="#" class="btn btn-default" id="@("btn"+trId)" onclick="SaveEdit(@trId)">保存</a>
                     </td>
                 </tr>
             }
@@ -38,10 +53,9 @@
 <script>
     var SaveEdit = function (trid) {
         var id = trid;
-        var businessRange = $("#BusinessRange" + trid).find("option:selected").val();
-        var businessStatus = $("#BusinessStatus" + trid).find("option:selected").val();
-        var salesName = $("#SalesName" + trid).find("option:selected").val();
-        alert(id + businessRange + businessStatus + salesName);
+        var businessRange = $("input[name=rbbr" + trid + "]:checked").val();
+        var businessStatus = $("input[name=rbbs" + trid + "]:checked").val();
+        var salesName = $("input[name=rbsn" + trid + "]:checked").val();
 
         var serverUrl = "@Url.Content("~/")";
         var mvcurl = serverUrl + "OtaCompanies/EditCompanySingle";
@@ -55,7 +69,7 @@
                 salesName: salesName
             },
             success: function (data) {
-                $("#btn" + trid).attr("value", "保存成功");
+                $("#btn" + trid).html("成功");
             }
         });
     }

@@ -109,10 +109,10 @@ namespace CrmWebApp.Controllers
             string realName = ac.GetRealName(User.Identity.Name);
             var model = new List<CompanyEditViewModel>();
             //把未知的和自己的客户列出去，未知的排在前面。然后用radio的方式给展示
-            var q = (from p in db.OtaCompany
-                     where p.SalesUserName == "未知" || p.SalesUserName == realName
-                     orderby p.LastMeetingDate, p.SalesUserName
-                     select p).Take(50);
+            var q = from p in db.OtaCompany
+                    where p.SalesUserName == "未知" || p.SalesUserName == realName
+                    orderby p.CreateTime, p.SalesUserName
+                    select p;
             foreach (OtaCompany item in q)
             {
                 CompanyEditViewModel editItem = new CompanyEditViewModel();
@@ -145,8 +145,8 @@ namespace CrmWebApp.Controllers
             OtaCompany.BusinessRange = businessRange;
             OtaCompany.BusinessStatus = businessStatus;
             OtaCompany.SalesUserName = salesName;
-            OtaCompany.LastMeetingDate = DateTime.Today;
-            db.SaveChangesAsync();
+            OtaCompany.CreateTime = DateTime.Now;
+            db.SaveChanges();
             return Content("更新完成.");
         }
 

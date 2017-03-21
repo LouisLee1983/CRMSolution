@@ -44,16 +44,16 @@ namespace CrmWebApp.Models
         [Display(Name = "人员投入")]
         public List<CompanySalesDailySalesSource> SalesSourceList { get; set; }
 
-        [Display(Name = "产品销量")]
+        [Display(Name = "产品销量(张/天)")]
         public List<CompanySalesDailyProductDesp> SalesProductDespList { get; set; }
 
-        [Display(Name = "产品比例")]
+        [Display(Name = "产品比例%")]
         public List<CompanySalesDailyParam> SalesProductPercentList { get; set; }
 
-        [Display(Name = "营收信息")]
+        [Display(Name = "营收信息(元)")]
         public List<CompanySalesDailyParam> SalesProfitList { get; set; }
         
-        [Display(Name = "资金情况")]
+        [Display(Name = "资金情况(万)")]
         public List<CompanySalesDailyFund> SalesFundList { get; set; }
 
         public CompanySalesDailyViewModel() { }

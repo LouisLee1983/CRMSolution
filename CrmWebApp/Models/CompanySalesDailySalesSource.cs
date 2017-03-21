@@ -19,9 +19,9 @@
         public string SaleSource { get; set; }
         [Display(Name = "投入人数")]
         public int? EmployeeCount { get; set; }
-        [Display(Name = "票量")]
+        [Display(Name = "日均票量")]
         public int? TicketCount { get; set; }
-        [Display(Name = "人均工资")]
+        [Display(Name = "人均工资(元/月)")]
         public int? EmployeePayment { get; set; }
     }
 }

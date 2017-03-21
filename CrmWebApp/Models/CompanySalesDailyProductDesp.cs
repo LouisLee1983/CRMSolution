@@ -21,7 +21,7 @@
         [StringLength(50)]
         [Display(Name = "产品类型")]
         public string SalesProduct { get; set; }
-        [Display(Name = "销量")]
+        [Display(Name = "日均票量")]
         public int? SalesCount { get; set; }
     }
 }

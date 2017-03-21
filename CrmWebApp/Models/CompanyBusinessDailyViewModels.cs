@@ -38,11 +38,11 @@ namespace CrmWebApp.Models
 
         [Display(Name ="员工数量")]
         public List<CompanyBusinessDailyParam> EmployeeList { get; set; }
-        [Display(Name = "软件系统")]
+        [Display(Name = "软件系统(1有)")]
         public List<CompanyBusinessDailyParam> ItSystemList { get; set; }
-        [Display(Name = "业务结构")]
+        [Display(Name = "业务结构(张/天)")]
         public List<CompanyBusinessDailyParam> BusinessAmountList { get; set; }
-        [Display(Name = "新业务量")]
+        [Display(Name = "新业务量(单/天)")]
         public List<CompanyBusinessDailyParam> NewBusinessList { get; set; }
         [Display(Name = "照片")]
         public List<CompanyBusinessDailyPhoto> PhotoList { get; set; }

@@ -95,8 +95,8 @@
                         <tr>
                             <th>渠道</th>
                             <th>人数</th>
-                            <th>票量</th>
-                            <th>人均工资</th>
+                            <th>票量(张/天)</th>
+                            <th>人均工资(元/月)</th>
                         </tr>
                         @for (int i = 0; i < Model.SalesSourceList.Count; i++)
                         {
@@ -105,7 +105,7 @@
                                 @Html.HiddenFor(e => Model.SalesSourceList[i].Id, new { htmlAttributes = new { @class = "form-control" } })
                                 @Html.HiddenFor(e => Model.SalesSourceList[i].CompanySalesDailyId, new { htmlAttributes = new { @class = "form-control" } })
                                 <td>
-                                    @Html.EditorFor(e => Model.SalesSourceList[i].SaleSource, new { htmlAttributes = new { @class = "form-control",id=trid+ "SubItem" } })
+                                    @Html.EditorFor(e => Model.SalesSourceList[i].SaleSource, new { htmlAttributes = new { @class = "form-control", id = trid + "SubItem" } })
                                 </td>
                                 <td>
                                     @Html.EditorFor(e => Model.SalesSourceList[i].EmployeeCount, new { htmlAttributes = new { @class = "form-control" } })
@@ -137,7 +137,7 @@
                         <tr>
                             <th>渠道</th>
                             <th>产品</th>
-                            <th>票量</th>
+                            <th>票量(张/天)</th>
                         </tr>
                         @for (int i = 0; i < Model.SalesProductDespList.Count; i++)
                         {
@@ -174,7 +174,7 @@
                     <table class="table">
                         <tr>
                             <th>产品</th>
-                            <th>占比</th>
+                            <th>占比%</th>
                         </tr>
                         @for (int i = 0; i < Model.SalesProductPercentList.Count; i++)
                         {
@@ -184,7 +184,7 @@
                                 @Html.HiddenFor(e => Model.SalesProductPercentList[i].CompanySalesDailyId, new { htmlAttributes = new { @class = "form-control" } })
                                 @Html.HiddenFor(e => Model.SalesProductPercentList[i].ParamName, new { htmlAttributes = new { @class = "form-control" } })
                                 <td>
-                                    @Html.EditorFor(e => Model.SalesProductPercentList[i].SubParamItem, new { htmlAttributes = new { @class = "form-control" ,id=trid +"SubItem"} })
+                                    @Html.EditorFor(e => Model.SalesProductPercentList[i].SubParamItem, new { htmlAttributes = new { @class = "form-control", id = trid + "SubItem" } })
                                 </td>
                                 <td>
                                     @Html.EditorFor(e => Model.SalesProductPercentList[i].ItemAmount, new { htmlAttributes = new { @class = "form-control" } })
@@ -208,7 +208,7 @@
                     <table class="table">
                         <tr>
                             <th>营收项</th>
-                            <th>利润</th>
+                            <th>利润(元)</th>
                         </tr>
                         @for (int i = 0; i < Model.SalesProfitList.Count; i++)
                         {
@@ -243,9 +243,9 @@
                     <table class="table">
                         <tr>
                             <th>渠道</th>
-                            <th>押款</th>
-                            <th>流动资金</th>
-                            <th>资金缺口</th>
+                            <th>押款(万)</th>
+                            <th>流动(万)</th>
+                            <th>缺口(万)</th>
                         </tr>
                         @for (int i = 0; i < Model.SalesFundList.Count; i++)
                         {

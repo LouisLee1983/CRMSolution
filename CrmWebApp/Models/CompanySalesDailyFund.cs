@@ -17,13 +17,13 @@
         [StringLength(50)]
         [Display(Name = "渠道")]
         public string SalesSource { get; set; }
-        [Display(Name = "押款")]
+        [Display(Name = "押款(万)")]
         public int? FreezeFund { get; set; }
 
-        [Display(Name = "流动资金")]
+        [Display(Name = "流动资金(万)")]
         public int? WorkingFund { get; set; }
 
-        [Display(Name = "缺少资金")]
+        [Display(Name = "缺少资金(万)")]
         public int? NeededFund { get; set; }
     }
 }
