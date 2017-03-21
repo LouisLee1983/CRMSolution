@@ -26,7 +26,7 @@
         public string LegalPersonIdNo { get; set; }
 
         [StringLength(50)]
-        [Display(Name = "法人电话")]
+        [Display(Name = "老板电话")]
         public string LegalPersonPhone { get; set; }
 
         [StringLength(128)]

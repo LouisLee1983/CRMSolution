@@ -60,7 +60,7 @@ namespace CrmWebApp.Controllers
                     //销售只能看到本人的                    
                     AccountController ac = new AccountController();
                     string realName = ac.GetRealName(User.Identity.Name);
-                    otaCompanys = otaCompanys.Where(p => p.SalesUserName == realName);
+                    otaCompanys = otaCompanys.Where(p => p.SalesUserName == realName || p.SalesUserName == "未知");
                 }
             }
             //搜索
@@ -103,6 +103,54 @@ namespace CrmWebApp.Controllers
         }
 
         [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
+        public ActionResult EditCompanyAll()
+        {
+            AccountController ac = new AccountController();
+            string realName = ac.GetRealName(User.Identity.Name);
+            var model = new List<CompanyEditViewModel>();
+            //把未知的和自己的客户列出去，未知的排在前面。然后用radio的方式给展示
+            var q = (from p in db.OtaCompany
+                     where p.SalesUserName == "未知" || p.SalesUserName == realName
+                     orderby p.LastMeetingDate, p.SalesUserName
+                     select p).Take(50);
+            foreach (OtaCompany item in q)
+            {
+                CompanyEditViewModel editItem = new CompanyEditViewModel();
+                editItem.BusinessRange = item.BusinessRange;
+                editItem.BusinessStatus = item.BusinessStatus;
+                editItem.CompanyName = item.CompanyName;
+                editItem.Id = item.Id;
+                editItem.SalesUserName = item.SalesUserName;
+                model.Add(editItem);
+            }
+            var BusinessRangeList = (from p in db.ParamDict
+                                     where p.ParamName == "业务类型"
+                                     select p.SubItemName).ToList();
+            ViewData["BusinessRangeList"] = BusinessRangeList;
+            var BusinessStatusList = (from p in db.ParamDict
+                                      where p.ParamName == "业务状态"
+                                      select p.SubItemName).ToList();
+            ViewData["BusinessStatusList"] = BusinessStatusList;
+
+            ViewData["SalesNameList"] = new List<string>() { "未知", realName };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
+        public ActionResult EditCompanySingle(int id, string businessRange, string businessStatus, string salesName)
+        {
+            var OtaCompany = db.OtaCompany.FirstOrDefault(p => p.Id == id);
+            OtaCompany.BusinessRange = businessRange;
+            OtaCompany.BusinessStatus = businessStatus;
+            OtaCompany.SalesUserName = salesName;
+            OtaCompany.LastMeetingDate = DateTime.Today;
+            db.SaveChangesAsync();
+            return Content("更新完成.");
+        }
+
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         // GET: OtaCompanies/Details/5
         public async Task<ActionResult> Details(int? id)
         {
@@ -136,6 +184,35 @@ namespace CrmWebApp.Controllers
             ViewData["BusinessStatusList"] = GetParamDictList("业务状态", "在线");
 
             return View(model);
+        }
+
+        private List<SelectListItem> GetSalesNameList(string defaultValue)
+        {
+            List<string> realNameList = (from p in db.AspNetUsers
+                                         select p.TrueName).ToList();
+            List<SelectListItem> result = new List<SelectListItem>();
+
+            SelectListItem selectItem = new SelectListItem();
+            selectItem.Value = "未知";
+            selectItem.Text = "未知";
+            if (string.IsNullOrEmpty(defaultValue))
+            {
+                selectItem.Selected = true;
+            }
+            result.Add(selectItem);
+            foreach (string realName in realNameList)
+            {
+                selectItem = new SelectListItem();
+                selectItem.Value = realName;
+                selectItem.Text = realName;
+                if (defaultValue == realName)
+                {
+                    selectItem.Selected = true;
+                }
+                result.Add(selectItem);
+            }
+
+            return result;
         }
 
         private List<SelectListItem> GetParamDictList(string paramName, string defaultValue)
@@ -229,8 +306,9 @@ namespace CrmWebApp.Controllers
             {
                 return HttpNotFound();
             }
+            //如果状态不在范围内，需要重置
             ViewData["ChinaCityList"] = GetChinaCityList(otaCompany.CityName);
-            ViewData["BusnessRangeList"] = GetParamDictList("业务类型", otaCompany.BusinessRange);
+            ViewData["BusinessRangeList"] = GetParamDictList("业务类型", otaCompany.BusinessRange);
             ViewData["BusinessStatusList"] = GetParamDictList("业务状态", otaCompany.BusinessStatus);
 
             return View(otaCompany);

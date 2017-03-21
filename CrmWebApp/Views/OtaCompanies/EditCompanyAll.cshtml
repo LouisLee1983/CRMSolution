@@ -1,0 +1,62 @@
+﻿@model List<CrmWebApp.Models.CompanyEditViewModel>
+
+@{
+    ViewBag.Title = "批量编辑客户资料";
+}
+
+@using (Html.BeginForm())
+{
+    <hr />
+    <div class="form-group">
+        <table class="table">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                var trId = Model[i].Id;
+                <tr id="@("tr"+trId)">
+                    <td>
+                        @Html.DisplayFor(e => Model[i].CompanyName, new { htmlAttributes = new { @class = "form-control" } })
+                    </td>
+                    <td>
+                        @foreach (var businessRange in ViewData["BusinessRangeList"] as List<string>)
+                        {
+                            @Html.RadioButton("rb" + trId, businessRange, businessRange == Model[i].BusinessRange)
+                            <label for="@("rb"+trId)">@businessRange</label>
+                        }
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <input class="btn btn-default" id='@("btn"+trId)' value="保存" onclick="SaveEdit(@trId)" />
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+    <hr />
+}
+
+<script>
+    var SaveEdit = function (trid) {
+        var id = trid;
+        var businessRange = $("#BusinessRange" + trid).find("option:selected").val();
+        var businessStatus = $("#BusinessStatus" + trid).find("option:selected").val();
+        var salesName = $("#SalesName" + trid).find("option:selected").val();
+        alert(id + businessRange + businessStatus + salesName);
+
+        var serverUrl = "@Url.Content("~/")";
+        var mvcurl = serverUrl + "OtaCompanies/EditCompanySingle";
+        $.ajax({
+            type: 'POST',
+            url: mvcurl,
+            data: {
+                id: id,
+                businessRange: businessRange,
+                businessStatus: businessStatus,
+                salesName: salesName
+            },
+            success: function (data) {
+                $("#btn" + trid).attr("value", "保存成功");
+            }
+        });
+    }
+</script>

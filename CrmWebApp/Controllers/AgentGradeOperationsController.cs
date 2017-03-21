@@ -32,55 +32,7 @@ namespace CrmWebApp.Controllers
             }
             return View(result);
         }
-        [Authorize(Roles = "Admin")]
-        public void ImportCompany()
-        {
-            var cityList = (from cc in db.ChinaCity select cc).ToList();
-
-            var exsitNames = (from c in db.OtaCompany select c.CompanyName).Distinct();
-            List<string> exsitNameList = exsitNames.ToList();
-
-            var q = (from p in db.AgentGradeOperation
-                     select p.agentName).Distinct();
-            foreach (string companyName in q)
-            {
-                if (string.IsNullOrEmpty(companyName) || exsitNameList.Contains(companyName))
-                {
-                    continue;
-                }
-                OtaCompany newItem = new OtaCompany();
-                newItem.BossBackground = "";
-                newItem.BossBusinessDesp = "";
-                newItem.BossIdNo = "";
-                newItem.CompanyName = companyName;
-                newItem.CreateTime = DateTime.Now;
-                newItem.BossName = "";
-                newItem.BusinessRange = "";
-                newItem.CapitalAsserts = "";
-                newItem.CityName = "";
-
-                foreach (var city in cityList)
-                {
-                    if (companyName.Contains(city.CityName.Replace("市", "")))
-                    {
-                        newItem.CityName = city.ProvinceName + "-" + city.CityName;
-                        break;
-                    }
-                }
-
-                newItem.LegalPerson = "ww";
-                newItem.LegalPersonIdNo = "";
-                newItem.LegalPersonPhone = "";
-                newItem.OfficeNo = "";
-                newItem.OtherInvest = "";
-                newItem.RealAddress = "";
-                newItem.RegisterAddress = "";
-                newItem.SalesUserName = "ljy";
-
-                db.OtaCompany.Add(newItem);
-            }
-            db.SaveChanges();
-        }
+        
 
         // GET: AgentGradeOperations/Details/5
         [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]

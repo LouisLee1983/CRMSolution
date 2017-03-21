@@ -186,6 +186,8 @@ namespace CrmWebApp.Controllers
                 model.ItSystemList = GetDefaultDailyParamList(id.Value, "软件系统");
             }
 
+            ViewData["BussinessTypeList"] = GetBussinessTypeList(companyBusinessDaily.BussinessType);
+
             return View(model);
         }
 
@@ -221,6 +223,7 @@ namespace CrmWebApp.Controllers
         {
             CompanyBusinessDaily companyBusinessDaily = db.CompanyBusinessDaily.FirstOrDefault(p => p.Id == model.Id);
             companyBusinessDaily.BussinessLogDate = model.BussinessLogDate;
+            companyBusinessDaily.BussinessType = model.BussinessType;
             companyBusinessDaily.ManagerName = model.ManagerName;
             await db.SaveChangesAsync();    //看看保存运营记录，保存相关的具体运营信息
 

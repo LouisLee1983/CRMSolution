@@ -9,12 +9,15 @@
     <div>
         <input type="button" class="btn btn-default" id="btnUpdateCompany" onclick="updatecompany()" value="更新客户资料" />
         <input type="button" class="btn btn-default" id="btndelcompany" onclick="delcompany()" value="清空旧" />
+        <input type="button" class="btn btn-default" id="btnImportCompanyFromCms" onclick="ImportCompanyFromCms()" value="导入CMS客户" />
+        <input type="button" class="btn btn-default" id="btnImportCompanyFromAgentGrade" onclick="ImportCompanyFromAgentGrade()" value="导入评分客户" />
+        <input type="button" class="btn btn-default" id="btnUpdateCompanyStatus" onclick="UpdateCompanyStatus()" value="更新客户状态" />
     </div>
     <div>
         <textarea id="paramdata" rows="10" cols="60"></textarea>
         <br />
-        <input type="button" class="btn btn-default" id="btnupdate" onclick="update()" value="更新客户销售" />
-        <input type="button" class="btn btn-default" id="btnUpdateSalesName" onclick="updateSalesName()" value="更新销售名字" />
+        <input type="button" class="btn btn-default" id="btnupdate" onclick="update()" value="更新销售abc-bbb" />
+        <input type="button" class="btn btn-default" id="btnUpdateSalesName" onclick="updateSalesName()" value="更新销售公司-销售" />
         <input type="button" class="btn btn-default" id="btnGetSalesName" onclick="getSalesName()" value="导出销售名字" />
         <input type="button" class="btn btn-default" id="btnGetCms" onclick="getCms()" value="导出CMS" />
         <input type="button" class="btn btn-default" id="btnupdateLegal" onclick="updateLegal()" value="更新客户法人" />
@@ -40,6 +43,53 @@
 </div>
 
 <script>
+    var UpdateCompanyStatus = function () {
+        $("#btnUpdateCompanyStatus").attr("disabled", true);    //隐藏一分钟
+        $("#resultspan").html("");
+        var serverUrl = "@Url.Content("~/")";
+        var mvcurl = serverUrl + "Admin/UpdateCompanyStatus";
+        $.ajax({
+            type: 'POST',
+            url: mvcurl,
+            data: null,
+            success: function (data) {
+                $("#resultspan").html(data);
+            }
+        });
+        $("#btnUpdateCompanyStatus").attr("disabled", false);    //隐藏一分钟
+    }
+
+    var ImportCompanyFromAgentGrade = function () {
+        $("#btnImportCompanyFromAgentGrade").attr("disabled", true);    //隐藏一分钟
+        $("#resultspan").html("");
+        var serverUrl = "@Url.Content("~/")";
+        var mvcurl = serverUrl + "Admin/ImportCompanyFromAgentGrade";
+        $.ajax({
+            type: 'POST',
+            url: mvcurl,
+            data: null,
+            success: function (data) {
+                $("#resultspan").html(data);
+            }
+        });
+        $("#btnImportCompanyFromAgentGrade").attr("disabled", false);    //隐藏一分钟
+    }
+
+    var ImportCompanyFromCms = function () {
+        $("#btnImportCompanyFromCms").attr("disabled", true);    //隐藏一分钟
+        $("#resultspan").html("");
+        var serverUrl = "@Url.Content("~/")";
+        var mvcurl = serverUrl + "Admin/ImportCompanyFromCms";
+        $.ajax({
+            type: 'POST',
+            url: mvcurl,
+            data: null,
+            success: function (data) {
+                $("#resultspan").html(data);
+            }
+        });
+        $("#btnImportCompanyFromCms").attr("disabled", false);    //隐藏一分钟
+    }
 
     var updateLegal = function () {
         $("#btnupdateLegal").attr("disabled", true);    //隐藏一分钟

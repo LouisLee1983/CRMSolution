@@ -238,6 +238,7 @@
     <Compile Include="Models\CompanyBusinessDailyViewModels.cs" />
     <Compile Include="Models\CompanyCertificate.cs" />
     <Compile Include="Models\CompanyCmsData.cs" />
+    <Compile Include="Models\CompanyEditViewModel.cs" />
     <Compile Include="Models\CompanyMedia.cs" />
     <Compile Include="Models\CompanyMeeting.cs" />
     <Compile Include="Models\CompanyMeetingSubject.cs" />
@@ -651,6 +652,7 @@
     <Content Include="Views\AgentGradeOperations\Index.cshtml" />
     <Content Include="Views\Account\QunarLogin.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\OtaCompanies\EditCompanyAll.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CompanyImages\Reports\" />

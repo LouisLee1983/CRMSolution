@@ -296,6 +296,7 @@ namespace CrmWebApp.Controllers
                 dailyItem.ManagerName = model.ManagerName;
                 dailyItem.ManagerPhone = model.ManagerPhone;
                 dailyItem.SalesLogDate = model.SalesLogDate;
+                dailyItem.SalesType = model.SalesType;
                 await db.SaveChangesAsync();    //看看保存运营记录，保存相关的具体运营信息
 
                 UpdateCompanySalesDailySalesSource(model.Id, salesSourceList);

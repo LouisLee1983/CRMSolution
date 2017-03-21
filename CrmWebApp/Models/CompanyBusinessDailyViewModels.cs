@@ -17,7 +17,6 @@ namespace CrmWebApp.Models
         public string CompanyName { get; set; }
 
         [StringLength(50)]
-        [Required(ErrorMessage = "选择业务类型")]
         [Display(Name = "业务类型")]
         public string BussinessType { get; set; }
 

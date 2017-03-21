@@ -20,7 +20,169 @@ namespace CrmWebApp.Controllers
             return View();
         }
 
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult UpdateCompanyStatus()
+        {
+            OtaCrmModel db = new OtaCrmModel();
+            List<string> salesList = (from p in db.AspNetUsers
+                                      select p.TrueName).ToList();
+            salesList.Add("自营");
+            salesList.Add("携程");
+            var q = from p in db.OtaCompany
+                    select p;
+            foreach (OtaCompany item in q)
+            {
+                if (string.IsNullOrEmpty(item.BusinessRange) || !"国内,国际".Contains(item.BusinessRange))
+                {
+                    item.BusinessRange = "国内";
+                }
+                if (string.IsNullOrEmpty(item.BusinessStatus)|| !"在线,下线,终止,待终止,待上线".Contains(item.BusinessStatus))
+                {
+                    item.BusinessStatus = "在线";
+                }
+                //销售名字+自营，如果不在内得，需要更新为未知
+                if (!salesList.Contains(item.SalesUserName))
+                {
+                    item.SalesUserName = "未知";
+                }
+            }
+            db.SaveChangesAsync();
+            return Content("更新完成.");
+        }
 
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult ImportCompanyFromCms()
+        {
+            OtaCrmModel db = new OtaCrmModel();
+            var cityList = (from cc in db.ChinaCity select cc).ToList();
+
+            var exsitNames = (from c in db.OtaCompany select c.CompanyName).Distinct();
+            List<string> exsitNameList = exsitNames.ToList();
+
+            var q = (from p in db.CompanyCmsData
+                     select p);
+            int count = 0;
+            foreach (CompanyCmsData cmsItem in q)
+            {
+                string companyName = cmsItem.CompanyName;
+                if (string.IsNullOrEmpty(companyName) || exsitNameList.Contains(companyName))
+                {
+                    continue;
+                }
+                OtaCompany newItem = new OtaCompany();
+                newItem.BossBackground = cmsItem.BossBackground;
+                newItem.BossBusinessDesp = "";
+                newItem.BossIdNo = "";
+                newItem.CompanyName = companyName;
+                newItem.CreateTime = DateTime.Now;
+                newItem.BossName = cmsItem.ContactPerson;
+                string businessRange = "";
+                if (!string.IsNullOrEmpty(cmsItem.GuojiWebName))
+                {
+                    businessRange = "国内";
+                }
+                if (!string.IsNullOrEmpty(cmsItem.GuojiWebName))
+                {
+                    businessRange = "国际";
+                }
+                if (!string.IsNullOrEmpty(cmsItem.GuojiWebName) && !string.IsNullOrEmpty(cmsItem.GuojiWebName))
+                {
+                    businessRange = "国内,国际";
+                }
+                newItem.BusinessRange = businessRange;
+                string businessStatus = "在线";
+                if (!string.IsNullOrEmpty(cmsItem.TTSStatusDesp) && cmsItem.TTSStatusDesp.Contains("终止"))
+                {
+                    businessStatus = "终止";
+                }
+                newItem.BusinessStatus = businessStatus;
+                newItem.CapitalAsserts = "";
+                newItem.CityName = "";
+
+                foreach (var city in cityList)
+                {
+                    if (!string.IsNullOrEmpty(cmsItem.RealAddress) && cmsItem.RealAddress.Contains(city.CityName.Replace("市", "")))
+                    {
+                        newItem.CityName = city.ProvinceName + "-" + city.CityName;
+                        break;
+                    }
+                }
+
+                newItem.LegalPerson = string.IsNullOrEmpty(cmsItem.LegalPerson) ? "未知" : cmsItem.LegalPerson;
+                newItem.LegalPersonIdNo = "";
+                newItem.LegalPersonPhone = cmsItem.ContactPhone;
+                newItem.OfficeNo = "";
+                newItem.OtherInvest = "";
+                newItem.RealAddress = cmsItem.RealAddress;
+                newItem.RegisterAddress = cmsItem.RegisterAddress;
+                newItem.SalesUserName = cmsItem.SalesName;
+
+                db.OtaCompany.Add(newItem);
+                count++;
+            }
+            db.SaveChanges();
+
+            return Content("导入成功:" + count.ToString());
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult ImportCompanyFromAgentGrade()
+        {
+            OtaCrmModel db = new OtaCrmModel();
+            var cityList = (from cc in db.ChinaCity select cc).ToList();
+
+            var exsitNames = (from c in db.OtaCompany select c.CompanyName).Distinct();
+            List<string> exsitNameList = exsitNames.ToList();
+
+            var q = (from p in db.AgentGradeOperation
+                     select p.agentName).Distinct();
+            int count = 0;
+            foreach (string companyName in q)
+            {
+                if (string.IsNullOrEmpty(companyName) || exsitNameList.Contains(companyName))
+                {
+                    continue;
+                }
+                OtaCompany newItem = new OtaCompany();
+                newItem.BossBackground = "";
+                newItem.BossBusinessDesp = "";
+                newItem.BossIdNo = "";
+                newItem.CompanyName = companyName;
+                newItem.CreateTime = DateTime.Now;
+                newItem.BossName = "";
+                newItem.BusinessRange = "国内";
+                newItem.BusinessStatus = "在线";
+                newItem.CapitalAsserts = "";
+                newItem.CityName = "";
+
+                foreach (var city in cityList)
+                {
+                    if (companyName.Contains(city.CityName.Replace("市", "")))
+                    {
+                        newItem.CityName = city.ProvinceName + "-" + city.CityName;
+                        break;
+                    }
+                }
+
+                newItem.LegalPerson = "未知";
+                newItem.LegalPersonIdNo = "";
+                newItem.LegalPersonPhone = "";
+                newItem.OfficeNo = "";
+                newItem.OtherInvest = "";
+                newItem.RealAddress = "";
+                newItem.RegisterAddress = "";
+                newItem.SalesUserName = "未知";
+
+                db.OtaCompany.Add(newItem);
+                count++;
+            }
+            db.SaveChanges();
+
+            return Content("导入成功:" + count.ToString());
+        }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
@@ -73,7 +235,7 @@ namespace CrmWebApp.Controllers
             List<CompanyCmsData> cList = q.ToList();
             foreach (CompanyCmsData item in cList)
             {
-                sb.Append(item.CompanyName).Append("\t").Append(item.LegalPerson).Append("\r\n");
+                sb.Append(item.CompanyName).Append("\t").Append(item.LegalPerson).Append("\t").Append(item.TTSStatusDesp).Append("\r\n");
             }
             return Content(sb.ToString());
         }
@@ -119,25 +281,7 @@ namespace CrmWebApp.Controllers
                 if (companyDict.ContainsKey(item.CompanyName))
                 {
                     item.SalesUserName = companyDict[item.CompanyName];
-                }
-                if (!string.IsNullOrEmpty(item.BusinessStatus))
-                {
-                    //更新业务
-                    string businessRange = "";
-                    if (item.BusinessStatus.Contains("国内"))
-                    {
-                        businessRange = "国内";
-                    }
-                    if (item.BusinessStatus.Contains("国际"))
-                    {
-                        businessRange = "国际";
-                    }
-                    if (item.BusinessStatus.Contains("国内") && item.BusinessStatus.Contains("国际"))
-                    {
-                        businessRange = "国内,国际";
-                    }
-                    item.BusinessRange = businessRange;
-                }
+                }                
             }
             db.SaveChangesAsync();
 
