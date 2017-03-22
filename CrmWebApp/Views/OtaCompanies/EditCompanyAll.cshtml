@@ -8,9 +8,9 @@
 {
     List<string> businessRangeList = ViewData["BusinessRangeList"] as List<string>;
     List<string> businessStatusList = ViewData["BusinessStatusList"] as List<string>;
-    List<string> salesNameList = ViewData["SalesNameList"] as List<string>;
-    <hr />
+    List<string> salesNameList = ViewData["SalesNameList"] as List<string>;    
     <div class="form-group">
+        @Html.ActionLink("下一批","EditCompanyAll")
         <table class="table">
             @for (int i = 0; i < Model.Count; i++)
             {
@@ -23,25 +23,25 @@
                         @for (int b = 0; b < businessRangeList.Count; b++)
                         {
                             <input type="radio" name="@("rbbr"+trId.ToString())" id="@("rbbr"+trId.ToString()+"_"+b.ToString())" value="@businessRangeList[b]" @(businessRangeList[b] == Model[i].BusinessRange ? "checked='checked'" : "") />
-                            <label for="@("rbbr"+trId.ToString())">@businessRangeList[b]</label>
+                            <label for="@("rbbr"+trId.ToString()+"_"+b.ToString())">@businessRangeList[b]</label>
                         }
                     </td>
                     <td>
                         @for (int b = 0; b < businessStatusList.Count; b++)
                         {
                             <input type="radio" name="@("rbbs"+trId.ToString())" id="@("rbbs"+trId.ToString()+"_"+b.ToString())" value="@businessStatusList[b]" @(businessStatusList[b] == Model[i].BusinessStatus ? "checked='checked'" : "") />
-                            <label for="@("rbbs"+trId.ToString())">@businessStatusList[b]</label>
+                            <label for="@("rbbs"+trId.ToString()+"_"+b.ToString())">@businessStatusList[b]</label>
                         }
                     </td>
                     <td>
                         @for (int b = 0; b < salesNameList.Count; b++)
                         {
                             <input type="radio" name="@("rbsn"+trId.ToString())" id="@("rbsn"+trId.ToString()+"_"+b.ToString())" value="@salesNameList[b]" @(salesNameList[b] == Model[i].SalesUserName ? "checked='checked'" : "") />
-                            <label for="@("rbsn"+trId.ToString())">@salesNameList[b]</label>
+                            <label for="@("rbsn"+trId.ToString()+"_"+b.ToString())">@salesNameList[b]</label>
                         }
                     </td>
                     <td>
-                        <a href="#" class="btn btn-default" id="@("btn"+trId)" onclick="SaveEdit(@trId)">保存</a>
+                        <span class="btn btn-default" id="@("btn"+trId)" onclick="SaveEdit(@trId)">保存</span>
                     </td>
                 </tr>
             }

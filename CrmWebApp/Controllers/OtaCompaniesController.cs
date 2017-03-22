@@ -48,6 +48,7 @@ namespace CrmWebApp.Controllers
                     List<string> myAreaUserNameList = sac.GetMyAreaUserNames(User.Identity.Name);
                     AccountController ac = new AccountController();
                     List<string> realNameList = new List<string>();
+                    realNameList.Add("未知");
                     foreach (string userName in myAreaUserNameList)
                     {
                         string realName = ac.GetRealName(userName);
@@ -107,12 +108,13 @@ namespace CrmWebApp.Controllers
         {
             AccountController ac = new AccountController();
             string realName = ac.GetRealName(User.Identity.Name);
+            
             var model = new List<CompanyEditViewModel>();
             //把未知的和自己的客户列出去，未知的排在前面。然后用radio的方式给展示
-            var q = from p in db.OtaCompany
+            var q = (from p in db.OtaCompany
                     where p.SalesUserName == "未知" || p.SalesUserName == realName
                     orderby p.CreateTime, p.SalesUserName
-                    select p;
+                    select p).Take(50);
             foreach (OtaCompany item in q)
             {
                 CompanyEditViewModel editItem = new CompanyEditViewModel();
@@ -131,8 +133,11 @@ namespace CrmWebApp.Controllers
                                       where p.ParamName == "业务状态"
                                       select p.SubItemName).ToList();
             ViewData["BusinessStatusList"] = BusinessStatusList;
-
-            ViewData["SalesNameList"] = new List<string>() { "未知", realName };
+            List<string> allRealNames = ac.GetAllRealName();
+            allRealNames.Remove("admin");
+            allRealNames.Remove("郑亚军");
+            allRealNames.Add("未知");
+            ViewData["SalesNameList"] = allRealNames;
 
             return View(model);
         }
