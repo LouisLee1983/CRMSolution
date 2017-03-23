@@ -28,29 +28,87 @@ namespace CrmWebApp.Controllers
         public PartialViewResult GetCompanyTicketRangeChart()
         {
             SimpleChartModel chartModel = new SimpleChartModel();
-            //chartModel.Height = 500;
-            //chartModel.ContainerId = "companyTicketRangeChart";
-            //chartModel.Title = "客户票量";
-            //chartModel.SeriesList = new List<YSeries>();
+            chartModel.Height = 500;
+            chartModel.ContainerId = "companyTicketRangeChart";
+            chartModel.Title = "客户票量级别";
+            chartModel.SeriesList = new List<YSeries>();
 
-            //YSeries series = new YSeries();
-            //series.YSeriesList = new List<object>();
-            //series.YName = "数量";
+            YSeries series = new YSeries();
+            series.YSeriesList = new List<object>();
+            series.YName = "数量";
 
-            //chartModel.YTitle = DateTime.Today.ToString("yyyy-MM-dd");
-            //chartModel.ValueSuffix = "个";
-            ////读取公司的表，group by 销售名
-            //OtaCrmModel db = new OtaCrmModel();
-            //var ss = from i in db.AgentGradeOperation
-            //         group i by i.SalesUserName
-            //             into g
-            //         select new { count = g.Count(), userName = g.Key };
-            //foreach (var item in ss)
-            //{
-            //    chartModel.XList.Add(item.userName);
-            //    series.YSeriesList.Add(item.count);
-            //}
-            //chartModel.SeriesList.Add(series);
+            chartModel.YTitle = DateTime.Today.ToString("yyyy-MM-dd");
+            chartModel.ValueSuffix = "个";
+
+            string level0 = "0";
+            string level1 = "1-50";
+            string level2 = "50-200";
+            string level3 = "200-500";
+            string level4 = "500-1000";
+            string level5 = "1000+";
+
+            //读取公司的表，group by 销售名
+            OtaCrmModel db = new OtaCrmModel();
+            DateTime startDate = DateTime.Parse(DateTime.Today.ToString("yyyy-MM-01"));
+            DateTime endDate = db.AgentGradeOperation.Max(p => p.statDate).Value;
+            TimeSpan ts = endDate - startDate;
+            int days = ts.Days;
+
+            var q = from p in db.AgentGradeOperation
+                     where p.statDate == endDate
+                    group p by p.agentName
+                         into g
+                    select new { sum = g.Sum(i=>i.totalTicketNum.Value), company = g.Key };
+            //按照公司名，分组，然后求平均值，应该先算日期的天数
+            int countLevel0 = 0;
+            int countLevel1 = 0;
+            int countLevel2 = 0;
+            int countLevel3 = 0;
+            int countLevel4 = 0;
+            int countLevel5 = 0;
+            foreach (var item in q)
+            {
+                int everageNum = item.sum / days;
+                if (everageNum == 0)
+                {
+                    countLevel0++;
+                }
+                if (everageNum >= 0 && everageNum < 50)
+                {
+                    countLevel1++;
+                }
+                if (everageNum >= 50 && everageNum < 200)
+                {
+                    countLevel2++;
+                }
+                if (everageNum >= 200 && everageNum < 500)
+                {
+                    countLevel3++;
+                }
+                if (everageNum >= 500 && everageNum < 1000)
+                {
+                    countLevel4++;
+                }
+                if (everageNum >= 1000)
+                {
+                    countLevel5++;
+                }
+            }
+            List<object[]> pieDataList = new List<object[]>();
+                object[] pieData = new object[] { level0, countLevel0 };
+                pieDataList.Add(pieData);
+            pieData = new object[] { level1, countLevel1 };
+            pieDataList.Add(pieData);
+            pieData = new object[] { level2, countLevel2 };
+            pieDataList.Add(pieData);
+            pieData = new object[] { level3, countLevel3 };
+            pieDataList.Add(pieData);
+            pieData = new object[] { level4, countLevel4 };
+            pieDataList.Add(pieData);
+            pieData = new object[] { level5, countLevel5 };
+            pieDataList.Add(pieData);
+
+            chartModel.pieDataList = pieDataList;
 
             DotNet.Highcharts.Highcharts chart = GetChart(chartModel);
             return PartialView("_PartialChartView", chart);
