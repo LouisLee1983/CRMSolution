@@ -172,6 +172,7 @@ namespace CrmWebApp.Controllers
         public PartialViewResult GetCompanyCountChart()
         {
             SimpleChartModel chartModel = new SimpleChartModel();
+            chartModel.Height = 500;
             chartModel.ContainerId = "companyCountChart";
             chartModel.Title = "客户数量";
             chartModel.SeriesList = new List<YSeries>();
@@ -191,6 +192,38 @@ namespace CrmWebApp.Controllers
             foreach (var item in ss)
             {
                 chartModel.XList.Add(item.userName);
+                series.YSeriesList.Add(item.count);
+            }
+            chartModel.SeriesList.Add(series);
+
+            DotNet.Highcharts.Highcharts chart = GetChart(chartModel);
+            return PartialView("_PartialChartView", chart);
+        }
+
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
+        public PartialViewResult GetCompanyStatusChart()
+        {
+            SimpleChartModel chartModel = new SimpleChartModel();
+            chartModel.ContainerId = "companyStatusChart";
+            chartModel.Title = "客户状态";
+            chartModel.SeriesList = new List<YSeries>();
+
+            YSeries series = new YSeries();
+            series.YSeriesList = new List<object>();
+            series.YName = "数量";
+
+            chartModel.YTitle = DateTime.Today.ToString("yyyy-MM-dd");
+            chartModel.ValueSuffix = "个";
+            //读取公司的表，group by 销售名
+            OtaCrmModel db = new OtaCrmModel();
+            var ss = from i in db.OtaCompany
+                     where i.BusinessStatus != null
+                     group i by i.BusinessStatus
+                         into g
+                     select new { count = g.Count(), businessStatus = g.Key };
+            foreach (var item in ss)
+            {
+                chartModel.XList.Add(item.businessStatus);
                 series.YSeriesList.Add(item.count);
             }
             chartModel.SeriesList.Add(series);

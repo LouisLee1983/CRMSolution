@@ -18,13 +18,23 @@ namespace CrmWebApp.Controllers
 
         [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         // GET: OtaCompanies
-        public ActionResult Index(string sortOrder, string searchString, string currentFilter, int? page)
+        public ActionResult Index(string sortOrder, string searchString, string currentFilter, string businessStatus, int? page)
         {
             //根据user来确定公司结果
             ViewBag.CurrentSort = sortOrder;
-            ViewBag.SalesUserNameSortParm = string.IsNullOrEmpty(sortOrder) ? "salesUserName_desc" : "";
+            ViewBag.SalesUserNameSortParm = string.IsNullOrEmpty(sortOrder) ? "salesUserName_desc" : "salesUserName";
             ViewBag.CityNameSortParm = sortOrder == "cityName" ? "cityName_desc" : "cityName";
             ViewBag.LastMeetingDateSortParm = sortOrder == "lastMeetingDate" ? "lastMeetingDate_desc" : "lastMeetingDate";
+            ViewBag.BusinessStatusSortParm = sortOrder == "businessStatus" ? "businessStatus_desc" : "businessStatus";
+            ViewData["BusinessStatusList"] = GetParamDictList("业务状态", businessStatus);
+            if (businessStatus == null)
+            {
+                ViewBag.BusinessStatus = "";
+            }
+            else
+            {
+                ViewBag.BusinessStatus = businessStatus;
+            }
             if (searchString != null)
             {
                 page = 1;
@@ -35,9 +45,13 @@ namespace CrmWebApp.Controllers
             }
             ViewBag.CurrentFilter = searchString;
             //总监能看到所有人的，区域经理能看到本区域的，需要进行打勾，其他的销售只能看到自己的
-            
+
             var otaCompanys = from p in db.OtaCompany
                               select p;
+            if (!string.IsNullOrEmpty(businessStatus))
+            {
+                otaCompanys = otaCompanys.Where(p => p.BusinessStatus == businessStatus);
+            }
             if (!User.IsInRole("SalesDirector") && !User.IsInRole("Admin"))
             {
                 if (User.IsInRole("AreaManager"))
@@ -80,6 +94,15 @@ namespace CrmWebApp.Controllers
                 case "salesUserName_desc":
                     otaCompanys = otaCompanys.OrderByDescending(o => o.SalesUserName);
                     break;
+                case "salesUserName":
+                    otaCompanys = otaCompanys.OrderBy(o => o.SalesUserName);
+                    break;
+                case "businessStatus_desc":
+                    otaCompanys = otaCompanys.OrderByDescending(o => o.BusinessStatus);
+                    break;
+                case "businessStatus":
+                    otaCompanys = otaCompanys.OrderBy(o => o.BusinessStatus);
+                    break;
                 case "cityName_desc":
                     otaCompanys = otaCompanys.OrderByDescending(o => o.CityName);
                     break;
@@ -93,7 +116,7 @@ namespace CrmWebApp.Controllers
                     otaCompanys = otaCompanys.OrderByDescending(o => o.LastMeetingDate);
                     break;
                 default:
-                    otaCompanys = otaCompanys.OrderBy(o => o.CompanyName);
+                    otaCompanys = otaCompanys.OrderBy(o => o.BusinessStatus);
                     break;
             }
             int pageSize = 10;
@@ -107,13 +130,13 @@ namespace CrmWebApp.Controllers
         {
             AccountController ac = new AccountController();
             string realName = ac.GetRealName(User.Identity.Name);
-            
+
             var model = new List<CompanyEditViewModel>();
             //把未知的和自己的客户列出去，未知的排在前面。然后用radio的方式给展示
             var q = (from p in db.OtaCompany
-                    where p.SalesUserName == "未知" || p.SalesUserName == realName
-                    orderby p.CreateTime, p.SalesUserName
-                    select p).Take(50);
+                     where p.SalesUserName == "未知" || p.SalesUserName == realName
+                     orderby p.CreateTime, p.SalesUserName
+                     select p).Take(50);
             foreach (OtaCompany item in q)
             {
                 CompanyEditViewModel editItem = new CompanyEditViewModel();

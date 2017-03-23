@@ -25,26 +25,13 @@ namespace CrmWebApp.Controllers
         public ActionResult UpdateCompanyStatus()
         {
             OtaCrmModel db = new OtaCrmModel();
-            List<string> salesList = (from p in db.AspNetUsers
-                                      select p.TrueName).ToList();
-            salesList.Add("自营");
-            salesList.Add("携程");
             var q = from p in db.OtaCompany
                     select p;
             foreach (OtaCompany item in q)
             {
-                if (string.IsNullOrEmpty(item.BusinessRange) || !"国内,国际".Contains(item.BusinessRange))
+                if (string.IsNullOrEmpty(item.LegalPerson) || item.LegalPerson == "未知")
                 {
-                    item.BusinessRange = "国内";
-                }
-                if (string.IsNullOrEmpty(item.BusinessStatus)|| !"在线,下线,终止,待终止,待上线".Contains(item.BusinessStatus))
-                {
-                    item.BusinessStatus = "在线";
-                }
-                //销售名字+自营，如果不在内得，需要更新为未知
-                if (!salesList.Contains(item.SalesUserName))
-                {
-                    item.SalesUserName = "未知";
+                    item.LegalPerson = "空";
                 }
             }
             db.SaveChangesAsync();
@@ -281,7 +268,7 @@ namespace CrmWebApp.Controllers
                 if (companyDict.ContainsKey(item.CompanyName))
                 {
                     item.SalesUserName = companyDict[item.CompanyName];
-                }                
+                }
             }
             db.SaveChangesAsync();
 
