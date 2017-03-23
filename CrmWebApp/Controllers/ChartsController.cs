@@ -28,24 +28,21 @@ namespace CrmWebApp.Controllers
         public PartialViewResult GetCompanyTicketRangeChart()
         {
             SimpleChartModel chartModel = new SimpleChartModel();
-            chartModel.Height = 500;
             chartModel.ContainerId = "companyTicketRangeChart";
+            chartModel.ChartType = DotNet.Highcharts.Enums.ChartTypes.Pie;
             chartModel.Title = "客户票量级别";
             chartModel.SeriesList = new List<YSeries>();
 
             YSeries series = new YSeries();
-            series.YSeriesList = new List<object>();
             series.YName = "数量";
-
-            chartModel.YTitle = DateTime.Today.ToString("yyyy-MM-dd");
             chartModel.ValueSuffix = "个";
 
-            string level0 = "0";
-            string level1 = "1-50";
-            string level2 = "50-200";
-            string level3 = "200-500";
-            string level4 = "500-1000";
-            string level5 = "1000+";
+            string level0 = "零";
+            string level1 = "1_50";
+            string level2 = "50_200";
+            string level3 = "200_500";
+            string level4 = "500_1000";
+            string level5 = "1000以上";
 
             //读取公司的表，group by 销售名
             OtaCrmModel db = new OtaCrmModel();
@@ -55,10 +52,10 @@ namespace CrmWebApp.Controllers
             int days = ts.Days;
 
             var q = from p in db.AgentGradeOperation
-                     where p.statDate == endDate
+                    where p.statDate == endDate
                     group p by p.agentName
                          into g
-                    select new { sum = g.Sum(i=>i.totalTicketNum.Value), company = g.Key };
+                    select new { sum = g.Sum(i => i.totalTicketNum.Value), company = g.Key };
             //按照公司名，分组，然后求平均值，应该先算日期的天数
             int countLevel0 = 0;
             int countLevel1 = 0;
@@ -73,7 +70,7 @@ namespace CrmWebApp.Controllers
                 {
                     countLevel0++;
                 }
-                if (everageNum >= 0 && everageNum < 50)
+                if (everageNum > 0 && everageNum < 50)
                 {
                     countLevel1++;
                 }
@@ -95,22 +92,40 @@ namespace CrmWebApp.Controllers
                 }
             }
             List<object[]> pieDataList = new List<object[]>();
-                object[] pieData = new object[] { level0, countLevel0 };
-                pieDataList.Add(pieData);
-            pieData = new object[] { level1, countLevel1 };
-            pieDataList.Add(pieData);
-            pieData = new object[] { level2, countLevel2 };
-            pieDataList.Add(pieData);
-            pieData = new object[] { level3, countLevel3 };
-            pieDataList.Add(pieData);
-            pieData = new object[] { level4, countLevel4 };
-            pieDataList.Add(pieData);
-            pieData = new object[] { level5, countLevel5 };
-            pieDataList.Add(pieData);
+            object[] pieData0 = new object[] { level0, countLevel0 };
+            if (countLevel0 > 0)
+            {
+                pieDataList.Add(pieData0);
+            }
+            object[] pieData1 = new object[] { level1, countLevel1 };
+            if (countLevel1 > 0)
+            {
+                pieDataList.Add(pieData1);
+            }
+            object[] pieData2 = new object[] { level2, countLevel2 };
+            if (countLevel2 > 0)
+            {
+                pieDataList.Add(pieData2);
+            }
+            object[] pieData3 = new object[] { level3, countLevel3 };
+            if (countLevel3 > 0)
+            {
+                pieDataList.Add(pieData3);
+            }
+            object[] pieData4 = new object[] { level4, countLevel4 };
+            if (countLevel4 > 0)
+            {
+                pieDataList.Add(pieData4);
+            }
+            object[] pieData5 = new object[] { level5, countLevel5 };
+            if (countLevel5 > 0)
+            {
+                pieDataList.Add(pieData5);
+            }
 
             chartModel.pieDataList = pieDataList;
 
-            DotNet.Highcharts.Highcharts chart = GetChart(chartModel);
+            DotNet.Highcharts.Highcharts chart = GetPieChart(chartModel);
             return PartialView("_PartialChartView", chart);
         }
 
@@ -261,7 +276,7 @@ namespace CrmWebApp.Controllers
             SimpleChartModel chartModel = new SimpleChartModel();
             chartModel.ChartType = DotNet.Highcharts.Enums.ChartTypes.Pie;
             chartModel.ContainerId = "myCompanyStatusChart";
-            chartModel.Title = realName+ "客户状态";
+            chartModel.Title = realName + "客户状态";
 
             YSeries series = new YSeries();
             series.YName = "数量";
