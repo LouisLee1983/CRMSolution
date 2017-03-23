@@ -44,6 +44,7 @@
             this.textBoxAgentGradeUrl = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPageCms = new System.Windows.Forms.TabPage();
+            this.textBoxCmsTotalcount = new System.Windows.Forms.TextBox();
             this.buttonGenerateCmsDetail = new System.Windows.Forms.Button();
             this.buttonGetCmsDataDetail = new System.Windows.Forms.Button();
             this.textBoxCmsId = new System.Windows.Forms.TextBox();
@@ -59,7 +60,7 @@
             this.buttonGoCmsUrl = new System.Windows.Forms.Button();
             this.textBoxCmsUrl = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBoxCmsTotalcount = new System.Windows.Forms.TextBox();
+            this.textBoxAgentLastDate = new System.Windows.Forms.TextBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageAgentGrade.SuspendLayout();
             this.panelAgentGrade.SuspendLayout();
@@ -80,6 +81,7 @@
             // 
             // tabPageAgentGrade
             // 
+            this.tabPageAgentGrade.Controls.Add(this.textBoxAgentLastDate);
             this.tabPageAgentGrade.Controls.Add(this.buttonGetAllAgentGradeData);
             this.tabPageAgentGrade.Controls.Add(this.buttonSaveAgentGradeData);
             this.tabPageAgentGrade.Controls.Add(this.buttonParseAgentGradeJson);
@@ -103,10 +105,10 @@
             // 
             // buttonGetAllAgentGradeData
             // 
-            this.buttonGetAllAgentGradeData.Location = new System.Drawing.Point(573, 30);
+            this.buttonGetAllAgentGradeData.Location = new System.Drawing.Point(618, 30);
             this.buttonGetAllAgentGradeData.Margin = new System.Windows.Forms.Padding(2);
             this.buttonGetAllAgentGradeData.Name = "buttonGetAllAgentGradeData";
-            this.buttonGetAllAgentGradeData.Size = new System.Drawing.Size(56, 18);
+            this.buttonGetAllAgentGradeData.Size = new System.Drawing.Size(82, 18);
             this.buttonGetAllAgentGradeData.TabIndex = 12;
             this.buttonGetAllAgentGradeData.Text = "获取所有";
             this.buttonGetAllAgentGradeData.UseVisualStyleBackColor = true;
@@ -114,7 +116,7 @@
             // 
             // buttonSaveAgentGradeData
             // 
-            this.buttonSaveAgentGradeData.Location = new System.Drawing.Point(648, 30);
+            this.buttonSaveAgentGradeData.Location = new System.Drawing.Point(704, 30);
             this.buttonSaveAgentGradeData.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSaveAgentGradeData.Name = "buttonSaveAgentGradeData";
             this.buttonSaveAgentGradeData.Size = new System.Drawing.Size(56, 18);
@@ -125,7 +127,7 @@
             // 
             // buttonParseAgentGradeJson
             // 
-            this.buttonParseAgentGradeJson.Location = new System.Drawing.Point(450, 30);
+            this.buttonParseAgentGradeJson.Location = new System.Drawing.Point(478, 30);
             this.buttonParseAgentGradeJson.Margin = new System.Windows.Forms.Padding(2);
             this.buttonParseAgentGradeJson.Name = "buttonParseAgentGradeJson";
             this.buttonParseAgentGradeJson.Size = new System.Drawing.Size(56, 18);
@@ -159,7 +161,7 @@
             this.buttonGetAgentGradeOnpageResponse.Location = new System.Drawing.Point(388, 30);
             this.buttonGetAgentGradeOnpageResponse.Margin = new System.Windows.Forms.Padding(2);
             this.buttonGetAgentGradeOnpageResponse.Name = "buttonGetAgentGradeOnpageResponse";
-            this.buttonGetAgentGradeOnpageResponse.Size = new System.Drawing.Size(56, 18);
+            this.buttonGetAgentGradeOnpageResponse.Size = new System.Drawing.Size(86, 18);
             this.buttonGetAgentGradeOnpageResponse.TabIndex = 7;
             this.buttonGetAgentGradeOnpageResponse.Text = "获取数据";
             this.buttonGetAgentGradeOnpageResponse.UseVisualStyleBackColor = true;
@@ -257,6 +259,15 @@
             this.tabPageCms.TabIndex = 1;
             this.tabPageCms.Text = "合同管理";
             this.tabPageCms.UseVisualStyleBackColor = true;
+            // 
+            // textBoxCmsTotalcount
+            // 
+            this.textBoxCmsTotalcount.Location = new System.Drawing.Point(622, 26);
+            this.textBoxCmsTotalcount.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxCmsTotalcount.Name = "textBoxCmsTotalcount";
+            this.textBoxCmsTotalcount.Size = new System.Drawing.Size(47, 21);
+            this.textBoxCmsTotalcount.TabIndex = 28;
+            this.textBoxCmsTotalcount.Text = "1";
             // 
             // buttonGenerateCmsDetail
             // 
@@ -409,14 +420,14 @@
             this.label2.TabIndex = 13;
             this.label2.Text = "URL";
             // 
-            // textBoxCmsTotalcount
+            // textBoxAgentLastDate
             // 
-            this.textBoxCmsTotalcount.Location = new System.Drawing.Point(622, 26);
-            this.textBoxCmsTotalcount.Margin = new System.Windows.Forms.Padding(2);
-            this.textBoxCmsTotalcount.Name = "textBoxCmsTotalcount";
-            this.textBoxCmsTotalcount.Size = new System.Drawing.Size(47, 21);
-            this.textBoxCmsTotalcount.TabIndex = 28;
-            this.textBoxCmsTotalcount.Text = "1";
+            this.textBoxAgentLastDate.Location = new System.Drawing.Point(538, 30);
+            this.textBoxAgentLastDate.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxAgentLastDate.Name = "textBoxAgentLastDate";
+            this.textBoxAgentLastDate.Size = new System.Drawing.Size(76, 21);
+            this.textBoxAgentLastDate.TabIndex = 13;
+            this.textBoxAgentLastDate.Text = "2017-03-01";
             // 
             // FormMain
             // 
@@ -472,6 +483,7 @@
         private System.Windows.Forms.TextBox textBoxCmsId;
         private System.Windows.Forms.Button buttonGenerateCmsDetail;
         private System.Windows.Forms.TextBox textBoxCmsTotalcount;
+        private System.Windows.Forms.TextBox textBoxAgentLastDate;
     }
 }
 

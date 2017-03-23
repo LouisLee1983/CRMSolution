@@ -83,6 +83,7 @@ namespace WFSpider
         private void buttonGetCookie_Click(object sender, EventArgs e)
         {
             textBoxAgentGradeCookie.Text = webBrowserAgentGrade.Document.Cookie;
+            textBoxAgentLastDate.Text = ReadTxtFile("lastdate.txt",true);
         }
 
         private void buttonGetResponse_Click(object sender, EventArgs e)
@@ -332,7 +333,7 @@ namespace WFSpider
             DateTime endDate = startDate.AddMonths(1).AddDays(-1);
             for (int i = 0; i < 3; i++)
             {
-                startDate = curMonth.AddMonths(i);
+                startDate = lastDate.AddMonths(i);
                 if (startDate > DateTime.Today)
                 {
                     break;
