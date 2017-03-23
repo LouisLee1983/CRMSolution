@@ -2,12 +2,16 @@
     ViewBag.Title = "Index";
 }
 
-<h3>数据统计图</h3>
-
+<hr />
 <div class="row-fluid">
     <div>
         @Html.Action("GetCompanyStatusChart")
     </div>
+    <hr />
+    <div>
+        @Html.Action("GetMyCompanyStatusChart")
+    </div>
+    <hr />
     <div>
         @Html.Action("GetCompanyCountChart")
     </div>
@@ -15,6 +19,7 @@
     <div>
         @Html.Action("GetMeetCountChart")
     </div>
+    <hr />
     <div>
 
     </div>

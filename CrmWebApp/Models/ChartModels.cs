@@ -28,6 +28,8 @@ namespace CrmWebApp.Models
         public string YTitle { get; set; }
         
         public List<YSeries> SeriesList { get; set; }
+
+        public List<object[]> pieDataList { get; set; }
         
         public SimpleChartModel()
         {
@@ -41,6 +43,7 @@ namespace CrmWebApp.Models
             this.XTitle = "";
             this.YTitle = "";
             this.SeriesList = new List<YSeries>();
+            this.pieDataList = new List<object[]>();
         }
     }
 

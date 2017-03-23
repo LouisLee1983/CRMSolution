@@ -217,6 +217,9 @@ namespace CrmWebApp.Controllers
         {
             List<string> realNameList = (from p in db.AspNetUsers
                                          select p.TrueName).ToList();
+            realNameList.Add("自营");
+            realNameList.Add("航司");
+            realNameList.Add("携程");
             List<SelectListItem> result = new List<SelectListItem>();
 
             SelectListItem selectItem = new SelectListItem();
@@ -337,6 +340,7 @@ namespace CrmWebApp.Controllers
             ViewData["ChinaCityList"] = GetChinaCityList(otaCompany.CityName);
             ViewData["BusinessRangeList"] = GetParamDictList("业务类型", otaCompany.BusinessRange);
             ViewData["BusinessStatusList"] = GetParamDictList("业务状态", otaCompany.BusinessStatus);
+            ViewData["SalesNameList"] = GetSalesNameList(otaCompany.SalesUserName);
 
             return View(otaCompany);
         }

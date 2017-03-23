@@ -22,44 +22,39 @@ namespace CrmWebApp.Controllers
         {
             return View();
         }
-        //总监看的数据：各个销售的客户数量，各个销售的票量，各个销售的拜访次数
-        //[Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
-        //public PartialViewResult GetSalesTicketCountChart()
-        //{
-        //    SimpleChartModel chartModel = new SimpleChartModel();
-        //    chartModel.ContainerId = "salesTicketCountChart";
-        //    chartModel.Title = "销售客户票量";
 
-        //    chartModel.SeriesList = new List<YSeries>();
+        //日均票量分客户数
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
+        public PartialViewResult GetCompanyTicketRangeChart()
+        {
+            SimpleChartModel chartModel = new SimpleChartModel();
+            //chartModel.Height = 500;
+            //chartModel.ContainerId = "companyTicketRangeChart";
+            //chartModel.Title = "客户票量";
+            //chartModel.SeriesList = new List<YSeries>();
 
-        //    YSeries series = new YSeries();
-        //    series.YSeriesList = new List<object>();
-        //    series.YName = "张";
+            //YSeries series = new YSeries();
+            //series.YSeriesList = new List<object>();
+            //series.YName = "数量";
 
-        //    chartModel.ValueSuffix = "张";
-        //    //统计昨天的销售票量
-        //    DateTime startWeek = DateTime.Now.AddDays(1 - Convert.ToInt32(DateTime.Now.DayOfWeek.ToString("d")));
-        //    startWeek = startWeek.AddDays(-7);
-        //    DateTime endWeek = startWeek.AddDays(6);
-        //    chartModel.YTitle = startWeek.ToString("yyyyMMdd") + "-" + endWeek.ToString("yyyyMMdd");
+            //chartModel.YTitle = DateTime.Today.ToString("yyyy-MM-dd");
+            //chartModel.ValueSuffix = "个";
+            ////读取公司的表，group by 销售名
+            //OtaCrmModel db = new OtaCrmModel();
+            //var ss = from i in db.AgentGradeOperation
+            //         group i by i.SalesUserName
+            //             into g
+            //         select new { count = g.Count(), userName = g.Key };
+            //foreach (var item in ss)
+            //{
+            //    chartModel.XList.Add(item.userName);
+            //    series.YSeriesList.Add(item.count);
+            //}
+            //chartModel.SeriesList.Add(series);
 
-        //    OtaCrmModel db = new OtaCrmModel();
-        //    var ss = from i in db.CompanyMeeting
-        //             where i.MeetDate >= startWeek && i.MeetDate <= endWeek
-        //             group i by i.CreateUserName
-        //                 into g
-        //             select new { count = g.Count(), userName = g.Key };
-        //    foreach (var item in ss)
-        //    {
-        //        chartModel.XList.Add(item.userName);
-        //        series.YSeriesList.Add(item.count);
-        //    }
-        //    chartModel.SeriesList.Add(series);
-
-        //    DotNet.Highcharts.Highcharts chart = GetChart(chartModel);
-        //    return PartialView("_PartialChartView", chart);
-        //}
-
+            DotNet.Highcharts.Highcharts chart = GetChart(chartModel);
+            return PartialView("_PartialChartView", chart);
+        }
 
         [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public PartialViewResult GetCompanyTicketCountChart(string companyName)
@@ -201,18 +196,49 @@ namespace CrmWebApp.Controllers
         }
 
         [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
+        public PartialViewResult GetMyCompanyStatusChart()
+        {
+            AccountController ac = new AccountController();
+            string realName = ac.GetRealName(User.Identity.Name);
+            SimpleChartModel chartModel = new SimpleChartModel();
+            chartModel.ChartType = DotNet.Highcharts.Enums.ChartTypes.Pie;
+            chartModel.ContainerId = "myCompanyStatusChart";
+            chartModel.Title = realName+ "客户状态";
+
+            YSeries series = new YSeries();
+            series.YName = "数量";
+
+            chartModel.ValueSuffix = "个";
+            //读取公司的表，group by 销售名
+            OtaCrmModel db = new OtaCrmModel();
+            var ss = from i in db.OtaCompany
+                     where i.BusinessStatus != null && i.SalesUserName == realName
+                     group i by i.BusinessStatus
+                         into g
+                     select new { count = g.Count(), businessStatus = g.Key };
+            List<object[]> pieDataList = new List<object[]>();
+            foreach (var item in ss)
+            {
+                object[] pieData = new object[] { item.businessStatus, item.count };
+                pieDataList.Add(pieData);
+            }
+            chartModel.pieDataList = pieDataList;
+
+            DotNet.Highcharts.Highcharts chart = GetPieChart(chartModel);
+            return PartialView("_PartialChartView", chart);
+        }
+
+        [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public PartialViewResult GetCompanyStatusChart()
         {
             SimpleChartModel chartModel = new SimpleChartModel();
+            chartModel.ChartType = DotNet.Highcharts.Enums.ChartTypes.Pie;
             chartModel.ContainerId = "companyStatusChart";
             chartModel.Title = "客户状态";
-            chartModel.SeriesList = new List<YSeries>();
 
             YSeries series = new YSeries();
-            series.YSeriesList = new List<object>();
             series.YName = "数量";
 
-            chartModel.YTitle = DateTime.Today.ToString("yyyy-MM-dd");
             chartModel.ValueSuffix = "个";
             //读取公司的表，group by 销售名
             OtaCrmModel db = new OtaCrmModel();
@@ -221,15 +247,62 @@ namespace CrmWebApp.Controllers
                      group i by i.BusinessStatus
                          into g
                      select new { count = g.Count(), businessStatus = g.Key };
+            List<object[]> pieDataList = new List<object[]>();
             foreach (var item in ss)
             {
-                chartModel.XList.Add(item.businessStatus);
-                series.YSeriesList.Add(item.count);
+                object[] pieData = new object[] { item.businessStatus, item.count };
+                pieDataList.Add(pieData);
             }
-            chartModel.SeriesList.Add(series);
+            chartModel.pieDataList = pieDataList;
 
-            DotNet.Highcharts.Highcharts chart = GetChart(chartModel);
+            DotNet.Highcharts.Highcharts chart = GetPieChart(chartModel);
             return PartialView("_PartialChartView", chart);
+        }
+
+        public DotNet.Highcharts.Highcharts GetPieChart(SimpleChartModel chartModel)
+        {
+            DotNet.Highcharts.Highcharts chart = new DotNet.Highcharts.Highcharts(chartModel.ContainerId);
+
+            //初始化
+            DotNet.Highcharts.Options.Chart chartOption = new DotNet.Highcharts.Options.Chart();
+            chartOption.DefaultSeriesType = chartModel.ChartType;
+            chartOption.Width = chartModel.Width;
+            chartOption.Height = chartModel.Height;
+            chart.InitChart(chartOption);
+
+            //设置标题
+            DotNet.Highcharts.Options.Title title = new DotNet.Highcharts.Options.Title();
+            title.Align = DotNet.Highcharts.Enums.HorizontalAligns.Center;
+            title.Text = chartModel.Title;
+            chart.SetTitle(title);
+
+            //提示
+            DotNet.Highcharts.Options.Tooltip tooltip = new DotNet.Highcharts.Options.Tooltip();
+            tooltip.ValueSuffix = chartModel.ValueSuffix;
+            tooltip.PointFormat = "{point.name}: <b>{point.y}</b>";
+            chart.SetTooltip(tooltip);
+
+            //饼图
+            DotNet.Highcharts.Options.PlotOptions plotOptions = new DotNet.Highcharts.Options.PlotOptions();
+            plotOptions.Pie = new DotNet.Highcharts.Options.PlotOptionsPie();
+            plotOptions.Pie.AllowPointSelect = true;
+            plotOptions.Pie.Cursor = DotNet.Highcharts.Enums.Cursors.Pointer;
+            plotOptions.Pie.ShowInLegend = true;
+            plotOptions.Pie.DataLabels = new DotNet.Highcharts.Options.PlotOptionsPieDataLabels();
+            plotOptions.Pie.DataLabels.Enabled = true;
+            plotOptions.Pie.DataLabels.Format = "<b>{point.name}</b>: {point.y}个";
+            chart.SetPlotOptions(plotOptions);
+
+            //设置表现值
+            List<DotNet.Highcharts.Options.Series> ssList = new List<DotNet.Highcharts.Options.Series>();
+            DotNet.Highcharts.Options.Series ss = new DotNet.Highcharts.Options.Series();
+            ss.Type = DotNet.Highcharts.Enums.ChartTypes.Pie;
+            ss.Name = chartModel.Title;
+            ss.Data = new DotNet.Highcharts.Helpers.Data(chartModel.pieDataList.ToArray());
+            ssList.Add(ss);
+            chart.SetSeries(ssList.ToArray());
+
+            return chart;
         }
 
         public DotNet.Highcharts.Highcharts GetChart(SimpleChartModel chartModel)
