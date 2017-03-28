@@ -153,6 +153,8 @@ namespace WFSpider
                 string[] fileNames = GetAllFileName(filePath);
                 Dictionary<string, int> perDayTicketDict = new Dictionary<string, int>();
                 List<AgentDetailOperationDatum> agentDetailList = new List<AgentDetailOperationDatum>();
+                DateTime startDate = DateTime.Parse(textBoxAgentLastDate.Text);
+                startDate = startDate.AddDays(-1);
                 //一次性读完整理完
                 foreach (string fileName in fileNames)
                 {
@@ -164,6 +166,10 @@ namespace WFSpider
                         foreach (AgentDetailOperationDatum item in root.data.data)
                         {
                             DateTime curDate = DateTime.Parse(item.statDate);
+                            if (curDate == startDate)
+                            {
+                                continue;
+                            }
                             string perDayKey = item.agentDomain.Trim() + curDate.ToString("yyyyMMdd");
                             if (!perDayTicketDict.ContainsKey(perDayKey))
                             {
@@ -329,7 +335,7 @@ namespace WFSpider
             DeleteAllFile(filePath);    //清空旧的
             JavaScriptSerializer jss = new JavaScriptSerializer();
             //从2个月前开始发扫
-            DateTime startDate = lastDate;
+            DateTime startDate = lastDate.AddDays(-1);
             DateTime endDate = startDate.AddMonths(1).AddDays(-1);
             for (int i = 0; i < 3; i++)
             {

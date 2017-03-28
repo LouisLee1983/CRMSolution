@@ -357,7 +357,7 @@ namespace CrmWebApp.Controllers
             {
                 db.Entry(otaCompany).State = EntityState.Modified;
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", new { id = otaCompany.Id });
             }
             return View(otaCompany);
         }
