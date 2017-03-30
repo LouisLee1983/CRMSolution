@@ -21,21 +21,39 @@ namespace CrmWebApp.Controllers
         [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public ActionResult Index(int? companyId, int? page)
         {
+            var model = from cbd in db.CompanyMeeting
+                        select cbd;
+            //orderby cbd.Id descending
             if (companyId.HasValue)
             {
                 ViewBag.CompanyId = companyId.Value;
                 ViewBag.CompanyName = db.OtaCompany.FirstOrDefault(p => p.Id == companyId.Value).CompanyName;
-                var model = from cbd in db.CompanyMeeting
-                            where cbd.CompanyId == companyId.Value
-                            orderby cbd.Id descending
-                            select cbd;
-                int pageSize = 10;
-                int pageNumber = (page ?? 1);
-
-                return View(model.ToPagedList(pageNumber, pageSize));
+                model = model.Where(p => p.CompanyId == companyId.Value);
             }
+            else
+            {
+                if (!User.IsInRole("SalesDirector") && !User.IsInRole("Admin"))
+                {
+                    if (User.IsInRole("AreaManager"))
+                    {
+                        //找出本区域的所有人，并把它作为条件加入查询结果中
+                        ServeAreasController sac = new ServeAreasController();
+                        List<string> myAreaUserNameList = sac.GetMyAreaUserNames(User.Identity.Name);
+                        model = model.Where(p => myAreaUserNameList.Contains(p.CreateUserName));
+                    }
+                    else if (User.IsInRole("OtaSales"))
+                    {
+                        //销售只能看到本人的                    
+                        model = model.Where(p => p.CreateUserName == User.Identity.Name);
+                    }
+                }
+            }
+            model = model.OrderByDescending(p => p.Id);
 
-            return View();
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+
+            return View(model.ToPagedList(pageNumber, pageSize));
         }
 
         [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
