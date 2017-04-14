@@ -22,6 +22,16 @@ namespace CrmWebApp.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        public ActionResult DeleteSameAgentGrade()
+        {
+            OtaCrmModel db = new OtaCrmModel();
+            string sql = "delete from AgentGradeOperation where id not in (select max(id) from AgentGradeOperation group by agentDomain,statDate)";
+            db.Database.ExecuteSqlCommandAsync(sql);
+            return Content("删除重复完成。");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
         public ActionResult UpdateCompanyStatus()
         {
             OtaCrmModel db = new OtaCrmModel();

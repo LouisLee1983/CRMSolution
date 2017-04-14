@@ -82,7 +82,7 @@ namespace CrmWebApp.Controllers
             if (ModelState.IsValid)
             {
                 //自动根据时间读取拜访记录生成周报,有html的格式
-                otaSalesReport.ReportContent = GenerateReport(otaSalesReport.StartDate.Value, otaSalesReport.EndDate.Value);
+                otaSalesReport.ReportContent = GenerateReport(otaSalesReport.UserName, otaSalesReport.StartDate.Value, otaSalesReport.EndDate.Value);
                 db.OtaSalesReport.Add(otaSalesReport);
                 db.SaveChanges();
                 //生成周报的时候，要同时生成相应的报表统计图表存放到对应的id的文件夹里面
@@ -142,26 +142,29 @@ namespace CrmWebApp.Controllers
         }
 
         [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
-        public string GenerateReport(DateTime startDate, DateTime endDate)
+        public string GenerateReport(string userName,DateTime startDate, DateTime endDate)
         {
             StringBuilder sb = new StringBuilder();
             var meetings = from p in db.CompanyMeeting
-                           where p.CreateUserName == User.Identity.Name && p.MeetDate >= startDate && p.MeetDate <= endDate
+                           where p.CreateUserName == userName && p.MeetDate >= startDate && p.MeetDate <= endDate
                            select p;
             List<CompanyMeeting> meetingList = meetings.ToList();
             string tableHead = "<br><table class='table table-bordered'><tbody><tr><th>客户</th><th>拜访日期</th><th>拜访纪要</th></tr>";
 
             sb.Append(tableHead);
             Dictionary<int, string> meetingIdDict = new Dictionary<int, string>();
-            string[] specialChars = new string[] {"_","","!","|","~","`","(",")","#","$","%","^","&","*","{","}",":",";","<",">","?","/","，","'","'","" };
+            string[] specialChars = new string[] {"_","\"","!","|","~","`","(",")","#","$","%","^","&","*","{","}",":",";","<",">","?","/","，","'","'" };
             foreach (var meeting in meetingList)
             {
                 string summary = string.IsNullOrEmpty(meeting.MeetSummary) ? "" : meeting.MeetSummary;
 
                 //-_,!|~`()#$%^&*{}:;"<>?/, '' 这些特殊字符需要去掉
-                foreach (string specialChar in specialChars)
+                if (!string.IsNullOrEmpty(summary))
                 {
-                    summary = summary.Replace(specialChar, "");
+                    foreach (string specialChar in specialChars)
+                    {
+                        summary = summary.Replace(specialChar, "");
+                    }
                 }
 
                 sb.Append("<tr>")

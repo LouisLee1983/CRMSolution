@@ -21,6 +21,7 @@
         <input type="button" class="btn btn-default" id="btnGetSalesName" onclick="getSalesName()" value="导出销售名字" />
         <input type="button" class="btn btn-default" id="btnGetCms" onclick="getCms()" value="导出CMS" />
         <input type="button" class="btn btn-default" id="btnupdateLegal" onclick="updateLegal()" value="更新客户法人" />
+        <input type="button" class="btn btn-default" id="btnDeleteSameAgentGrade" onclick="DeleteSameAgentGrade()" value="删除重复代理评分" />
     </div>
     <div>
         <span id="resultspan"></span>
@@ -43,6 +44,22 @@
 </div>
 
 <script>
+    var DeleteSameAgentGrade = function () {
+        $("#btnDeleteSameAgentGrade").attr("disabled", true);    //隐藏一分钟
+        $("#resultspan").html("");
+        var serverUrl = "@Url.Content("~/")";
+        var mvcurl = serverUrl + "Admin/DeleteSameAgentGrade";
+        $.ajax({
+            type: 'POST',
+            url: mvcurl,
+            data: null,
+            success: function (data) {
+                $("#resultspan").html(data);
+            }
+        });
+        $("#btnDeleteSameAgentGrade").attr("disabled", false);    //隐藏一分钟
+    }
+
     var UpdateCompanyStatus = function () {
         $("#btnUpdateCompanyStatus").attr("disabled", true);    //隐藏一分钟
         $("#resultspan").html("");
