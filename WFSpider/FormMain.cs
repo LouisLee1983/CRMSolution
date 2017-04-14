@@ -321,7 +321,7 @@ namespace WFSpider
             DateTime curMonth = DateTime.Parse(DateTime.Today.ToString("yyyy-MM-01"));
             DateTime lastDate = curMonth.AddMonths(-2);
             string lastDateFilePath = "lastdate.txt";
-            string lastDateStr = ReadTxtFile(lastDateFilePath, true);
+            string lastDateStr = textBoxAgentLastDate.Text;
             if (!string.IsNullOrEmpty(lastDateStr))
             {
                 lastDate = DateTime.Parse(lastDateStr);

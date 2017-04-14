@@ -96,10 +96,12 @@ namespace CrmWebApp.Controllers
 
         public string SavePersonCompanyTicketChart(string userName, int reportId, DateTime startDate, DateTime endDate)
         {
+            AccountController ac = new AccountController();
+            string realName = ac.GetRealName(userName);
             //读取两周的数据,自己客户的票量,按照日期展示曲线图
             OtaCrmModel db = new OtaCrmModel();
             var companyNames = from c in db.OtaCompany
-                               where c.SalesUserName == userName
+                               where c.SalesUserName == realName
                                select c.CompanyName;
 
             var q = from p in db.AgentGradeOperation
@@ -151,9 +153,17 @@ namespace CrmWebApp.Controllers
 
             sb.Append(tableHead);
             Dictionary<int, string> meetingIdDict = new Dictionary<int, string>();
+            string[] specialChars = new string[] {"_","","!","|","~","`","(",")","#","$","%","^","&","*","{","}",":",";","<",">","?","/","，","'","'","" };
             foreach (var meeting in meetingList)
             {
                 string summary = string.IsNullOrEmpty(meeting.MeetSummary) ? "" : meeting.MeetSummary;
+
+                //-_,!|~`()#$%^&*{}:;"<>?/, '' 这些特殊字符需要去掉
+                foreach (string specialChar in specialChars)
+                {
+                    summary = summary.Replace(specialChar, "");
+                }
+
                 sb.Append("<tr>")
                     .Append("<td>").Append(meeting.CompanyName.Trim()).Append("</td>")
                     .Append("<td>").Append(meeting.MeetDate.ToString("yyyy-MM-dd")).Append("</td>")
