@@ -7,7 +7,7 @@
         font-size: 14px;
     }
 
-    #l-map {
+    #mapContainer {
         width: 100%;
         height: 400px;
         overflow: hidden;
@@ -89,10 +89,11 @@
     <div>
         <div id="mapContainer"></div>
         <div id="result">
-            <input type="text" id="inputAddress" /><button id="btnGetAddressPoint">获取坐标</button>
+            <input type="text" id="inputAddress" /><input type="button" id="btnGetAddressPoint" onclick="searchByStationName()" value="获取坐标" />
             <input type="text" id="inputAddressPoint" />
+            <input type="button" id="showAllCompanyAddress" onclick="showAllCompanyMarker()" value="显示所有公司" />
             <button id="open">打开</button><button id="close">关闭</button>
-        </div>        
+        </div>
     </div>
 </div>
 
@@ -101,7 +102,8 @@
 </address>
 
 @section Scripts {
-    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5CGXov1bFod0nc1Fs5OzHNSIOToSwW57"></script>
+    @*<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5CGXov1bFod0nc1Fs5OzHNSIOToSwW57"></script>*@
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=IVIzjCHkCZHmpKeh0aTHZbcwuZBPEUza"></script>
     <!-- 加载百度地图样式信息窗口 -->
     <script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
     <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css" />
@@ -109,7 +111,7 @@
 
 <script type="text/javascript">
     var map = new BMap.Map("mapContainer");
-    map.centerAndZoom("宁波", 12);
+    map.centerAndZoom("北京", 12);
     map.enableScrollWheelZoom();    //启用滚轮放大缩小，默认禁用
     map.enableContinuousZoom();    //启用地图惯性拖拽，默认禁用
 
@@ -122,6 +124,7 @@
     function searchByStationName() {
         map.clearOverlays();//清空原来的标注
         var keyword = document.getElementById("inputAddress").value;
+        alert(keyword);
         localSearch.setSearchCompleteCallback(function (searchResult) {
             var poi = searchResult.getPoi(0);
             document.getElementById("inputAddressPoint").value = poi.point.lng + "," + poi.point.lat;
@@ -134,5 +137,26 @@
             // marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
         });
         localSearch.search(keyword);
+    }
+    //id,公司名，地名，推广名，域名
+    var showAllCompanyMarker= function(){
+        //模拟两个公司，定位两个点
+        addMapMarker(1, "北京市天安门", "北京广发机票代理公司");
+        addMapMarker(2, "北京市东升科技园", "北京去哪儿机票代理公司");
+    }
+    var addMapMarker = function (id, address, companyName) {
+        var localSearch = new BMap.LocalSearch(map);
+        localSearch.enableAutoViewport(); //允许自动调节窗体大小
+        localSearch.setSearchCompleteCallback(function (searchResult) {
+            var poi = searchResult.getPoi(0);
+            var marker = new BMap.Marker(new BMap.Point(poi.point.lng, poi.point.lat));  // 创建标注，为要查询的地方对应的经纬度
+            map.addOverlay(marker);
+            var content = id+":"+ companyName + "<br/><br/>地址：" + address + "<br/>";
+            var infoWindow = new BMap.InfoWindow("<p style='font-size:14px;'>" + content + "</p>");
+            
+            marker.addEventListener("click", function () { this.openInfoWindow(infoWindow); });
+            // marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+        });
+        localSearch.search(address);
     }
 </script>
