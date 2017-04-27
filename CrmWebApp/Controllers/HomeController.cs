@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CrmWebApp.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,7 +13,7 @@ namespace CrmWebApp.Controllers
         {
             return View();
         }
-
+        
         public PartialViewResult GetChart()
         {
             DotNet.Highcharts.Highcharts chart = new DotNet.Highcharts.Highcharts("chart");
