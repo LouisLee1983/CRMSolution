@@ -603,7 +603,7 @@
     <Content Include="Views\Account\QunarLogin.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\OtaCompanies\EditCompanyAll.cshtml" />
-    <Content Include="Views\OtaCompanies\CompanyMapView.cshtml" />
+    <Content Include="Views\OtaCompanies\CompanyMap.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CompanyImages\Reports\" />

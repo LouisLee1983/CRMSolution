@@ -125,6 +125,11 @@ namespace CrmWebApp.Controllers
             return View(otaCompanys.ToPagedList(pageNumber, pageSize));
         }
 
+        public ActionResult CompanyMap()
+        {
+            return View();
+        }
+
         [Authorize(Roles = "SalesDirector,OtaSales,AreaManager,Admin")]
         public JsonResult GetCompanyJson()
         {
