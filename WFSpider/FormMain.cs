@@ -371,7 +371,7 @@ namespace WFSpider
                     textBoxAgentGradeResult.AppendText(fileName + ":" + totalPage + "\r\n");
                 }
             }
-            WriteFile(endDate.AddDays(1).ToString("yyyy-MM-dd"), lastDateFilePath, false);
+            WriteFile(endDate.ToString("yyyy-MM-dd"), lastDateFilePath, false);
 
         }
 

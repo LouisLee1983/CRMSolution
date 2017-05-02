@@ -50,6 +50,10 @@ namespace CrmWebApp.Controllers
             DateTime endDate = db.AgentGradeOperation.Max(p => p.statDate).Value;
             TimeSpan ts = endDate - startDate;
             int days = ts.Days;
+            if (days == 0)
+            {
+                days = 1;
+            }
 
             var q = from p in db.AgentGradeOperation
                     where p.statDate == endDate
@@ -160,6 +164,10 @@ namespace CrmWebApp.Controllers
             DateTime endDate = db.AgentGradeOperation.Max(p => p.statDate).Value;
             TimeSpan ts = endDate - startDate;
             int days = ts.Days;
+            if (days == 0)
+            {
+                days = 1;
+            }
             List<string> myCompanys = (from p in db.OtaCompany
                                        where p.SalesUserName == realName
                                        select p.CompanyName).Distinct().ToList();
