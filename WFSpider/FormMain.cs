@@ -41,6 +41,7 @@ namespace WFSpider
         private void buttonGoUrl_Click(object sender, EventArgs e)
         {
             webBrowserAgentGrade.Navigate(textBoxAgentGradeUrl.Text);
+            buttonGetAgentGradeCookie.Enabled = true;
         }
 
         public string GetZipWebResponseWithCookies(Cookie[] cookies, string url, string encode)
@@ -84,6 +85,7 @@ namespace WFSpider
         {
             textBoxAgentGradeCookie.Text = webBrowserAgentGrade.Document.Cookie;
             textBoxAgentLastDate.Text = ReadTxtFile("lastdate.txt",true);
+            buttonGetAllAgentGradeData.Enabled = true;
         }
 
         private void buttonGetResponse_Click(object sender, EventArgs e)
@@ -143,7 +145,7 @@ namespace WFSpider
             return result.ToArray();
         }
 
-        private void buttonSaveData_Click(object sender, EventArgs e)
+        public void SaveCMSData()
         {
             //读取文件夹下面的所有文件
             JavaScriptSerializer jss = new JavaScriptSerializer();
@@ -196,9 +198,14 @@ namespace WFSpider
                         textBoxAgentGradeResult.AppendText(agoList.Count + ":" + i.ToString() + "\r\n");
                     }
 
-                    textBoxAgentGradeResult.Text = "保存成功：" + agoList.Count;
+                    textBoxAgentGradeResult.AppendText("保存成功：" + agoList.Count);
                 }
             }
+        }
+
+        private void buttonSaveData_Click(object sender, EventArgs e)
+        {
+            SaveCMSData();
         }
 
         public List<AgentGradeOperation> GetAgentGradeOperations(List<AgentDetailOperationDatum> agentDetailList, Dictionary<string, int> perDayTicketDict)
@@ -317,6 +324,8 @@ namespace WFSpider
 
         private void buttonGetAllData_Click(object sender, EventArgs e)
         {
+            buttonGetAllAgentGradeData.Enabled = false;
+            textBoxAgentGradeResult.AppendText("数据导入中....");
             //连取三个月数据，先执行按天的查询，最后结束的时候查一个月的统计，把jason保存到文件，然后再for循环保存
             DateTime curMonth = DateTime.Parse(DateTime.Today.ToString("yyyy-MM-01"));
             DateTime lastDate = curMonth.AddMonths(-2);
@@ -372,7 +381,9 @@ namespace WFSpider
                 }
             }
             WriteFile(endDate.ToString("yyyy-MM-dd"), lastDateFilePath, false);
-
+            //直接执行保存
+            SaveCMSData();
+            MessageBox.Show("任务执行完成.");
         }
 
 

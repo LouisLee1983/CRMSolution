@@ -30,6 +30,7 @@
         {
             this.tabControlMain = new System.Windows.Forms.TabControl();
             this.tabPageAgentGrade = new System.Windows.Forms.TabPage();
+            this.textBoxAgentLastDate = new System.Windows.Forms.TextBox();
             this.buttonGetAllAgentGradeData = new System.Windows.Forms.Button();
             this.buttonSaveAgentGradeData = new System.Windows.Forms.Button();
             this.buttonParseAgentGradeJson = new System.Windows.Forms.Button();
@@ -60,7 +61,6 @@
             this.buttonGoCmsUrl = new System.Windows.Forms.Button();
             this.textBoxCmsUrl = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBoxAgentLastDate = new System.Windows.Forms.TextBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageAgentGrade.SuspendLayout();
             this.panelAgentGrade.SuspendLayout();
@@ -103,19 +103,30 @@
             this.tabPageAgentGrade.Text = "评分";
             this.tabPageAgentGrade.UseVisualStyleBackColor = true;
             // 
+            // textBoxAgentLastDate
+            // 
+            this.textBoxAgentLastDate.Location = new System.Drawing.Point(538, 30);
+            this.textBoxAgentLastDate.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxAgentLastDate.Name = "textBoxAgentLastDate";
+            this.textBoxAgentLastDate.Size = new System.Drawing.Size(76, 21);
+            this.textBoxAgentLastDate.TabIndex = 13;
+            this.textBoxAgentLastDate.Text = "2017-03-01";
+            // 
             // buttonGetAllAgentGradeData
             // 
+            this.buttonGetAllAgentGradeData.Enabled = false;
             this.buttonGetAllAgentGradeData.Location = new System.Drawing.Point(618, 30);
             this.buttonGetAllAgentGradeData.Margin = new System.Windows.Forms.Padding(2);
             this.buttonGetAllAgentGradeData.Name = "buttonGetAllAgentGradeData";
             this.buttonGetAllAgentGradeData.Size = new System.Drawing.Size(82, 18);
             this.buttonGetAllAgentGradeData.TabIndex = 12;
-            this.buttonGetAllAgentGradeData.Text = "获取所有";
+            this.buttonGetAllAgentGradeData.Text = "3获取所有";
             this.buttonGetAllAgentGradeData.UseVisualStyleBackColor = true;
             this.buttonGetAllAgentGradeData.Click += new System.EventHandler(this.buttonGetAllData_Click);
             // 
             // buttonSaveAgentGradeData
             // 
+            this.buttonSaveAgentGradeData.Enabled = false;
             this.buttonSaveAgentGradeData.Location = new System.Drawing.Point(704, 30);
             this.buttonSaveAgentGradeData.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSaveAgentGradeData.Name = "buttonSaveAgentGradeData";
@@ -127,6 +138,7 @@
             // 
             // buttonParseAgentGradeJson
             // 
+            this.buttonParseAgentGradeJson.Enabled = false;
             this.buttonParseAgentGradeJson.Location = new System.Drawing.Point(478, 30);
             this.buttonParseAgentGradeJson.Margin = new System.Windows.Forms.Padding(2);
             this.buttonParseAgentGradeJson.Name = "buttonParseAgentGradeJson";
@@ -138,12 +150,13 @@
             // 
             // buttonGetAgentGradeCookie
             // 
+            this.buttonGetAgentGradeCookie.Enabled = false;
             this.buttonGetAgentGradeCookie.Location = new System.Drawing.Point(418, 7);
             this.buttonGetAgentGradeCookie.Margin = new System.Windows.Forms.Padding(2);
             this.buttonGetAgentGradeCookie.Name = "buttonGetAgentGradeCookie";
-            this.buttonGetAgentGradeCookie.Size = new System.Drawing.Size(56, 18);
+            this.buttonGetAgentGradeCookie.Size = new System.Drawing.Size(93, 18);
             this.buttonGetAgentGradeCookie.TabIndex = 9;
-            this.buttonGetAgentGradeCookie.Text = "获取Cookie";
+            this.buttonGetAgentGradeCookie.Text = "2获取Cookie";
             this.buttonGetAgentGradeCookie.UseVisualStyleBackColor = true;
             this.buttonGetAgentGradeCookie.Click += new System.EventHandler(this.buttonGetCookie_Click);
             // 
@@ -158,6 +171,7 @@
             // 
             // buttonGetAgentGradeOnpageResponse
             // 
+            this.buttonGetAgentGradeOnpageResponse.Enabled = false;
             this.buttonGetAgentGradeOnpageResponse.Location = new System.Drawing.Point(388, 30);
             this.buttonGetAgentGradeOnpageResponse.Margin = new System.Windows.Forms.Padding(2);
             this.buttonGetAgentGradeOnpageResponse.Name = "buttonGetAgentGradeOnpageResponse";
@@ -211,7 +225,7 @@
             this.buttonGoAgentGradeUrl.Name = "buttonGoAgentGradeUrl";
             this.buttonGoAgentGradeUrl.Size = new System.Drawing.Size(56, 18);
             this.buttonGoAgentGradeUrl.TabIndex = 2;
-            this.buttonGoAgentGradeUrl.Text = "前往";
+            this.buttonGoAgentGradeUrl.Text = "1前往";
             this.buttonGoAgentGradeUrl.UseVisualStyleBackColor = true;
             this.buttonGoAgentGradeUrl.Click += new System.EventHandler(this.buttonGoUrl_Click);
             // 
@@ -419,15 +433,6 @@
             this.label2.Size = new System.Drawing.Size(23, 12);
             this.label2.TabIndex = 13;
             this.label2.Text = "URL";
-            // 
-            // textBoxAgentLastDate
-            // 
-            this.textBoxAgentLastDate.Location = new System.Drawing.Point(538, 30);
-            this.textBoxAgentLastDate.Margin = new System.Windows.Forms.Padding(2);
-            this.textBoxAgentLastDate.Name = "textBoxAgentLastDate";
-            this.textBoxAgentLastDate.Size = new System.Drawing.Size(76, 21);
-            this.textBoxAgentLastDate.TabIndex = 13;
-            this.textBoxAgentLastDate.Text = "2017-03-01";
             // 
             // FormMain
             // 
