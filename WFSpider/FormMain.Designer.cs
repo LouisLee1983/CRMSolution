@@ -72,11 +72,11 @@
             // 
             this.tabControlMain.Controls.Add(this.tabPageAgentGrade);
             this.tabControlMain.Controls.Add(this.tabPageCms);
-            this.tabControlMain.Location = new System.Drawing.Point(9, 10);
-            this.tabControlMain.Margin = new System.Windows.Forms.Padding(2);
+            this.tabControlMain.Location = new System.Drawing.Point(12, 12);
+            this.tabControlMain.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
-            this.tabControlMain.Size = new System.Drawing.Size(938, 659);
+            this.tabControlMain.Size = new System.Drawing.Size(1251, 824);
             this.tabControlMain.TabIndex = 0;
             // 
             // tabPageAgentGrade
@@ -94,31 +94,31 @@
             this.tabPageAgentGrade.Controls.Add(this.buttonGoAgentGradeUrl);
             this.tabPageAgentGrade.Controls.Add(this.textBoxAgentGradeUrl);
             this.tabPageAgentGrade.Controls.Add(this.label1);
-            this.tabPageAgentGrade.Location = new System.Drawing.Point(4, 22);
-            this.tabPageAgentGrade.Margin = new System.Windows.Forms.Padding(2);
+            this.tabPageAgentGrade.Location = new System.Drawing.Point(4, 25);
+            this.tabPageAgentGrade.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageAgentGrade.Name = "tabPageAgentGrade";
-            this.tabPageAgentGrade.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPageAgentGrade.Size = new System.Drawing.Size(930, 633);
+            this.tabPageAgentGrade.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tabPageAgentGrade.Size = new System.Drawing.Size(1243, 795);
             this.tabPageAgentGrade.TabIndex = 0;
             this.tabPageAgentGrade.Text = "评分";
             this.tabPageAgentGrade.UseVisualStyleBackColor = true;
             // 
             // textBoxAgentLastDate
             // 
-            this.textBoxAgentLastDate.Location = new System.Drawing.Point(538, 30);
-            this.textBoxAgentLastDate.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxAgentLastDate.Location = new System.Drawing.Point(717, 38);
+            this.textBoxAgentLastDate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxAgentLastDate.Name = "textBoxAgentLastDate";
-            this.textBoxAgentLastDate.Size = new System.Drawing.Size(76, 21);
+            this.textBoxAgentLastDate.Size = new System.Drawing.Size(100, 25);
             this.textBoxAgentLastDate.TabIndex = 13;
             this.textBoxAgentLastDate.Text = "2017-03-01";
             // 
             // buttonGetAllAgentGradeData
             // 
             this.buttonGetAllAgentGradeData.Enabled = false;
-            this.buttonGetAllAgentGradeData.Location = new System.Drawing.Point(618, 30);
-            this.buttonGetAllAgentGradeData.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonGetAllAgentGradeData.Location = new System.Drawing.Point(824, 38);
+            this.buttonGetAllAgentGradeData.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonGetAllAgentGradeData.Name = "buttonGetAllAgentGradeData";
-            this.buttonGetAllAgentGradeData.Size = new System.Drawing.Size(82, 18);
+            this.buttonGetAllAgentGradeData.Size = new System.Drawing.Size(109, 22);
             this.buttonGetAllAgentGradeData.TabIndex = 12;
             this.buttonGetAllAgentGradeData.Text = "3获取所有";
             this.buttonGetAllAgentGradeData.UseVisualStyleBackColor = true;
@@ -126,11 +126,10 @@
             // 
             // buttonSaveAgentGradeData
             // 
-            this.buttonSaveAgentGradeData.Enabled = false;
-            this.buttonSaveAgentGradeData.Location = new System.Drawing.Point(704, 30);
-            this.buttonSaveAgentGradeData.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonSaveAgentGradeData.Location = new System.Drawing.Point(939, 38);
+            this.buttonSaveAgentGradeData.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonSaveAgentGradeData.Name = "buttonSaveAgentGradeData";
-            this.buttonSaveAgentGradeData.Size = new System.Drawing.Size(56, 18);
+            this.buttonSaveAgentGradeData.Size = new System.Drawing.Size(75, 22);
             this.buttonSaveAgentGradeData.TabIndex = 11;
             this.buttonSaveAgentGradeData.Text = "储存";
             this.buttonSaveAgentGradeData.UseVisualStyleBackColor = true;
@@ -139,10 +138,10 @@
             // buttonParseAgentGradeJson
             // 
             this.buttonParseAgentGradeJson.Enabled = false;
-            this.buttonParseAgentGradeJson.Location = new System.Drawing.Point(478, 30);
-            this.buttonParseAgentGradeJson.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonParseAgentGradeJson.Location = new System.Drawing.Point(637, 38);
+            this.buttonParseAgentGradeJson.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonParseAgentGradeJson.Name = "buttonParseAgentGradeJson";
-            this.buttonParseAgentGradeJson.Size = new System.Drawing.Size(56, 18);
+            this.buttonParseAgentGradeJson.Size = new System.Drawing.Size(75, 22);
             this.buttonParseAgentGradeJson.TabIndex = 10;
             this.buttonParseAgentGradeJson.Text = "转换json";
             this.buttonParseAgentGradeJson.UseVisualStyleBackColor = true;
@@ -151,10 +150,10 @@
             // buttonGetAgentGradeCookie
             // 
             this.buttonGetAgentGradeCookie.Enabled = false;
-            this.buttonGetAgentGradeCookie.Location = new System.Drawing.Point(418, 7);
-            this.buttonGetAgentGradeCookie.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonGetAgentGradeCookie.Location = new System.Drawing.Point(557, 9);
+            this.buttonGetAgentGradeCookie.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonGetAgentGradeCookie.Name = "buttonGetAgentGradeCookie";
-            this.buttonGetAgentGradeCookie.Size = new System.Drawing.Size(93, 18);
+            this.buttonGetAgentGradeCookie.Size = new System.Drawing.Size(124, 22);
             this.buttonGetAgentGradeCookie.TabIndex = 9;
             this.buttonGetAgentGradeCookie.Text = "2获取Cookie";
             this.buttonGetAgentGradeCookie.UseVisualStyleBackColor = true;
@@ -162,20 +161,20 @@
             // 
             // textBoxAgentGradePageIndex
             // 
-            this.textBoxAgentGradePageIndex.Location = new System.Drawing.Point(309, 28);
-            this.textBoxAgentGradePageIndex.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxAgentGradePageIndex.Location = new System.Drawing.Point(412, 35);
+            this.textBoxAgentGradePageIndex.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxAgentGradePageIndex.Name = "textBoxAgentGradePageIndex";
-            this.textBoxAgentGradePageIndex.Size = new System.Drawing.Size(76, 21);
+            this.textBoxAgentGradePageIndex.Size = new System.Drawing.Size(100, 25);
             this.textBoxAgentGradePageIndex.TabIndex = 8;
             this.textBoxAgentGradePageIndex.Text = "1";
             // 
             // buttonGetAgentGradeOnpageResponse
             // 
             this.buttonGetAgentGradeOnpageResponse.Enabled = false;
-            this.buttonGetAgentGradeOnpageResponse.Location = new System.Drawing.Point(388, 30);
-            this.buttonGetAgentGradeOnpageResponse.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonGetAgentGradeOnpageResponse.Location = new System.Drawing.Point(517, 38);
+            this.buttonGetAgentGradeOnpageResponse.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonGetAgentGradeOnpageResponse.Name = "buttonGetAgentGradeOnpageResponse";
-            this.buttonGetAgentGradeOnpageResponse.Size = new System.Drawing.Size(86, 18);
+            this.buttonGetAgentGradeOnpageResponse.Size = new System.Drawing.Size(115, 22);
             this.buttonGetAgentGradeOnpageResponse.TabIndex = 7;
             this.buttonGetAgentGradeOnpageResponse.Text = "获取数据";
             this.buttonGetAgentGradeOnpageResponse.UseVisualStyleBackColor = true;
@@ -184,46 +183,46 @@
             // panelAgentGrade
             // 
             this.panelAgentGrade.Controls.Add(this.webBrowserAgentGrade);
-            this.panelAgentGrade.Location = new System.Drawing.Point(8, 54);
-            this.panelAgentGrade.Margin = new System.Windows.Forms.Padding(2);
+            this.panelAgentGrade.Location = new System.Drawing.Point(11, 68);
+            this.panelAgentGrade.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelAgentGrade.Name = "panelAgentGrade";
-            this.panelAgentGrade.Size = new System.Drawing.Size(920, 431);
+            this.panelAgentGrade.Size = new System.Drawing.Size(1227, 539);
             this.panelAgentGrade.TabIndex = 6;
             // 
             // webBrowserAgentGrade
             // 
             this.webBrowserAgentGrade.Dock = System.Windows.Forms.DockStyle.Fill;
             this.webBrowserAgentGrade.Location = new System.Drawing.Point(0, 0);
-            this.webBrowserAgentGrade.Margin = new System.Windows.Forms.Padding(2);
-            this.webBrowserAgentGrade.MinimumSize = new System.Drawing.Size(15, 16);
+            this.webBrowserAgentGrade.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.webBrowserAgentGrade.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowserAgentGrade.Name = "webBrowserAgentGrade";
-            this.webBrowserAgentGrade.Size = new System.Drawing.Size(920, 431);
+            this.webBrowserAgentGrade.Size = new System.Drawing.Size(1227, 539);
             this.webBrowserAgentGrade.TabIndex = 0;
             // 
             // textBoxAgentGradeCookie
             // 
-            this.textBoxAgentGradeCookie.Location = new System.Drawing.Point(8, 28);
-            this.textBoxAgentGradeCookie.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxAgentGradeCookie.Location = new System.Drawing.Point(11, 35);
+            this.textBoxAgentGradeCookie.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxAgentGradeCookie.Name = "textBoxAgentGradeCookie";
-            this.textBoxAgentGradeCookie.Size = new System.Drawing.Size(301, 21);
+            this.textBoxAgentGradeCookie.Size = new System.Drawing.Size(400, 25);
             this.textBoxAgentGradeCookie.TabIndex = 5;
             // 
             // textBoxAgentGradeResult
             // 
-            this.textBoxAgentGradeResult.Location = new System.Drawing.Point(8, 490);
-            this.textBoxAgentGradeResult.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxAgentGradeResult.Location = new System.Drawing.Point(11, 612);
+            this.textBoxAgentGradeResult.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxAgentGradeResult.Multiline = true;
             this.textBoxAgentGradeResult.Name = "textBoxAgentGradeResult";
             this.textBoxAgentGradeResult.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxAgentGradeResult.Size = new System.Drawing.Size(920, 142);
+            this.textBoxAgentGradeResult.Size = new System.Drawing.Size(1225, 176);
             this.textBoxAgentGradeResult.TabIndex = 4;
             // 
             // buttonGoAgentGradeUrl
             // 
-            this.buttonGoAgentGradeUrl.Location = new System.Drawing.Point(357, 6);
-            this.buttonGoAgentGradeUrl.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonGoAgentGradeUrl.Location = new System.Drawing.Point(476, 8);
+            this.buttonGoAgentGradeUrl.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonGoAgentGradeUrl.Name = "buttonGoAgentGradeUrl";
-            this.buttonGoAgentGradeUrl.Size = new System.Drawing.Size(56, 18);
+            this.buttonGoAgentGradeUrl.Size = new System.Drawing.Size(75, 22);
             this.buttonGoAgentGradeUrl.TabIndex = 2;
             this.buttonGoAgentGradeUrl.Text = "1前往";
             this.buttonGoAgentGradeUrl.UseVisualStyleBackColor = true;
@@ -231,20 +230,19 @@
             // 
             // textBoxAgentGradeUrl
             // 
-            this.textBoxAgentGradeUrl.Location = new System.Drawing.Point(52, 6);
-            this.textBoxAgentGradeUrl.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxAgentGradeUrl.Location = new System.Drawing.Point(69, 8);
+            this.textBoxAgentGradeUrl.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxAgentGradeUrl.Name = "textBoxAgentGradeUrl";
-            this.textBoxAgentGradeUrl.Size = new System.Drawing.Size(301, 21);
+            this.textBoxAgentGradeUrl.Size = new System.Drawing.Size(400, 25);
             this.textBoxAgentGradeUrl.TabIndex = 1;
             this.textBoxAgentGradeUrl.Text = "http://fuwu.corp.qunar.com/callcenterLogin";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(5, 6);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Location = new System.Drawing.Point(7, 8);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(23, 12);
+            this.label1.Size = new System.Drawing.Size(31, 15);
             this.label1.TabIndex = 0;
             this.label1.Text = "URL";
             // 
@@ -265,30 +263,30 @@
             this.tabPageCms.Controls.Add(this.buttonGoCmsUrl);
             this.tabPageCms.Controls.Add(this.textBoxCmsUrl);
             this.tabPageCms.Controls.Add(this.label2);
-            this.tabPageCms.Location = new System.Drawing.Point(4, 22);
-            this.tabPageCms.Margin = new System.Windows.Forms.Padding(2);
+            this.tabPageCms.Location = new System.Drawing.Point(4, 25);
+            this.tabPageCms.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageCms.Name = "tabPageCms";
-            this.tabPageCms.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPageCms.Size = new System.Drawing.Size(930, 633);
+            this.tabPageCms.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tabPageCms.Size = new System.Drawing.Size(1243, 795);
             this.tabPageCms.TabIndex = 1;
             this.tabPageCms.Text = "合同管理";
             this.tabPageCms.UseVisualStyleBackColor = true;
             // 
             // textBoxCmsTotalcount
             // 
-            this.textBoxCmsTotalcount.Location = new System.Drawing.Point(622, 26);
-            this.textBoxCmsTotalcount.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxCmsTotalcount.Location = new System.Drawing.Point(829, 32);
+            this.textBoxCmsTotalcount.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxCmsTotalcount.Name = "textBoxCmsTotalcount";
-            this.textBoxCmsTotalcount.Size = new System.Drawing.Size(47, 21);
+            this.textBoxCmsTotalcount.Size = new System.Drawing.Size(61, 25);
             this.textBoxCmsTotalcount.TabIndex = 28;
             this.textBoxCmsTotalcount.Text = "1";
             // 
             // buttonGenerateCmsDetail
             // 
-            this.buttonGenerateCmsDetail.Location = new System.Drawing.Point(823, 26);
-            this.buttonGenerateCmsDetail.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonGenerateCmsDetail.Location = new System.Drawing.Point(1097, 32);
+            this.buttonGenerateCmsDetail.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonGenerateCmsDetail.Name = "buttonGenerateCmsDetail";
-            this.buttonGenerateCmsDetail.Size = new System.Drawing.Size(91, 18);
+            this.buttonGenerateCmsDetail.Size = new System.Drawing.Size(121, 22);
             this.buttonGenerateCmsDetail.TabIndex = 27;
             this.buttonGenerateCmsDetail.Text = "转换详情";
             this.buttonGenerateCmsDetail.UseVisualStyleBackColor = true;
@@ -296,10 +294,10 @@
             // 
             // buttonGetCmsDataDetail
             // 
-            this.buttonGetCmsDataDetail.Location = new System.Drawing.Point(741, 27);
-            this.buttonGetCmsDataDetail.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonGetCmsDataDetail.Location = new System.Drawing.Point(988, 34);
+            this.buttonGetCmsDataDetail.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonGetCmsDataDetail.Name = "buttonGetCmsDataDetail";
-            this.buttonGetCmsDataDetail.Size = new System.Drawing.Size(72, 18);
+            this.buttonGetCmsDataDetail.Size = new System.Drawing.Size(96, 22);
             this.buttonGetCmsDataDetail.TabIndex = 26;
             this.buttonGetCmsDataDetail.Text = "获取详情";
             this.buttonGetCmsDataDetail.UseVisualStyleBackColor = true;
@@ -307,19 +305,19 @@
             // 
             // textBoxCmsId
             // 
-            this.textBoxCmsId.Location = new System.Drawing.Point(688, 26);
-            this.textBoxCmsId.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxCmsId.Location = new System.Drawing.Point(917, 32);
+            this.textBoxCmsId.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxCmsId.Name = "textBoxCmsId";
-            this.textBoxCmsId.Size = new System.Drawing.Size(47, 21);
+            this.textBoxCmsId.Size = new System.Drawing.Size(61, 25);
             this.textBoxCmsId.TabIndex = 25;
             this.textBoxCmsId.Text = "1";
             // 
             // buttonGetAllPageCmsReponse
             // 
-            this.buttonGetAllPageCmsReponse.Location = new System.Drawing.Point(681, 6);
-            this.buttonGetAllPageCmsReponse.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonGetAllPageCmsReponse.Location = new System.Drawing.Point(908, 8);
+            this.buttonGetAllPageCmsReponse.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonGetAllPageCmsReponse.Name = "buttonGetAllPageCmsReponse";
-            this.buttonGetAllPageCmsReponse.Size = new System.Drawing.Size(66, 18);
+            this.buttonGetAllPageCmsReponse.Size = new System.Drawing.Size(88, 22);
             this.buttonGetAllPageCmsReponse.TabIndex = 24;
             this.buttonGetAllPageCmsReponse.Text = "获取所有";
             this.buttonGetAllPageCmsReponse.UseVisualStyleBackColor = true;
@@ -327,10 +325,10 @@
             // 
             // buttonGenerateCmsData
             // 
-            this.buttonGenerateCmsData.Location = new System.Drawing.Point(499, 27);
-            this.buttonGenerateCmsData.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonGenerateCmsData.Location = new System.Drawing.Point(665, 34);
+            this.buttonGenerateCmsData.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonGenerateCmsData.Name = "buttonGenerateCmsData";
-            this.buttonGenerateCmsData.Size = new System.Drawing.Size(91, 18);
+            this.buttonGenerateCmsData.Size = new System.Drawing.Size(121, 22);
             this.buttonGenerateCmsData.TabIndex = 22;
             this.buttonGenerateCmsData.Text = "转换json";
             this.buttonGenerateCmsData.UseVisualStyleBackColor = true;
@@ -338,10 +336,10 @@
             // 
             // buttonGetCmsCookies
             // 
-            this.buttonGetCmsCookies.Location = new System.Drawing.Point(417, 6);
-            this.buttonGetCmsCookies.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonGetCmsCookies.Location = new System.Drawing.Point(556, 8);
+            this.buttonGetCmsCookies.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonGetCmsCookies.Name = "buttonGetCmsCookies";
-            this.buttonGetCmsCookies.Size = new System.Drawing.Size(56, 18);
+            this.buttonGetCmsCookies.Size = new System.Drawing.Size(75, 22);
             this.buttonGetCmsCookies.TabIndex = 21;
             this.buttonGetCmsCookies.Text = "获取Cookie";
             this.buttonGetCmsCookies.UseVisualStyleBackColor = true;
@@ -349,19 +347,19 @@
             // 
             // textBoxCmsPageIndex
             // 
-            this.textBoxCmsPageIndex.Location = new System.Drawing.Point(308, 27);
-            this.textBoxCmsPageIndex.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxCmsPageIndex.Location = new System.Drawing.Point(411, 34);
+            this.textBoxCmsPageIndex.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxCmsPageIndex.Name = "textBoxCmsPageIndex";
-            this.textBoxCmsPageIndex.Size = new System.Drawing.Size(76, 21);
+            this.textBoxCmsPageIndex.Size = new System.Drawing.Size(100, 25);
             this.textBoxCmsPageIndex.TabIndex = 20;
             this.textBoxCmsPageIndex.Text = "1";
             // 
             // buttonGetCmsOnepageData
             // 
-            this.buttonGetCmsOnepageData.Location = new System.Drawing.Point(388, 29);
-            this.buttonGetCmsOnepageData.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonGetCmsOnepageData.Location = new System.Drawing.Point(517, 36);
+            this.buttonGetCmsOnepageData.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonGetCmsOnepageData.Name = "buttonGetCmsOnepageData";
-            this.buttonGetCmsOnepageData.Size = new System.Drawing.Size(85, 18);
+            this.buttonGetCmsOnepageData.Size = new System.Drawing.Size(113, 22);
             this.buttonGetCmsOnepageData.TabIndex = 19;
             this.buttonGetCmsOnepageData.Text = "获取首次数据";
             this.buttonGetCmsOnepageData.UseVisualStyleBackColor = true;
@@ -370,46 +368,46 @@
             // panelCms
             // 
             this.panelCms.Controls.Add(this.webBrowserCms);
-            this.panelCms.Location = new System.Drawing.Point(8, 54);
-            this.panelCms.Margin = new System.Windows.Forms.Padding(2);
+            this.panelCms.Location = new System.Drawing.Point(11, 68);
+            this.panelCms.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelCms.Name = "panelCms";
-            this.panelCms.Size = new System.Drawing.Size(920, 431);
+            this.panelCms.Size = new System.Drawing.Size(1227, 539);
             this.panelCms.TabIndex = 18;
             // 
             // webBrowserCms
             // 
             this.webBrowserCms.Dock = System.Windows.Forms.DockStyle.Fill;
             this.webBrowserCms.Location = new System.Drawing.Point(0, 0);
-            this.webBrowserCms.Margin = new System.Windows.Forms.Padding(2);
-            this.webBrowserCms.MinimumSize = new System.Drawing.Size(15, 16);
+            this.webBrowserCms.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.webBrowserCms.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowserCms.Name = "webBrowserCms";
-            this.webBrowserCms.Size = new System.Drawing.Size(920, 431);
+            this.webBrowserCms.Size = new System.Drawing.Size(1227, 539);
             this.webBrowserCms.TabIndex = 0;
             // 
             // textBoxCmsCookies
             // 
-            this.textBoxCmsCookies.Location = new System.Drawing.Point(8, 27);
-            this.textBoxCmsCookies.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxCmsCookies.Location = new System.Drawing.Point(11, 34);
+            this.textBoxCmsCookies.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxCmsCookies.Name = "textBoxCmsCookies";
-            this.textBoxCmsCookies.Size = new System.Drawing.Size(301, 21);
+            this.textBoxCmsCookies.Size = new System.Drawing.Size(400, 25);
             this.textBoxCmsCookies.TabIndex = 17;
             // 
             // textBoxCmsResult
             // 
-            this.textBoxCmsResult.Location = new System.Drawing.Point(8, 489);
-            this.textBoxCmsResult.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxCmsResult.Location = new System.Drawing.Point(11, 611);
+            this.textBoxCmsResult.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxCmsResult.Multiline = true;
             this.textBoxCmsResult.Name = "textBoxCmsResult";
             this.textBoxCmsResult.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxCmsResult.Size = new System.Drawing.Size(920, 142);
+            this.textBoxCmsResult.Size = new System.Drawing.Size(1225, 176);
             this.textBoxCmsResult.TabIndex = 16;
             // 
             // buttonGoCmsUrl
             // 
-            this.buttonGoCmsUrl.Location = new System.Drawing.Point(356, 6);
-            this.buttonGoCmsUrl.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonGoCmsUrl.Location = new System.Drawing.Point(475, 8);
+            this.buttonGoCmsUrl.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonGoCmsUrl.Name = "buttonGoCmsUrl";
-            this.buttonGoCmsUrl.Size = new System.Drawing.Size(56, 18);
+            this.buttonGoCmsUrl.Size = new System.Drawing.Size(75, 22);
             this.buttonGoCmsUrl.TabIndex = 15;
             this.buttonGoCmsUrl.Text = "前往";
             this.buttonGoCmsUrl.UseVisualStyleBackColor = true;
@@ -417,30 +415,29 @@
             // 
             // textBoxCmsUrl
             // 
-            this.textBoxCmsUrl.Location = new System.Drawing.Point(51, 6);
-            this.textBoxCmsUrl.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxCmsUrl.Location = new System.Drawing.Point(68, 8);
+            this.textBoxCmsUrl.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxCmsUrl.Name = "textBoxCmsUrl";
-            this.textBoxCmsUrl.Size = new System.Drawing.Size(301, 21);
+            this.textBoxCmsUrl.Size = new System.Drawing.Size(400, 25);
             this.textBoxCmsUrl.TabIndex = 14;
             this.textBoxCmsUrl.Text = "http://cms.qunar.com/cms/login.do";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(4, 6);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Location = new System.Drawing.Point(5, 8);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(23, 12);
+            this.label2.Size = new System.Drawing.Size(31, 15);
             this.label2.TabIndex = 13;
             this.label2.Text = "URL";
             // 
             // FormMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(956, 678);
+            this.ClientSize = new System.Drawing.Size(1275, 848);
             this.Controls.Add(this.tabControlMain);
-            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "FormMain";
             this.Text = "客户信息抓取";
             this.tabControlMain.ResumeLayout(false);

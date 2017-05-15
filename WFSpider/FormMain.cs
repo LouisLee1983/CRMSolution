@@ -201,6 +201,7 @@ namespace WFSpider
                     textBoxAgentGradeResult.AppendText("保存成功：" + agoList.Count);
                 }
             }
+            DeleteAllFile(filePath);    //清空旧的
         }
 
         private void buttonSaveData_Click(object sender, EventArgs e)
